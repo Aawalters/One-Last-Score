@@ -40,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
     {
         ProcessInput();
         Animate();
-        Debug.Log(isGrounded);
+        // Debug.Log(isGrounded);
     }
 
     private void FixedUpdate()

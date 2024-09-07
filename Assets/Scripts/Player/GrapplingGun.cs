@@ -75,7 +75,7 @@ public class GrapplingGun : MonoBehaviour
         if (_hit)
         {
             // Debug.Log("hit");
-            // Debug.Log("Hit object layer: " + _hit.collider.gameObject.layer);
+            Debug.Log("Hit object layer: " + _hit.collider.gameObject.layer);
             grapplePoint = _hit.point;
             grappleDistanceVector = grapplePoint - (Vector2)gunPivot.position; 
             grappleRope.enabled = true;
