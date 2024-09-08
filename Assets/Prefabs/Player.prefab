@@ -518,7 +518,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1426531965171240446}
   - component: {fileID: 6381608119779075255}
-  - component: {fileID: 8188869879549157575}
   - component: {fileID: 5516453970350294433}
   m_Layer: 3
   m_Name: GrapplingGun
@@ -595,32 +594,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &8188869879549157575
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8728709147080681934}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.06946151, y: 0.0011880696}
-  m_SpriteTilingProperty:
-    border: {x: 0.049999997, y: 0.049999997, z: 0.049999997, w: 0.049999997}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.16, y: 0.16}
-    newSize: {x: 0.16, y: 0.16}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.010957807, y: 0.15705946}
-  m_EdgeRadius: 0
 --- !u!114 &5516453970350294433
 MonoBehaviour:
   m_ObjectHideFlags: 0

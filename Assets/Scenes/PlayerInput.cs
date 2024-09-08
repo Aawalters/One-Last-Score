@@ -4,8 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerInput : MonoBehaviour
 {
+    [Header("Scripts Ref:")]
+    public GrapplingRope grappleRope;
+    public GrapplingGun grapplingGun;
 
     public float moveSpeed;
     public float jumpForce;
@@ -84,6 +87,29 @@ public class PlayerMovement : MonoBehaviour
                 StartCoroutine(DisableCollision());
             }
 
+        }
+        // Grappling hook Input
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            // grab
+            grapplingGun.SetGrapplePoint();
+        }
+        else if (Input.GetKey(KeyCode.Mouse0) && grappleRope.enabled)
+        {
+            // rotation grappling
+            grapplingGun.RotateGun(grapplingGun.grapplePoint);
+        }
+        else if (Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            // release
+            grapplingGun.grappleRope.enabled = false;
+            grapplingGun.m_springJoint2D.enabled = false;
+        }
+        else
+        {
+            // rotation not grappling
+            Vector2 mousePos = grapplingGun.m_camera.ScreenToWorldPoint(Input.mousePosition);
+            grapplingGun.RotateGun(mousePos);
         }
     }
 
