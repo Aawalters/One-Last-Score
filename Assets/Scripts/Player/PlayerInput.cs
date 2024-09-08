@@ -29,6 +29,7 @@ public class PlayerInput : MonoBehaviour
     public float attackRadius;
     public LayerMask enemyLayer;
     public int kickDamage = 1;
+    public float kickForce = 0.5f;
 
 
     private void Awake()
@@ -152,15 +153,13 @@ public class PlayerInput : MonoBehaviour
 
     public void Kick()
     {
-
         Collider2D[] enemyList = Physics2D.OverlapCircleAll(attackPoint.transform.position, attackRadius, enemyLayer);
 
         foreach (Collider2D enemyObject in enemyList)
         {
-
-            Debug.Log("Hit");
-            enemyObject.GetComponent<Enemy_Basic>().health -= kickDamage;
-
+            Vector2 dir = enemyObject.transform.position - transform.position;
+            dir.Normalize();
+            enemyObject.GetComponent<Enemy_Basic>().takeKick(kickDamage, dir, kickForce);
         }
     }
 
