@@ -21,16 +21,14 @@ public class GrapplingRope : MonoBehaviour
 
     float moveTime = 0;
 
-    [HideInInspector] public bool isGrappling = true;
-
-    bool strightLine = true;
+    bool straightLine = true;
 
     private void OnEnable()
     {
         moveTime = 0;
         my_lineRenderer.positionCount = precision;
         waveSize = StartWaveSize;
-        strightLine = false;
+        straightLine = false;
 
         LinePointsToFirePoint();
 
@@ -40,7 +38,6 @@ public class GrapplingRope : MonoBehaviour
     private void OnDisable()
     {
         my_lineRenderer.enabled = false;
-        isGrappling = false;
     }
 
     private void LinePointsToFirePoint()
@@ -59,11 +56,11 @@ public class GrapplingRope : MonoBehaviour
 
     void DrawRope()
     {
-        if (!strightLine)
+        if (!straightLine)
         {
             if (my_lineRenderer.GetPosition(precision - 1).x == grapplingGun.grapplePoint.x)
             {
-                strightLine = true;
+                straightLine = true;
             }
             else
             {
@@ -72,10 +69,10 @@ public class GrapplingRope : MonoBehaviour
         }
         else
         {
-            if (!isGrappling)
+            if (!grapplingGun.isGrappled)
             {
-                grapplingGun.Grapple();
-                isGrappling = true;
+                grapplingGun.isGrappled = true;
+                Debug.Log("GRAPPLED" + grapplingGun.isGrappled);
             }
             if (waveSize > 0)
             {

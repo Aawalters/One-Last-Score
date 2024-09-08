@@ -28,6 +28,9 @@ public class GrapplingGun : MonoBehaviour
     [HideInInspector] public Vector2 grapplePoint;
     [HideInInspector] public Vector2 grappleDistanceVector;
 
+    public bool isGrappled = false;    // is player grappled to an object?
+    private GameObject grappledObject;  // object we hit (could be enemy or other)
+
     private void Start()
     {
         //default
@@ -38,6 +41,14 @@ public class GrapplingGun : MonoBehaviour
 
     private void Update()
     {
+        if(isGrappled && grappleRope.enabled)
+        {
+            if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy"))
+            {
+                grapplePoint = grappledObject.transform.position;
+            }
+
+        }
 
     }
 
@@ -58,17 +69,57 @@ public class GrapplingGun : MonoBehaviour
             grapplePoint = _hit.point;
             grappleDistanceVector = grapplePoint - (Vector2)gunPivot.position; 
             grappleRope.enabled = true;
+            grappledObject = _hit.collider.gameObject;
         }
     }
 
-    public void Grapple()
+    public void PullPlayer()
     {
+        Debug.Log("PULL PLAYER");
         m_springJoint2D.autoConfigureDistance = false;
         m_springJoint2D.connectedAnchor = grapplePoint;
         Vector2 distanceVector = firePoint.position - gunHolder.position;
         m_springJoint2D.distance = distanceVector.magnitude;
         m_springJoint2D.frequency = launchSpeed;
         m_springJoint2D.enabled = true;
+    }
+
+    public void PullEnemy()
+    {
+        Debug.Log("PULL ENEMY");
+        if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            SpringJoint2D enemySpringJoint = grappledObject.GetComponent<SpringJoint2D>();
+            Debug.Log("selected name: " + grappledObject.gameObject.name);
+            Debug.Log("enemySpringJoint" + enemySpringJoint);
+            if (enemySpringJoint != null)
+            {
+                enemySpringJoint.connectedAnchor = firePoint.position;  // Connect the enemy to the player
+                enemySpringJoint.distance = 0;  // Enemy will be pulled towards the player
+                enemySpringJoint.enabled = true;
+            }
+        }
+        else
+        {
+            Debug.Log("No enemy to pull or invalid target.");
+        }
+
+    }
+
+    public void ReleaseEnemy()
+    {
+        if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            SpringJoint2D enemySpringJoint = grappledObject.GetComponent<SpringJoint2D>();
+            if (enemySpringJoint != null)
+            {
+                enemySpringJoint.enabled = false;
+            }
+        }
+        else
+        {
+            Debug.Log("No enemy to release or invalid target.");
+        }
 
     }
 }

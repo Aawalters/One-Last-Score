@@ -75,6 +75,7 @@ public class PlayerInput : MonoBehaviour
 
     private void ProcessInput()  
     {
+        // Normal Movement Input
         // scale of -1 -> 1
         moveDirection = Input.GetAxis("Horizontal");
         if(Input.GetButtonDown("Jump") && isGrounded)
@@ -94,16 +95,31 @@ public class PlayerInput : MonoBehaviour
             // grab
             grapplingGun.SetGrapplePoint();
         }
-        else if (Input.GetKey(KeyCode.Mouse0) && grappleRope.enabled)
+        if (grapplingGun.isGrappled)
+        {
+            // Player is connected but hasn't moved yet
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                grapplingGun.PullPlayer();  // Pull the player towards the grapple point
+            }
+            else if (Input.GetKeyDown(KeyCode.E))
+            {
+                Debug.Log("PULL ENEMY");
+                grapplingGun.PullEnemy();  // Pull the enemy towards the player
+            }
+        }
+        if (Input.GetKey(KeyCode.Mouse0) && grappleRope.enabled)
         {
             // rotation grappling
             grapplingGun.RotateGun(grapplingGun.grapplePoint);
         }
-        else if (Input.GetKeyUp(KeyCode.Mouse0))
+        if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             // release
-            grapplingGun.grappleRope.enabled = false;
+            grappleRope.enabled = false;
+            grapplingGun.isGrappled = false;
             grapplingGun.m_springJoint2D.enabled = false;
+            grapplingGun.ReleaseEnemy();
         }
         else
         {
