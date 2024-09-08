@@ -6,7 +6,7 @@ public class GrapplingGun : MonoBehaviour
     public GrapplingRope grappleRope;
 
     [Header("Layers Settings:")]
-    [SerializeField] private int grappableLayerNumber = 9;
+    [SerializeField] private LayerMask grappableLayerMask;
 
     [Header("Main Camera:")]
     public Camera m_camera;
@@ -70,7 +70,7 @@ public class GrapplingGun : MonoBehaviour
     }
 
     void SetGrapplePoint() {
-        RaycastHit2D _hit = Physics2D.Raycast(firePoint.position, (m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position).normalized, maxDistance, grappableLayerNumber);
+        RaycastHit2D _hit = Physics2D.Raycast(firePoint.position, (m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position).normalized, maxDistance, grappableLayerMask);
         //Debug.DrawRay(firePoint.position, ((m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position).normalized * maxDistance), Color.red, maxDistance);
         if (_hit)
         {
