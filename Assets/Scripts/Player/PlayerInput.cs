@@ -159,6 +159,7 @@ public class PlayerInput : MonoBehaviour
         {
             Vector2 dir = enemyObject.transform.position - transform.position;
             dir.Normalize();
+            dir = dir * (rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude);
             enemyObject.GetComponent<Enemy_Basic>().takeKick(kickDamage, dir, kickForce);
         }
     }
