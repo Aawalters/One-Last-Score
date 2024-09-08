@@ -464,7 +464,7 @@ MonoBehaviour:
   attackRadius: 0.92
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   kickDamage: 1
 --- !u!231 &7021618568593065068
 SpringJoint2D:
