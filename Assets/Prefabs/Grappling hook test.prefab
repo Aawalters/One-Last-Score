@@ -183,7 +183,7 @@ GameObject:
   - component: {fileID: 5305454390320951179}
   - component: {fileID: 8868116277648529112}
   m_Layer: 0
-  m_Name: Player 1
+  m_Name: Grappling hook test
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

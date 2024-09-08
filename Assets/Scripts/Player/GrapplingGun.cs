@@ -64,8 +64,7 @@ public class GrapplingGun : MonoBehaviour
         //Debug.DrawRay(firePoint.position, ((m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position).normalized * maxDistance), Color.red, maxDistance);
         if (_hit)
         {
-            // Debug.Log("hit");
-            Debug.Log("Hit object layer: " + _hit.collider.gameObject.layer);
+            // Debug.Log("Hit object layer: " + _hit.collider.gameObject.layer);
             grapplePoint = _hit.point;
             grappleDistanceVector = grapplePoint - (Vector2)gunPivot.position; 
             grappleRope.enabled = true;
@@ -75,7 +74,7 @@ public class GrapplingGun : MonoBehaviour
 
     public void PullPlayer()
     {
-        Debug.Log("PULL PLAYER");
+        // Debug.Log("PULL PLAYER");
         m_springJoint2D.autoConfigureDistance = false;
         m_springJoint2D.connectedAnchor = grapplePoint;
         Vector2 distanceVector = firePoint.position - gunHolder.position;
@@ -86,12 +85,12 @@ public class GrapplingGun : MonoBehaviour
 
     public void PullEnemy()
     {
-        Debug.Log("PULL ENEMY");
+        // Debug.Log("PULL ENEMY");
         if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             SpringJoint2D enemySpringJoint = grappledObject.GetComponent<SpringJoint2D>();
-            Debug.Log("selected name: " + grappledObject.gameObject.name);
-            Debug.Log("enemySpringJoint" + enemySpringJoint);
+            // Debug.Log("selected name: " + grappledObject.gameObject.name);
+            // Debug.Log("enemySpringJoint" + enemySpringJoint);
             if (enemySpringJoint != null)
             {
                 enemySpringJoint.connectedAnchor = firePoint.position;  // Connect the enemy to the player

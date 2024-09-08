@@ -16,7 +16,7 @@ public class PlayerInput : MonoBehaviour
     public LayerMask groundObjects;
     public float checkRadius;
     private Rigidbody2D rb;
-    private bool facingRight = true;
+    private bool facingRight;
     private float moveDirection;
     private bool isJumping = false;
     private bool isGrounded;
@@ -24,6 +24,11 @@ public class PlayerInput : MonoBehaviour
     private GameObject currentOneWayPlatform;
     [SerializeField] private BoxCollider2D playerCollider;
     public float waitTime = 0f;
+    public Animator anim;
+    public GameObject attackPoint;
+    public float attackRadius;
+    public LayerMask enemyLayer;
+    public int kickDamage = 1;
 
 
     private void Awake()
@@ -35,7 +40,8 @@ public class PlayerInput : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        anim = GetComponent<Animator>();
+        facingRight = false;
     }
 
     // Update is called once per frame
@@ -55,7 +61,17 @@ public class PlayerInput : MonoBehaviour
     private void Move()
     {
         rb.velocity = new Vector2(moveDirection * moveSpeed, rb.velocity.y);
-        if (isJumping) {
+        if (rb.velocity.x > .1f || rb.velocity.x < -.1f)
+        {
+            anim.SetBool("isWalking", true);
+        }
+        else
+        {
+            anim.SetBool("isWalking", false);
+        }
+
+        if (isJumping)
+        {
             rb.AddForce(new Vector2(0f, jumpForce));
         }
         isJumping = false;
@@ -73,24 +89,29 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
-    private void ProcessInput()  
+    private void ProcessInput()
     {
         // Normal Movement Input
         // scale of -1 -> 1
         moveDirection = Input.GetAxis("Horizontal");
-        if(Input.GetButtonDown("Jump") && isGrounded)
+        if (Input.GetButtonDown("Jump") && isGrounded)
         {
             isJumping = true;
-        } 
-        if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) {
-            if (currentOneWayPlatform != null) 
+        }
+        if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            if (currentOneWayPlatform != null)
             {
                 StartCoroutine(DisableCollision());
             }
 
         }
+        if (Input.GetMouseButtonDown(0))
+        {
+            anim.SetBool("isKicking", true);
+        }
         // Grappling hook Input
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             // grab
             grapplingGun.SetGrapplePoint();
@@ -108,12 +129,12 @@ public class PlayerInput : MonoBehaviour
                 grapplingGun.PullEnemy();  // Pull the enemy towards the player
             }
         }
-        if (Input.GetKey(KeyCode.Mouse0) && grappleRope.enabled)
+        if (Input.GetKey(KeyCode.Mouse1) && grappleRope.enabled)
         {
             // rotation grappling
             grapplingGun.RotateGun(grapplingGun.grapplePoint);
         }
-        if (Input.GetKeyUp(KeyCode.Mouse0))
+        if (Input.GetKeyUp(KeyCode.Mouse1))
         {
             // release
             grappleRope.enabled = false;
@@ -129,16 +150,37 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
-    private void  OnCollisionEnter2D(Collision2D other)
+    public void Kick()
     {
-        if (other.gameObject.CompareTag("OneWayPlatform")) {
+
+        Collider2D[] enemyList = Physics2D.OverlapCircleAll(attackPoint.transform.position, attackRadius, enemyLayer);
+
+        foreach (Collider2D enemyObject in enemyList)
+        {
+
+            Debug.Log("Hit");
+            enemyObject.GetComponent<Enemy_Basic>().health -= kickDamage;
+
+        }
+    }
+
+    public void EndKick()
+    {
+        anim.SetBool("isKicking", false);
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("OneWayPlatform"))
+        {
             currentOneWayPlatform = other.gameObject;
         }
     }
 
     private void OnCollisionExit2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("OneWayPlatform")) {
+        if (other.gameObject.CompareTag("OneWayPlatform"))
+        {
             currentOneWayPlatform = null;
         }
     }
@@ -155,5 +197,10 @@ public class PlayerInput : MonoBehaviour
     {
         facingRight = !facingRight;
         transform.Rotate(0.0f, 180.0f, 0.0f);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(attackPoint.transform.position, attackRadius);
     }
 }
