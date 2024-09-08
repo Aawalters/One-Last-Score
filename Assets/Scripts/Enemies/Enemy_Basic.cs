@@ -7,11 +7,13 @@ public class Enemy_Basic : MonoBehaviour
     public float health = 5f;
     public float currentHealth;
     private Animator anim;
+    public Rigidbody2D rb;
     // Start is called before the first frame update
     void Start()
     {
-        anim = GetComponent<Animator>();
+        anim = transform.Find("Sprite").GetComponent<Animator>();
         currentHealth = health;
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -25,5 +27,12 @@ public class Enemy_Basic : MonoBehaviour
         if (health < 0) {
             Debug.Log("dead as hell");
         }
+    }
+
+    public void takeKick(int damage, Vector2 direction, float kickForce) {
+        Debug.Log("Hit");
+        health -= damage;
+        Debug.Log(direction);
+        rb.AddForce(direction * kickForce, ForceMode2D.Impulse);
     }
 }

@@ -96,12 +96,12 @@ TextureImporter:
       name: Main_Enemy_Punch_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 1173
-        width: 700
-        height: 875
+        x: 210
+        y: 1176
+        width: 448
+        height: 856
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -117,12 +117,12 @@ TextureImporter:
       name: Main_Enemy_Punch_1
       rect:
         serializedVersion: 2
-        x: 700
+        x: 897
         y: 1173
-        width: 700
-        height: 875
+        width: 464
+        height: 859
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -138,12 +138,12 @@ TextureImporter:
       name: Main_Enemy_Punch_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 298
-        width: 700
-        height: 875
+        x: 9
+        y: 310
+        width: 691
+        height: 853
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -160,11 +160,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 700
-        y: 298
-        width: 700
-        height: 875
+        y: 308
+        width: 699
+        height: 852
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
