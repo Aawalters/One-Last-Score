@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9cdc54bce821cbc4699546380e88dee3
+guid: 07da25dadf1398243b7c3ee763c5a170
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -42,12 +42,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 300
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -91,91 +91,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: jack_walk_sprite_sheet_0
-      rect:
-        serializedVersion: 2
-        x: 11
-        y: 0
-        width: 984
-        height: 1916
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 345d1bde6665f2e489d0ff063bb984a3
-      internalID: -1323399774
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: jack_walk_sprite_sheet_1
-      rect:
-        serializedVersion: 2
-        x: 1003
-        y: 0
-        width: 684
-        height: 1916
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 07c9e4ac2007c2140a3c9dd810669244
-      internalID: 743100323
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: jack_walk_sprite_sheet_2
-      rect:
-        serializedVersion: 2
-        x: 1695
-        y: 0
-        width: 852
-        height: 1916
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0b0cbad9ffe6b044f9d811d23b424010
-      internalID: 572318111
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: jack_walk_sprite_sheet_3
-      rect:
-        serializedVersion: 2
-        x: 2555
-        y: 0
-        width: 843
-        height: 1916
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ad0ba8a324fbd584f99fd4a46270e79e
-      internalID: 1275797221
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
@@ -186,11 +102,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      jack_walk_sprite_sheet_0: -1323399774
-      jack_walk_sprite_sheet_1: 743100323
-      jack_walk_sprite_sheet_2: 572318111
-      jack_walk_sprite_sheet_3: 1275797221
+    nameFileIdTable: {}
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

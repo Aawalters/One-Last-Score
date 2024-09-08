@@ -22,6 +22,10 @@ public class PlayerMovement1 : MonoBehaviour
     [SerializeField] private BoxCollider2D playerCollider;
     public float waitTime = 0f;
     public Animator anim;
+    public GameObject attackPoint;
+    public float attackRadius;
+    public LayerMask enemyLayer;
+    public int kickDamage = 1;
 
 
     private void Awake()
@@ -99,6 +103,15 @@ public class PlayerMovement1 : MonoBehaviour
         }
     }
 
+    public void Kick() {
+        Collider2D[] enemyList = Physics2D.OverlapCircleAll(attackPoint.transform.position, attackRadius, enemyLayer);
+
+        foreach (Collider2D enemyObject in enemyList) {
+            Debug.Log("Hit");
+            enemyObject.GetComponent<Enemy_Basic>().health -= kickDamage;
+        }
+    }
+
     public void EndKick() {
         anim.SetBool("isKicking", false);
     }
@@ -129,5 +142,9 @@ public class PlayerMovement1 : MonoBehaviour
     {
         facingRight = !facingRight;
         transform.Rotate(0.0f, 180.0f, 0.0f);
+    }
+
+    private void OnDrawGizmos() {
+        Gizmos.DrawWireSphere(attackPoint.transform.position, attackRadius);
     }
 }
