@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5811921192025995566}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0873, y: 0.1776, z: 0}
-  m_LocalScale: {x: 0.74257994, y: 0.46947825, z: 0.54543}
+  m_LocalPosition: {x: 0.2017, y: 0.2645, z: 0}
+  m_LocalScale: {x: 0.8957742, y: 0.5304165, z: 0.54543}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5811921193137224075}
@@ -203,6 +203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 5
   currentHealth: 5
+  rb: {fileID: 0}
 --- !u!231 &1667829834687669964
 SpringJoint2D:
   m_ObjectHideFlags: 0
