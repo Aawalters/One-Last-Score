@@ -31,6 +31,11 @@ public class PlayerInput : MonoBehaviour
     public int kickDamage = 1;
     public float kickForce = 0.5f;
 
+    public AudioSource audioSource;
+
+    public AudioClip KickAudio;
+    public AudioClip MissAudio;
+
 
     private void Awake()
     {
@@ -43,6 +48,7 @@ public class PlayerInput : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         facingRight = false;
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -161,6 +167,15 @@ public class PlayerInput : MonoBehaviour
             dir.Normalize();
             dir = dir * (rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude);
             enemyObject.GetComponent<Enemy_Basic>().takeKick(kickDamage, dir, kickForce);
+        }
+        if (enemyList.Length == 0)
+        {
+            audioSource.clip = MissAudio;
+            audioSource.Play();
+        } else
+        {
+            audioSource.clip = KickAudio;
+            audioSource.Play();
         }
     }
 
