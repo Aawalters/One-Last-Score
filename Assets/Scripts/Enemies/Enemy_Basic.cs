@@ -9,6 +9,8 @@ public class Enemy_Basic : MonoBehaviour
     private Animator anim;
     public Rigidbody2D rb;
     private GameManager gameManager;
+    public float collisionForceThreshold;
+    private bool inImpact = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,6 +23,9 @@ public class Enemy_Basic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (rb.velocity.magnitude < collisionForceThreshold) {
+            inImpact = false;
+        }
         if (health < currentHealth) {
             currentHealth = health;
             anim.SetTrigger("Impact");
@@ -29,14 +34,28 @@ public class Enemy_Basic : MonoBehaviour
         if (health < 0) {
             Destroy(gameObject);
             Debug.Log("dead as hell");
-            gameManager.OnEnemyKilled();
+            // gameManager.OnEnemyKilled();
         }
     }
 
-    public void takeKick(int damage, Vector2 direction, float kickForce) {
-        Debug.Log("Hit");
+     // This method is called when the enemy collides with another object
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (inImpact) {
+            float impactForce = collision.relativeVelocity.magnitude;
+            Debug.Log(impactForce);
+
+            if (impactForce > collisionForceThreshold) {
+                int collisionDamage = Mathf.RoundToInt(impactForce);
+                health -= collisionDamage;
+                Debug.Log("Enemy took " + collisionDamage + " damage due to impact.");
+            }
+        }
+    }
+
+    public void takeKick(int damage, Vector2 force) {
         health -= damage;
-        Debug.Log(direction);
-        rb.AddForce(direction * kickForce, ForceMode2D.Impulse);
+        inImpact = true;
+        rb.AddForce(force, ForceMode2D.Impulse);
     }
 }

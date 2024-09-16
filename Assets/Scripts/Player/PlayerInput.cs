@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -15,11 +16,13 @@ public class PlayerInput : MonoBehaviour
     public Transform groundCheck;
     public LayerMask groundObjects;
     public float checkRadius;
+    public Vector2 checkGroundSize;
     private Rigidbody2D rb;
     private bool facingRight;
     private float moveDirection;
     private bool isJumping = false;
     private bool isGrounded;
+    private bool midJump;
 
     private GameObject currentOneWayPlatform;
     [SerializeField] private BoxCollider2D playerCollider;
@@ -35,6 +38,8 @@ public class PlayerInput : MonoBehaviour
 
     public AudioClip KickAudio;
     public AudioClip MissAudio;
+    public float kickUpForce; 
+    public float maxKickForce;
 
 
     private void Awake()
@@ -61,7 +66,11 @@ public class PlayerInput : MonoBehaviour
 
     private void FixedUpdate()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundObjects);
+        if (rb.velocity.y == 0) {
+            midJump = false;
+        }
+        // isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundObjects);
+        isGrounded = Physics2D.OverlapBox(groundCheck.position, checkGroundSize, 0f) && !midJump;
         Move();
     }
 
@@ -79,7 +88,9 @@ public class PlayerInput : MonoBehaviour
 
         if (isJumping)
         {
+            rb.velocity = new Vector2(rb.velocity.x, 0f);
             rb.AddForce(new Vector2(0f, jumpForce));
+            midJump = true;
         }
         isJumping = false;
     }
@@ -104,6 +115,7 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             isJumping = true;
+            midJump = true;
         }
         if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
         {
@@ -160,13 +172,25 @@ public class PlayerInput : MonoBehaviour
     public void Kick()
     {
         Collider2D[] enemyList = Physics2D.OverlapCircleAll(attackPoint.transform.position, attackRadius, enemyLayer);
+        Vector2 force;
 
         foreach (Collider2D enemyObject in enemyList)
         {
             Vector2 dir = enemyObject.transform.position - transform.position;
             dir.Normalize();
-            dir = dir * (rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude);
-            enemyObject.GetComponent<Enemy_Basic>().takeKick(kickDamage, dir, kickForce);
+            // if isGrounded, add slight upward force, but don't multiply it by force
+            if (isGrounded) {
+                force = new Vector2((dir.x > 0 ? 1 : -1) * math.max(1, rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * kickForce, kickUpForce);
+                if (math.abs(force.x) > maxKickForce) { // clamp x
+                    force.x = force.x > 0 ? maxKickForce : maxKickForce * -1;
+                }
+            } else {
+                dir = dir * math.max(1, rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude);
+                force = Vector2.ClampMagnitude(dir * kickForce, maxKickForce); // clamp total force
+            }
+            Debug.Log(force);
+            // Debug.Log("Hit direction: " + dir);
+            enemyObject.GetComponent<Enemy_Basic>().takeKick(kickDamage, force);
         }
         if (enemyList.Length == 0)
         {
@@ -217,5 +241,8 @@ public class PlayerInput : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(attackPoint.transform.position, attackRadius);
+        // Gizmos.DrawWireSphere(groundCheck.transform.position, checkRadius);
+        // isGrounded = Physics2D.OverlapBox(groundCheck.position, new Vector2(2, 2), 0f);
+        Gizmos.DrawCube(groundCheck.position, checkGroundSize);
     }
 }
