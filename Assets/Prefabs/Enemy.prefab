@@ -202,9 +202,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b57793e512845b142ac8fa3991401cf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 5
-  currentHealth: 5
-  rb: {fileID: 0}
+  health: 20
+  currentHealth: 20
+  rb: {fileID: 5811921193137224074}
+  collisionForceThreshold: 10
+  collisionDamageMultiplier: 0.5
+  bounceForce: 5
 --- !u!231 &1667829834687669964
 SpringJoint2D:
   m_ObjectHideFlags: 0

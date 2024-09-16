@@ -38,8 +38,10 @@ public class PlayerInput : MonoBehaviour
 
     public AudioClip KickAudio;
     public AudioClip MissAudio;
-    public float kickUpForce; 
-    public float maxKickForce;
+    public float kickUpForce;
+    public float maxKickForce; // clamping kick force
+    [Range(0, 1)]
+    public float movementForceMultiplier; // determines how much player & enemy velocity should affect kick force 
 
 
     private void Awake()
@@ -69,8 +71,11 @@ public class PlayerInput : MonoBehaviour
         if (rb.velocity.y == 0) {
             midJump = false;
         }
+
+        // if is Grounded and just ended midJump, then play landing animation
+        
         // isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundObjects);
-        isGrounded = Physics2D.OverlapBox(groundCheck.position, checkGroundSize, 0f) && !midJump;
+        isGrounded = Physics2D.OverlapBox(groundCheck.position, checkGroundSize, 0f, groundObjects) && !midJump;
         Move();
     }
 
@@ -125,12 +130,12 @@ public class PlayerInput : MonoBehaviour
             }
 
         }
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.K))
         {
             anim.SetBool("isKicking", true);
         }
         // Grappling hook Input
-        if (Input.GetKeyDown(KeyCode.Mouse1))
+        if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.J))
         {
             // grab
             grapplingGun.SetGrapplePoint();
@@ -153,7 +158,7 @@ public class PlayerInput : MonoBehaviour
             // rotation grappling
             grapplingGun.RotateGun(grapplingGun.grapplePoint);
         }
-        if (Input.GetKeyUp(KeyCode.Mouse1))
+        if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyUp(KeyCode.J))
         {
             // release
             grappleRope.enabled = false;
@@ -178,17 +183,18 @@ public class PlayerInput : MonoBehaviour
         {
             Vector2 dir = enemyObject.transform.position - transform.position;
             dir.Normalize();
+            Debug.Log("on ground kick? " + isGrounded);
             // if isGrounded, add slight upward force, but don't multiply it by force
             if (isGrounded) {
-                force = new Vector2((dir.x > 0 ? 1 : -1) * math.max(1, rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * kickForce, kickUpForce);
+                force = new Vector2((dir.x > 0 ? 1 : -1) * math.max(1, (rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * movementForceMultiplier) * kickForce, kickUpForce);
                 if (math.abs(force.x) > maxKickForce) { // clamp x
                     force.x = force.x > 0 ? maxKickForce : maxKickForce * -1;
                 }
             } else {
-                dir = dir * math.max(1, rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude);
+                dir = dir * math.max(1, (rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * movementForceMultiplier);
                 force = Vector2.ClampMagnitude(dir * kickForce, maxKickForce); // clamp total force
             }
-            Debug.Log(force);
+            Debug.Log("Force: " + force);
             // Debug.Log("Hit direction: " + dir);
             enemyObject.GetComponent<Enemy_Basic>().takeKick(kickDamage, force);
         }

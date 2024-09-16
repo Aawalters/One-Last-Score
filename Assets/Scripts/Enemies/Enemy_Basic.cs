@@ -11,6 +11,9 @@ public class Enemy_Basic : MonoBehaviour
     private GameManager gameManager;
     public float collisionForceThreshold;
     private bool inImpact = false;
+    [Range(0, 1)]
+    public float collisionDamageMultiplier; // determines how much collision force is factored into damage
+    public float bounceForce; // strength of bouncing against other things
     // Start is called before the first frame update
     void Start()
     {
@@ -25,10 +28,11 @@ public class Enemy_Basic : MonoBehaviour
     {
         if (rb.velocity.magnitude < collisionForceThreshold) {
             inImpact = false;
+            anim.SetBool("ImpactBool", false);
         }
         if (health < currentHealth) {
             currentHealth = health;
-            anim.SetTrigger("Impact");
+            anim.SetTrigger("ImpactTrigger");
         }
 
         if (health < 0) {
@@ -42,13 +46,19 @@ public class Enemy_Basic : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (inImpact) {
+            
             float impactForce = collision.relativeVelocity.magnitude;
-            Debug.Log(impactForce);
+            Debug.Log("impact force: " + impactForce);
 
-            if (impactForce > collisionForceThreshold) {
-                int collisionDamage = Mathf.RoundToInt(impactForce);
+            if (impactForce > collisionForceThreshold) { // if force > threshold, then deal dmg, otherwise no longer in inImpact state
+                int collisionDamage = Mathf.RoundToInt(impactForce * collisionDamageMultiplier); // consider log max for extreme cases
                 health -= collisionDamage;
                 Debug.Log("Enemy took " + collisionDamage + " damage due to impact.");
+
+                // direction opposite of collision
+                Vector2 bounceDirection = collision.contacts[0].normal;
+                // Debug.Log("bounce direction: " + -bounceDirection);
+                rb.AddForce(bounceDirection * bounceForce, ForceMode2D.Impulse);
             }
         }
     }
@@ -56,6 +66,7 @@ public class Enemy_Basic : MonoBehaviour
     public void takeKick(int damage, Vector2 force) {
         health -= damage;
         inImpact = true;
+        anim.SetBool("ImpactBool", true);
         rb.AddForce(force, ForceMode2D.Impulse);
     }
 }
