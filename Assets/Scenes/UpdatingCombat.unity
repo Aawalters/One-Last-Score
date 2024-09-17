@@ -137,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &36190844
 Transform:
   m_ObjectHideFlags: 0
@@ -1430,6 +1430,26 @@ PrefabInstance:
       propertyPath: m_DampingRatio
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5811921192025995567, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.752
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811921193137224073, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: m_Size.x
+      value: 1.3378874
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811921193137224073, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: m_Size.y
+      value: 1.4967582
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811921193137224073, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.19548684
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811921193137224073, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.7499037
+      objectReference: {fileID: 0}
     - target: {fileID: 5811921193137224074, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
       propertyPath: m_Constraints
       value: 4
@@ -1444,7 +1464,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5811921193137224075, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.31
+      value: -4.537
       objectReference: {fileID: 0}
     - target: {fileID: 5811921193137224075, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1487,12 +1507,32 @@ PrefabInstance:
       value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 5811921193137224078, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1444416760}
+    - target: {fileID: 5811921193137224078, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: jumpForce
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811921193137224078, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: chaseSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811921193137224078, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
       propertyPath: currentHealth
       value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 5811921193137224078, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: groundLayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811921193137224078, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
       propertyPath: collisionForceThreshold
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811921193137224078, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: collisionForceMultiplier
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5811921193137224085, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
       propertyPath: m_Name
@@ -1775,11 +1815,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5811921193137224075, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.1
+      value: -7.9
       objectReference: {fileID: 0}
     - target: {fileID: 5811921193137224075, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.5
+      value: -3.25
       objectReference: {fileID: 0}
     - target: {fileID: 5811921193137224075, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1821,6 +1861,18 @@ PrefabInstance:
       propertyPath: rb
       value: 
       objectReference: {fileID: 1240665373}
+    - target: {fileID: 5811921193137224078, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: health
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811921193137224078, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: currentHealth
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811921193137224078, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: collisionForceMultiplier
+      value: 0.411
+      objectReference: {fileID: 0}
     - target: {fileID: 5811921193137224085, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
       propertyPath: m_Name
       value: Enemy (1)
@@ -2599,7 +2651,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1034824820
 Transform:
   m_ObjectHideFlags: 0
@@ -2926,7 +2978,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1306428499
 Transform:
   m_ObjectHideFlags: 0
@@ -3096,6 +3148,11 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!4 &1444416760 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2990557554159055597, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+  m_PrefabInstance: {fileID: 246864342}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1446113208
 GameObject:
   m_ObjectHideFlags: 0
@@ -3248,7 +3305,7 @@ GameObject:
   - component: {fileID: 1502978175}
   - component: {fileID: 1502978177}
   - component: {fileID: 1502978176}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Trash Can
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3508,10 +3565,10 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 7ca5dd0b011ee9f4a8b8d608101c3ea0, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.085
+  m_Volume: 0.143
   m_Pitch: 1
   Loop: 0
-  Mute: 0
+  Mute: 1
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
@@ -3751,7 +3808,7 @@ GameObject:
   - component: {fileID: 1784726055}
   - component: {fileID: 1784726054}
   m_Layer: 0
-  m_Name: Reference
+  m_Name: Level
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

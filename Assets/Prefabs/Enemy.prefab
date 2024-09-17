@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 1795744082280894315}
   m_Layer: 9
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -208,6 +208,7 @@ MonoBehaviour:
   collisionForceThreshold: 10
   collisionDamageMultiplier: 0.5
   bounceForce: 5
+  collisionForceMultiplier: 0
 --- !u!231 &1667829834687669964
 SpringJoint2D:
   m_ObjectHideFlags: 0
