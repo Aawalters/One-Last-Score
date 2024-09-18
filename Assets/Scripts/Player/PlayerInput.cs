@@ -98,11 +98,14 @@ public class PlayerInput : MonoBehaviour
 
     private void Move()
     {
-        rb.velocity = new Vector2(
-            Mathf.Clamp(moveDirection * moveSpeed, -XMaxSpeed, XMaxSpeed),
-            Mathf.Clamp(rb.velocity.y, -30, YMaxSpeed));
-
-        //rb.velocity = new Vector2(moveDirection * moveSpeed, rb.velocity.y);
+        if (!isGrounded)
+        {
+            rb.velocity = new Vector2( Mathf.Clamp(rb.velocity.x + moveDirection * moveSpeed, -XMaxSpeed, XMaxSpeed),
+                Mathf.Clamp(rb.velocity.y, -30, YMaxSpeed));
+        } else
+        {
+            rb.velocity = new Vector2(moveDirection * moveSpeed, rb.velocity.y);
+        }
 
         anim.SetBool("isWalking", Mathf.Abs(rb.velocity.x) > 0.1f);
 
@@ -150,24 +153,28 @@ public class PlayerInput : MonoBehaviour
             anim.SetBool("isKicking", true);
         }
         // Grappling hook Input
-        grapplingGun.SetSpring(isGrounded);
-        if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.J))
+        //grapplingGun.SetSpring(isGrounded);
+        if (Input.GetKeyDown(KeyCode.Mouse1)  || Input.GetKeyDown(KeyCode.J))
         {
             grapplingGun.SetGrapplePoint();
         }
-        else if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyUp(KeyCode.J))
+        if (Input.GetKey(KeyCode.Mouse1)  || Input.GetKeyDown(KeyCode.J))
+        {
+            grapplingGun.pull();
+        }
+        else if (Input.GetKeyUp(KeyCode.Mouse1))
         {
             grapplingGun.stopGrappling();
         }
         // Pull Player
-        else if (Input.GetKey(KeyCode.Q))
-        {
-            grapplingGun.pull();
-        }
-        else if (Input.GetKeyUp(KeyCode.Q))
-        {
-            grapplingGun.stopPulling();
-        }
+        //else if (Input.GetKey(KeyCode.Q))
+        //{
+        //    grapplingGun.pull();
+        //}
+        //else if (Input.GetKeyUp(KeyCode.Q))
+        //{
+        //    grapplingGun.stopPulling();
+        //}
         // Pull Enemies
         if (Input.GetKeyDown(KeyCode.E))
         {
