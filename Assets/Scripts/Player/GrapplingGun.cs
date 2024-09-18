@@ -18,145 +18,168 @@ public class GrapplingGun : MonoBehaviour
 
     [Header("Physics Ref:")]
     public SpringJoint2D m_springJoint2D;
+    public Rigidbody2D m_rigidbody;
 
     [Header("Distance:")]
     [SerializeField] private float maxDistance = 20;
 
+    private enum LaunchType
+    {
+        Transform_Launch,
+        Physics_Launch
+    }
+
     [Header("Launching:")]
+    [SerializeField] private LaunchType launchType = LaunchType.Physics_Launch;
     [SerializeField] private float launchSpeed = 1;
+
 
     [HideInInspector] public Vector2 grapplePoint;
     [HideInInspector] public Vector2 grappleDistanceVector;
 
-    public bool isGrappled = false;    // is player grappled to an object?
-
-    public bool isPulling = false;
-
-    private GameObject grappledObject;  // object we hit (could be enemy or other)
+    [HideInInspector] public bool isGrappling;
+    private GameObject grappledObject;
 
     private void Start()
     {
-        //default
         grappleRope.enabled = false;
         m_springJoint2D.enabled = false;
-
     }
 
     private void Update()
     {
-        if(isGrappled && grappleRope.enabled)
+        Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
+        RotateGun(mousePos, true);
+
+        if (isGrappling && grappleRope.enabled)
         {
             if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy"))
-            {
                 grapplePoint = grappledObject.transform.position;
-            }
-
         }
-
     }
 
-    public void RotateGun(Vector3 lookPoint)
+    public void pull()
+    {
+        if (grappleRope.enabled)
+        {
+            RotateGun(grapplePoint, false);
+        } else {
+            Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
+            RotateGun(mousePos, true);
+        }
+
+        if (isGrappling)
+        {
+            launch();
+        }
+    }
+
+    public void stopPulling()
+    {
+        Vector2 releaseVelocity = m_rigidbody.velocity;
+        m_springJoint2D.enabled = false;
+        m_rigidbody.gravityScale = 1;
+        isGrappling = false;
+        m_rigidbody.velocity = releaseVelocity; //momentum
+    }
+
+    public void SetSpring(bool isGrounded)
+    {
+        if (isGrappling && (gunHolder.position.y < grapplePoint.y) && !isGrounded && Mathf.Abs(gunHolder.GetComponent<Rigidbody2D>().velocity.x) < 5)
+        {
+            m_springJoint2D.autoConfigureDistance = false;
+            m_springJoint2D.connectedAnchor = grapplePoint;
+            Vector2 distanceVector = grapplePoint - (Vector2)gunHolder.position;
+            m_springJoint2D.distance = distanceVector.magnitude;
+            m_springJoint2D.frequency = 0;
+            m_springJoint2D.enabled = true;
+        } else if (!isGrappling || !(gunHolder.position.y < grapplePoint.y) || isGrounded)
+        {
+            stopPulling();
+        }
+    }
+
+    private void RotateGun(Vector3 lookPoint, bool allowRotationOverTime)
     {
         Vector3 distanceVector = lookPoint - gunPivot.position;
         float angle = Mathf.Atan2(distanceVector.y, distanceVector.x) * Mathf.Rad2Deg;
         gunPivot.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
-    public void SetGrapplePoint(bool isgrounded) {
+    public void SetGrapplePoint()
+    {
         RaycastHit2D _hit = Physics2D.Raycast(firePoint.position, (m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position).normalized, maxDistance, grappableLayerMask);
         //Debug.DrawRay(firePoint.position, ((m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position).normalized * maxDistance), Color.red, maxDistance);
         if (_hit)
         {
-            // Debug.Log("Hit object layer: " + _hit.collider.gameObject.layer);
             grapplePoint = _hit.point;
-            grappleDistanceVector = grapplePoint - (Vector2)gunPivot.position; 
+            grappleDistanceVector = grapplePoint - (Vector2)gunPivot.position;
             grappleRope.enabled = true;
             grappledObject = _hit.collider.gameObject;
-            if (!isgrounded)
-            {
-                Grab(grappleDistanceVector);
-            }
         }
     }
 
-    public void Grab(Vector2 grappleDistanceVector)
+    public void stopGrappling()
     {
-        if (gunHolder.position.y < grapplePoint.y)
+        grappleRope.enabled = false;
+        stopPulling();
+        isGrappling = false;
+    }
+
+    public void launch()
+    {
+        m_springJoint2D.autoConfigureDistance = false;
+        m_springJoint2D.connectedAnchor = grapplePoint;
+
+        if (launchType == LaunchType.Physics_Launch)
         {
-            ConfigurePlayerSpring(true, grapplePoint, grappleDistanceVector.magnitude);
+            Vector2 distanceVector = firePoint.position - gunHolder.position;
+            m_springJoint2D.distance = distanceVector.magnitude;
+            m_springJoint2D.frequency = launchSpeed;
+            m_springJoint2D.enabled = true;
         }
-    }
+        else if (launchType == LaunchType.Transform_Launch)
+        {
+            m_rigidbody.gravityScale = 0;
+            m_rigidbody.velocity = Vector2.zero;
+            Vector2 firePointDistance = firePoint.position - gunHolder.localPosition;
+            Vector2 targetPos = grapplePoint - firePointDistance;
+            gunHolder.position = Vector2.Lerp(gunHolder.position, targetPos, Time.deltaTime * (launchSpeed + 4));
+            m_springJoint2D.enabled = false;
+        }
 
-    public void PullPlayer()
-    {
-        // Debug.Log("PULL PLAYER");
-        Vector2 distanceVector = firePoint.position - gunHolder.position;
-        ConfigurePlayerSpring(true, grapplePoint, distanceVector.magnitude);
-        isPulling = true;
-    }
-
-    public void StopPullingPlayer()
-    {
-        // Debug.Log("STOP PULLING PLAYER");
-        Vector2 distanceVector = firePoint.position - gunHolder.position;
-        Vector2 currentVelocity = gunHolder.gameObject.GetComponent<Rigidbody2D>().velocity;
-        ConfigurePlayerSpring(false, grapplePoint, distanceVector.magnitude);
-        gunHolder.gameObject.GetComponent<Rigidbody2D>().velocity = currentVelocity;
-        isPulling = false;
     }
 
     public void PullEnemy()
     {
-        // Debug.Log("PULL ENEMY");
-        if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy"))
+        if (isGrappling)
         {
-            SpringJoint2D enemySpringJoint = grappledObject.GetComponent<SpringJoint2D>();
-            // Debug.Log("selected name: " + grappledObject.gameObject.name);
-            // Debug.Log("enemySpringJoint" + enemySpringJoint);
-            if (enemySpringJoint != null)
+            if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy"))
             {
-                enemySpringJoint.connectedAnchor = firePoint.position;  // Connect the enemy to the player
-                enemySpringJoint.distance = 0;  // Enemy will be pulled towards the player
-                enemySpringJoint.enabled = true;
+                SpringJoint2D enemySpringJoint = grappledObject.GetComponent<SpringJoint2D>();
+                if (enemySpringJoint != null)
+                {
+                    enemySpringJoint.connectedAnchor = firePoint.position;
+                    enemySpringJoint.distance = 0;
+                    enemySpringJoint.enabled = true;
+                }
             }
         }
-        else
-        {
-            Debug.Log("No enemy to pull or invalid target.");
-        }
-
     }
 
     public void StopPullingEnemy()
     {
-        if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy"))
+        if (isGrappling) 
         {
-            SpringJoint2D enemySpringJoint = grappledObject.GetComponent<SpringJoint2D>();
-            if (enemySpringJoint != null)
+            if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy"))
             {
-                enemySpringJoint.enabled = false;
+                SpringJoint2D enemySpringJoint = grappledObject.GetComponent<SpringJoint2D>();
+                if (enemySpringJoint != null)
+                {
+                    enemySpringJoint.enabled = false;
+                }
             }
-        }
-        else
-        {
-            Debug.Log("No enemy to release or invalid target.");
+            stopPulling();
         }
     }
-
-    private void ConfigurePlayerSpring(bool state, Vector2 anchorPoint, float distance)
-    {
-        if (state)
-        {
-            m_springJoint2D.autoConfigureDistance = false;
-            m_springJoint2D.connectedAnchor = anchorPoint;
-            m_springJoint2D.distance = distance;
-            m_springJoint2D.frequency = launchSpeed;
-            m_springJoint2D.enabled = state;
-        }
-        else
-        {
-            m_springJoint2D.enabled = state;
-        }
-    }
-
 }

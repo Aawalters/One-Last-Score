@@ -95,25 +95,13 @@ public class PlayerInput : MonoBehaviour
 
     private void Move()
     {
-        ///////////////////////
-        if (true) // !m_springJoint2D.enabled
-
-        { }
-        // When not being pulled by grappling hook
         rb.velocity = new Vector2(
-        Mathf.Clamp(rb.velocity.x + moveDirection * moveSpeed, -XMaxSpeed, XMaxSpeed),
-        Mathf.Clamp(rb.velocity.y, -YMaxSpeed, YMaxSpeed));
-        ///////////////////////
+            Mathf.Clamp(rb.velocity.x + moveDirection * moveSpeed, -XMaxSpeed, XMaxSpeed),
+            Mathf.Clamp(rb.velocity.y, -30, YMaxSpeed));
 
-        rb.velocity = new Vector2(moveDirection * moveSpeed, rb.velocity.y);
-        if (rb.velocity.x > .1f || rb.velocity.x < -.1f)
-        {
-            anim.SetBool("isWalking", true);
-        }
-        else
-        {
-            anim.SetBool("isWalking", false);
-        }
+        //rb.velocity = new Vector2(moveDirection * moveSpeed, rb.velocity.y);
+
+        anim.SetBool("isWalking", Mathf.Abs(rb.velocity.x) > 0.1f);
 
         if (isJumping)
         {
@@ -159,55 +147,33 @@ public class PlayerInput : MonoBehaviour
             anim.SetBool("isKicking", true);
         }
         // Grappling hook Input
-        if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.J))
+        grapplingGun.SetSpring(isGrounded);
+        if (Input.GetKeyDown(KeyCode.Mouse1))
         {
-            // grab
-            grapplingGun.SetGrapplePoint(isGrounded);
+            grapplingGun.SetGrapplePoint();
         }
-        if (grapplingGun.isGrappled)
+        else if (Input.GetKeyUp(KeyCode.Mouse1))
         {
-            // Player is connected but hasn't moved yet
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                grapplingGun.PullPlayer();  // Pull the player towards the grapple point
-            }
-            ///////////////////////
-            else if (Input.GetKeyUp(KeyCode.Q))
-            {
-                grapplingGun.StopPullingPlayer(); // Stop pulling the player towards the grapple point
-            }
-            ///////////////////////
-            else if (Input.GetKeyDown(KeyCode.E))
-            {
-                grapplingGun.PullEnemy();  // Pull the enemy towards the player
-            }
-            ///////////////////////
-            else if (Input.GetKeyUp(KeyCode.E))
-            {
-                // grapplingGun.StopPullingEnemy();  // Pull the enemy towards the player
-            }
-            ///////////////////////
+            grapplingGun.stopGrappling();
         }
-        if (Input.GetKey(KeyCode.Mouse1) && grappleRope.enabled)
+        // Pull Player
+        else if (Input.GetKey(KeyCode.Q))
         {
-            // rotation grappling
-            grapplingGun.RotateGun(grapplingGun.grapplePoint);
+            grapplingGun.pull();
         }
-        if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyUp(KeyCode.J))
+        else if (Input.GetKeyUp(KeyCode.Q))
         {
-            // release
-            grappleRope.enabled = false;
-            grapplingGun.isGrappled = false;
-            ///////////////////////
-            grapplingGun.StopPullingPlayer();
+            grapplingGun.stopPulling();
+        }
+        // Pull Enemies
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            grapplingGun.PullEnemy();
+        }
+        if (Input.GetKeyUp(KeyCode.E))
+
+        {
             grapplingGun.StopPullingEnemy();
-            ///////////////////////
-        }
-        else
-        {
-            // rotation not grappling
-            Vector2 mousePos = grapplingGun.m_camera.ScreenToWorldPoint(Input.mousePosition);
-            grapplingGun.RotateGun(mousePos);
         }
     }
 

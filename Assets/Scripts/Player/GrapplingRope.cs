@@ -69,10 +69,10 @@ public class GrapplingRope : MonoBehaviour
         }
         else
         {
-            if (!grapplingGun.isGrappled)
+            if (!grapplingGun.isGrappling)
             {
-                grapplingGun.isGrappled = true;
-                Debug.Log("GRAPPLED" + grapplingGun.isGrappled);
+                grapplingGun.isGrappling = true;
+                Debug.Log("GRAPPLED" + grapplingGun.isGrappling);
             }
             if (waveSize > 0)
             {
