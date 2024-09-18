@@ -78,9 +78,10 @@ public class GrapplingGun : MonoBehaviour
     {
         Vector2 releaseVelocity = m_rigidbody.velocity;
         m_springJoint2D.enabled = false;
-        m_rigidbody.gravityScale = 1;
-        isGrappling = false;
+        // m_rigidbody.gravityScale = 1;
         m_rigidbody.velocity = releaseVelocity; //momentum
+        isGrappling = false;
+        Debug.Log(m_rigidbody.gameObject.name + " velocity: " + m_rigidbody.velocity);
     }
 
     public void SetSpring(bool isGrounded)

@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5811921192025995566}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.2017, y: 0.752, z: 0}
+  m_LocalPosition: {x: -0.01, y: -0.19, z: 0}
   m_LocalScale: {x: 0.8957742, y: 0.5304165, z: 0.54543}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -178,7 +178,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.19548684, y: 0.7499037}
+  m_Offset: {x: -0.017078161, y: -0.18055832}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -189,7 +189,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.3378874, y: 1.4967582}
+  m_Size: {x: 1.3014469, y: 1.5291781}
   m_EdgeRadius: 0
 --- !u!114 &5811921193137224078
 MonoBehaviour:
@@ -203,20 +203,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b57793e512845b142ac8fa3991401cf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 1000
+  maxHealth: 1000
   currentHealth: 1000
   collisionForceThreshold: 10
   collisionDamageMultiplier: 0.5
   bounceForce: 5
   collisionForceMultiplier: 0.5
+  postImpactMassScale: 0.8
+  mass: 1
+  maxVelocity: 60
   player: {fileID: 0}
-  chaseSpeed: 3
+  chaseSpeed: 0
   jumpForce: 4
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
   isGrounded: 0
-  enemyHeight: 2.5
+  enemyHeight: 0.89
+  aiEnabled: 0
   pointSpacing: 0.5
 --- !u!231 &1667829834687669964
 SpringJoint2D:
@@ -258,7 +262,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 0.8792486
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -378,7 +382,7 @@ LineRenderer:
   m_Positions: []
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.05
     widthCurve:
       serializedVersion: 2
       m_Curve:

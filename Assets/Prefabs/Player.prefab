@@ -406,7 +406,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 2.5
+  m_GravityScale: 3.5
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -454,7 +454,7 @@ MonoBehaviour:
   grapplingGun: {fileID: 5516453970350294433}
   m_springJoint2D: {fileID: 7021618568593065068}
   XMaxSpeed: 10
-  YMaxSpeed: 7
+  YMaxSpeed: 30
   moveSpeed: 10
   jumpForce: 700
   groundCheck: {fileID: 2990557553756991438}
@@ -464,6 +464,9 @@ MonoBehaviour:
   checkGroundSize: {x: 0.8, y: 0.1}
   playerCollider: {fileID: 2990557554159055598}
   waitTime: 1.5
+  airControl: 0.7
+  grappleAirControl: 0.5
+  friction: 0.2
   attackPoint: {fileID: 6114587614926986967}
   attackRadius: 0.8
   enemyLayer:
@@ -472,9 +475,9 @@ MonoBehaviour:
   kickDamage: 1
   kickForce: 15
   kickUpForce: 10
-  maxKickForce: 75.61
-  movementForceMultiplier: 0.313
-  movementUpForceMultiplier: 1
+  maxKickForce: 100
+  movementForceMultiplier: 0.3
+  movementUpForceMultiplier: 0.2
   audioSource: {fileID: 7998308603484210774}
   KickAudio: {fileID: 8300000, guid: 97f613546e209fd4888e63a86e9a39d9, type: 3}
   MissAudio: {fileID: 8300000, guid: f3368c20d3503e3439553e27cec0ec10, type: 3}
@@ -767,7 +770,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8065346434939192077}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -11}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:

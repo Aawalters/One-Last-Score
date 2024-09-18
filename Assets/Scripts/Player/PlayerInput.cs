@@ -15,6 +15,7 @@ public class PlayerInput : MonoBehaviour
     public SpringJoint2D m_springJoint2D;
     public float XMaxSpeed = 20f;
     public float YMaxSpeed = 30f;
+    private bool isGrappling = false;
     ///////////////////////
 
     // player movement
@@ -33,6 +34,12 @@ public class PlayerInput : MonoBehaviour
     private GameObject currentOneWayPlatform;
     [SerializeField] private BoxCollider2D playerCollider;
     public float waitTime = 0f;
+    [Range(0, 1)]
+    public float airControl; // degree of player air control
+    [Range(0, 1)]
+    public float grappleAirControl; // degree of player air grappling control
+    [Range(0, 1)]
+    public float friction; // degree of friction on surfaces (to counter natural momentum)
     //
 
     // attack tuning
@@ -98,14 +105,16 @@ public class PlayerInput : MonoBehaviour
 
     private void Move()
     {
-        if (!isGrounded)
-        {
-            rb.velocity = new Vector2( Mathf.Clamp(rb.velocity.x + moveDirection * moveSpeed, -XMaxSpeed, XMaxSpeed),
-                Mathf.Clamp(rb.velocity.y, -30, YMaxSpeed));
-        } else
-        {
-            rb.velocity = new Vector2(moveDirection * moveSpeed, rb.velocity.y);
+        // if !isGrounded and !isGrappling
+        float adjustAirControl = 1;
+        if (!isGrounded && !isGrappling) {
+            adjustAirControl = airControl;
+        } else if (isGrappling) {
+            adjustAirControl = grappleAirControl;
         }
+        float xVelocity = (rb.velocity.x * (!isGrounded ? 1 : friction)) + (moveDirection * moveSpeed * adjustAirControl);
+        rb.velocity = new Vector2( Mathf.Clamp(xVelocity, -XMaxSpeed, XMaxSpeed),
+            isGrappling ? Mathf.Clamp(rb.velocity.y, -YMaxSpeed, YMaxSpeed) : rb.velocity.y);
 
         anim.SetBool("isWalking", Mathf.Abs(rb.velocity.x) > 0.1f);
 
@@ -156,14 +165,16 @@ public class PlayerInput : MonoBehaviour
         //grapplingGun.SetSpring(isGrounded);
         if (Input.GetKeyDown(KeyCode.Mouse1)  || Input.GetKeyDown(KeyCode.J))
         {
+            isGrappling = true;
             grapplingGun.SetGrapplePoint();
         }
-        if (Input.GetKey(KeyCode.Mouse1)  || Input.GetKeyDown(KeyCode.J))
+        if (Input.GetKey(KeyCode.Mouse1)  || Input.GetKey(KeyCode.J))
         {
             grapplingGun.pull();
         }
-        else if (Input.GetKeyUp(KeyCode.Mouse1))
+        else if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyUp(KeyCode.J))
         {
+            isGrappling = false;
             grapplingGun.stopGrappling();
         }
         // Pull Player

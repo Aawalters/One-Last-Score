@@ -26,6 +26,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     [Range(0, 1)]
     public float postImpactMassScale; // affects enemy floatiness during Impact State
     public float mass; // enemy base mass
+    public float maxVelocity; // don't want enemies to break game speed
     //
 
     // AI
@@ -122,6 +123,8 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
                 rb.AddForce(new Vector2(jumpDirection.x, jumpForce), ForceMode2D.Impulse);
             }
         }
+
+        rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxVelocity);
     }
 
      // This method is called when the enemy collides with another object
