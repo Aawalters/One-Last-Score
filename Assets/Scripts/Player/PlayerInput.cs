@@ -11,7 +11,11 @@ public class PlayerInput : MonoBehaviour
     [Header("Scripts Ref:")]
     public GrapplingRope grappleRope;
     public GrapplingGun grapplingGun;
-    //
+    ///////////////////////
+    public SpringJoint2D m_springJoint2D;
+    public float XMaxSpeed = 20f;
+    public float YMaxSpeed = 30f;
+    ///////////////////////
 
     // player movement
     public float moveSpeed;
@@ -88,6 +92,16 @@ public class PlayerInput : MonoBehaviour
 
     private void Move()
     {
+        ///////////////////////
+        if (true) // !m_springJoint2D.enabled
+
+        { }
+        // When not being pulled by grappling hook
+        rb.velocity = new Vector2(
+        Mathf.Clamp(rb.velocity.x + moveDirection * moveSpeed, -XMaxSpeed, XMaxSpeed),
+        Mathf.Clamp(rb.velocity.y, -YMaxSpeed, YMaxSpeed));
+        ///////////////////////
+
         rb.velocity = new Vector2(moveDirection * moveSpeed, rb.velocity.y);
         if (rb.velocity.x > .1f || rb.velocity.x < -.1f)
         {
@@ -145,7 +159,7 @@ public class PlayerInput : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.J))
         {
             // grab
-            grapplingGun.SetGrapplePoint();
+            grapplingGun.SetGrapplePoint(isGrounded);
         }
         if (grapplingGun.isGrappled)
         {
@@ -154,11 +168,22 @@ public class PlayerInput : MonoBehaviour
             {
                 grapplingGun.PullPlayer();  // Pull the player towards the grapple point
             }
+            ///////////////////////
+            else if (Input.GetKeyUp(KeyCode.Q))
+            {
+                grapplingGun.StopPullingPlayer(); // Stop pulling the player towards the grapple point
+            }
+            ///////////////////////
             else if (Input.GetKeyDown(KeyCode.E))
             {
-                Debug.Log("PULL ENEMY");
                 grapplingGun.PullEnemy();  // Pull the enemy towards the player
             }
+            ///////////////////////
+            else if (Input.GetKeyUp(KeyCode.E))
+            {
+                // grapplingGun.StopPullingEnemy();  // Pull the enemy towards the player
+            }
+            ///////////////////////
         }
         if (Input.GetKey(KeyCode.Mouse1) && grappleRope.enabled)
         {
@@ -170,8 +195,10 @@ public class PlayerInput : MonoBehaviour
             // release
             grappleRope.enabled = false;
             grapplingGun.isGrappled = false;
-            grapplingGun.m_springJoint2D.enabled = false;
-            grapplingGun.ReleaseEnemy();
+            ///////////////////////
+            grapplingGun.StopPullingPlayer();
+            grapplingGun.StopPullingEnemy();
+            ///////////////////////
         }
         else
         {

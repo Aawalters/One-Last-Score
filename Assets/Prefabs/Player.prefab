@@ -450,6 +450,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grappleRope: {fileID: 5516453970350294432}
   grapplingGun: {fileID: 5516453970350294433}
+  m_springJoint2D: {fileID: 7021618568593065068}
+  XMaxSpeed: 20
+  YMaxSpeed: 30
   moveSpeed: 10
   jumpForce: 500
   groundCheck: {fileID: 2990557553756991438}
@@ -457,6 +460,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   checkRadius: 1
+  checkGroundSize: {x: 0, y: 0}
   playerCollider: {fileID: 2990557554159055598}
   waitTime: 1.5
   anim: {fileID: 3976756146910260309}
@@ -467,6 +471,12 @@ MonoBehaviour:
     m_Bits: 512
   kickDamage: 1
   kickForce: 0.5
+  audioSource: {fileID: 0}
+  KickAudio: {fileID: 0}
+  MissAudio: {fileID: 0}
+  kickUpForce: 0
+  maxKickForce: 0
+  movementForceMultiplier: 0
 --- !u!231 &7021618568593065068
 SpringJoint2D:
   m_ObjectHideFlags: 0
@@ -683,3 +693,4 @@ MonoBehaviour:
   grapplePoint: {x: 0, y: 0}
   grappleDistanceVector: {x: 0, y: 0}
   isGrappled: 0
+  isPulling: 0
