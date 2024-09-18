@@ -32,6 +32,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     private bool shouldJump;
     private float direction;
     public float enemyHeight; // used for 'isXabove' detection
+    public bool aiEnabled = false;
     //
 
     // tracing knockback path (debugging + fx later??)
@@ -73,39 +74,41 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
             anim.SetBool("ImpactBool", false);
         }
 
-        // very basic AI script
-        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, .3f, groundLayer);
-        direction = Mathf.Sign(player.position.x - transform.position.x); 
-        // bool isPlayerBelow = Physics2D.Raycast(transform.position, Vector2.up, 4f, 1 << player.gameObject.layer);
+        if(aiEnabled) {
+            // very basic AI script
+            isGrounded = Physics2D.Raycast(transform.position, Vector2.down, .3f, groundLayer);
+            direction = Mathf.Sign(player.position.x - transform.position.x); 
+            // bool isPlayerBelow = Physics2D.Raycast(transform.position, Vector2.up, 4f, 1 << player.gameObject.layer);
 
-        if (isGrounded && !inImpact) {
-            rb.velocity = new Vector2(direction * chaseSpeed, rb.velocity.y);
-            if (direction > 0) {
-                FlipCharacter(true);
-            } else if (direction < 0) {
-                FlipCharacter(false);
+            if (isGrounded && !inImpact) {
+                rb.velocity = new Vector2(direction * chaseSpeed, rb.velocity.y);
+                if (direction > 0) {
+                    FlipCharacter(true);
+                } else if (direction < 0) {
+                    FlipCharacter(false);
+                }
+
+                RaycastHit2D groundInFront = Physics2D.Raycast(transform.position, new Vector2(direction, 0), 2f, groundLayer);
+                RaycastHit2D gapAhead = Physics2D.Raycast(transform.position + new Vector3(direction, 0, 0), Vector2.down, 1.5f, groundLayer);
+
+                bool isPlayerAbove = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + enemyHeight), Vector2.up, 3f, 1 << player.gameObject.layer);
+                RaycastHit2D platformAbove = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + enemyHeight), Vector2.up, 3f, groundLayer);
+                
+                // if no ground and gap ahead, or player above and platform available, then jump
+                if ((!groundInFront.collider && !gapAhead.collider) || (isPlayerAbove && platformAbove.collider)) {
+                    // Debug.Log("jump params at time of jump: " + groundInFront.collider + gapAhead.collider + isPlayerAbove + platformAbove.collider);
+                    shouldJump = true;
+                }
             }
 
-            RaycastHit2D groundInFront = Physics2D.Raycast(transform.position, new Vector2(direction, 0), 2f, groundLayer);
-            RaycastHit2D gapAhead = Physics2D.Raycast(transform.position + new Vector3(direction, 0, 0), Vector2.down, 1.5f, groundLayer);
-
-            bool isPlayerAbove = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + enemyHeight), Vector2.up, 3f, 1 << player.gameObject.layer);
-            RaycastHit2D platformAbove = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y + enemyHeight), Vector2.up, 3f, groundLayer);
-            
-            // if no ground and gap ahead, or player above and platform available, then jump
-            if ((!groundInFront.collider && !gapAhead.collider) || (isPlayerAbove && platformAbove.collider)) {
-                // Debug.Log("jump params at time of jump: " + groundInFront.collider + gapAhead.collider + isPlayerAbove + platformAbove.collider);
-                shouldJump = true;
+            // basic guessing/heuristic jump logic
+            if (isGrounded && shouldJump) {
+                Debug.Log(gameObject.name + "jumped");
+                shouldJump = false;
+                Vector2 direction = (player.position - transform.position).normalized;
+                Vector2 jumpDirection = direction * jumpForce;
+                rb.AddForce(new Vector2(jumpDirection.x, jumpForce), ForceMode2D.Impulse);
             }
-        }
-
-        // basic guessing/heuristic jump logic
-        if (isGrounded && shouldJump) {
-            Debug.Log(gameObject.name + "jumped");
-            shouldJump = false;
-            Vector2 direction = (player.position - transform.position).normalized;
-            Vector2 jumpDirection = direction * jumpForce;
-            rb.AddForce(new Vector2(jumpDirection.x, jumpForce), ForceMode2D.Impulse);
         }
     }
 
