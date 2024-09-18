@@ -7,41 +7,48 @@ using UnityEngine.Tilemaps;
 
 public class PlayerInput : MonoBehaviour
 {
+    // grappling
     [Header("Scripts Ref:")]
     public GrapplingRope grappleRope;
     public GrapplingGun grapplingGun;
+    //
 
+    // player movement
     public float moveSpeed;
     public float jumpForce;
     public Transform groundCheck;
     public LayerMask groundObjects;
-    public float checkRadius;
-    public Vector2 checkGroundSize;
+    public Vector2 checkGroundSize; // width height of ground check box
     private Rigidbody2D rb;
     private bool facingRight;
     private float moveDirection;
     private bool isJumping = false;
     private bool isGrounded;
     private bool midJump;
-
     private GameObject currentOneWayPlatform;
     [SerializeField] private BoxCollider2D playerCollider;
     public float waitTime = 0f;
-    public Animator anim;
+    //
+
+    // attack tuning
     public GameObject attackPoint;
     public float attackRadius;
     public LayerMask enemyLayer;
     public int kickDamage = 1;
     public float kickForce = 0.5f;
-
-    public AudioSource audioSource;
-
-    public AudioClip KickAudio;
-    public AudioClip MissAudio;
     public float kickUpForce;
     public float maxKickForce; // clamping kick force
     [Range(0, 1)]
     public float movementForceMultiplier; // determines how much player & enemy velocity should affect kick force 
+    public float movementUpForceMultiplier; // determines how much player & enemy velocity affect grounded upward kick force
+    //
+
+    // art audio
+    public AudioSource audioSource;
+    public AudioClip KickAudio;
+    public AudioClip MissAudio;
+    public Animator anim;
+    //
 
 
     private void Awake()
@@ -183,18 +190,20 @@ public class PlayerInput : MonoBehaviour
         {
             Vector2 dir = enemyObject.transform.position - transform.position;
             dir.Normalize();
+            float weightedForce = kickForce + (rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * movementForceMultiplier;
+            float weightedUpForce = kickUpForce * movementUpForceMultiplier;
             Debug.Log("on ground kick? " + isGrounded);
             // if isGrounded, add slight upward force, but don't multiply it by force
             if (isGrounded) {
-                force = new Vector2((dir.x > 0 ? 1 : -1) * math.max(1, (rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * movementForceMultiplier) * kickForce, kickUpForce);
+                force = new Vector2(Mathf.Sign(dir.x) * weightedForce, weightedUpForce);
                 if (math.abs(force.x) > maxKickForce) { // clamp x
                     force.x = force.x > 0 ? maxKickForce : maxKickForce * -1;
                 }
             } else {
-                dir = dir * math.max(1, (rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * movementForceMultiplier);
+                dir = dir * weightedForce;
                 force = Vector2.ClampMagnitude(dir * kickForce, maxKickForce); // clamp total force
             }
-            Debug.Log("Force: " + force);
+            Debug.Log("Force of player kick: " + force);
             // Debug.Log("Hit direction: " + dir);
             enemyObject.GetComponent<Enemy_Basic>().takeKick(kickDamage, force);
         }
