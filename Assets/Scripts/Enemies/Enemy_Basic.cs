@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy_Basic : MonoBehaviour
+public class Enemy_Basic : MonoBehaviour, IDamageable
 {
     // game state
-    public float health = 5f;
-    public float currentHealth;
+    public int maxHealth = 1000;
+    public int currentHealth;
     private Animator anim;
     private Rigidbody2D rb;
     private GameManager gameManager;
+    private bool facingRight;
     //
 
     // collision tuning
@@ -43,10 +44,11 @@ public class Enemy_Basic : MonoBehaviour
     void Start()
     {
         anim = transform.Find("Sprite").GetComponent<Animator>();
-        currentHealth = health;
+        currentHealth = maxHealth;
         rb = GetComponent<Rigidbody2D>();
         gameManager = FindObjectOfType<GameManager>(); // Reference the GameManager in the scene
         lineRenderer = gameObject.GetComponent<LineRenderer>();
+        facingRight = false;
 
         // Initialize the last recorded position
         lastRecordedPosition = transform.position;
@@ -55,17 +57,7 @@ public class Enemy_Basic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // taking dmg
-        if (health < currentHealth) {
-            currentHealth = health;
-            anim.SetTrigger("ImpactTrigger");
-        }
-        // death
-        if (health < 0) {
-            Destroy(gameObject);
-            Debug.Log("dead as hell");
-            // gameManager.OnEnemyKilled();
-        }
+        
     }
 
     private void FixedUpdate() {
@@ -88,6 +80,11 @@ public class Enemy_Basic : MonoBehaviour
 
         if (isGrounded && !inImpact) {
             rb.velocity = new Vector2(direction * chaseSpeed, rb.velocity.y);
+            if (direction > 0) {
+                FlipCharacter(true);
+            } else if (direction < 0) {
+                FlipCharacter(false);
+            }
 
             RaycastHit2D groundInFront = Physics2D.Raycast(transform.position, new Vector2(direction, 0), 2f, groundLayer);
             RaycastHit2D gapAhead = Physics2D.Raycast(transform.position + new Vector3(direction, 0, 0), Vector2.down, 1.5f, groundLayer);
@@ -118,25 +115,44 @@ public class Enemy_Basic : MonoBehaviour
         if (inImpact || collision.gameObject.CompareTag("enemy")) {
             
             float impactForce = collision.relativeVelocity.magnitude;
-            Debug.Log(gameObject.name + " took " + impactForce + " impact force from " + collision.gameObject.name);
+            int collisionDamage = 0;
 
             if (impactForce > collisionForceThreshold) { // if force > threshold, then deal dmg, otherwise no longer in inImpact state
-                int collisionDamage = Mathf.RoundToInt(impactForce * collisionDamageMultiplier); // consider log max for extreme cases
-                health -= collisionDamage;
-                Debug.Log(gameObject.name + " took " + collisionDamage + " impact damage from " + collision.gameObject.name);
+                collisionDamage = Mathf.RoundToInt(impactForce * collisionDamageMultiplier); // consider log max for extreme cases
+                Damage(collisionDamage);
 
-                if (collision.gameObject.CompareTag("enemy")) { // if collide wtih enemy, treat as if you were inImpact
+                // if collide wtih enemy, treat as if you were inImpact
+                if (collision.gameObject.CompareTag("enemy")) { 
                     inImpact = true;
                     anim.SetBool("ImpactBool", true);
                 } else { // bounce off surfaces, not enemies
                     // direction opposite of collision
                     Vector2 bounceDirection = collision.contacts[0].normal;
+                    // flip direction to face impact
+                    if (bounceDirection.x < 0) {
+                        FlipCharacter(true);
+                    } else if (bounceDirection.x > 0) {
+                        FlipCharacter(false);
+                    }
                     rb.AddForce(bounceDirection * (impactForce * collisionForceMultiplier), ForceMode2D.Impulse);
                 }
             }
+
+            Debug.Log(gameObject.name + " <- " + impactForce + " impact force, " + collisionDamage + " impact damage <- " + collision.gameObject.name);
         }
     }
 
+    private void FlipCharacter(bool right) {
+        // Debug.Log("flip character called with: " + right);
+        // storing whether object is already facingRight to avoid double flipping
+        if (right && !facingRight) {
+            facingRight = true;
+            transform.Rotate(0.0f, 180.0f, 0.0f);
+        } else if (!right && facingRight) {
+            facingRight = false;
+            transform.Rotate(0.0f, 180.0f, 0.0f);
+        }
+    }
     // Method to add a point to the LineRenderer
     private void AddPointToPath(Vector3 newPoint)
     {
@@ -154,11 +170,27 @@ public class Enemy_Basic : MonoBehaviour
     }
 
     public void takeKick(int damage, Vector2 force) {
-        health -= damage;
+        Damage(damage);
         inImpact = true;
         anim.SetBool("ImpactBool", true);
+        if (force.x < 0) {
+            FlipCharacter(true);
+        } else if (force.x > 0) {
+            FlipCharacter(false);
+        }
         rb.velocity = Vector2.zero; // so previous velocity doesn't interfere
         rb.AddForce(force, ForceMode2D.Impulse);
+    }
+
+    public void Damage(int damage)
+    {
+        currentHealth -= damage;
+        anim.SetTrigger("ImpactTrigger");
+
+        if (currentHealth <= 0) {
+            Destroy(gameObject);
+            Debug.Log("dead as hell");
+        }
     }
 
     private void OnDrawGizmos()
@@ -175,4 +207,6 @@ public class Enemy_Basic : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawRay(new Vector2(transform.position.x, transform.position.y + enemyHeight), Vector2.up * 3f); // isPlatformAbove/isPlayerAbove (they can be diff, but for now we're saying they're the same)
     }
+
+
 }

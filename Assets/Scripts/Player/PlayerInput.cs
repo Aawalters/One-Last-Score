@@ -46,6 +46,8 @@ public class PlayerInput : MonoBehaviour
     public float movementForceMultiplier; // determines how much player & enemy velocity should affect kick force 
     [Range(0, 1)]
     public float movementUpForceMultiplier; // determines how much player & enemy velocity affect grounded upward kick force
+    public bool shouldBeDamaging { get; private set;} = false;
+    private HashSet<IDamageable> iDamageableSet = new HashSet<IDamageable>();
     //
 
     // art audio
@@ -209,43 +211,64 @@ public class PlayerInput : MonoBehaviour
         }
     }
 
-    public void Kick()
+    public IEnumerator Kick()
     {
-        Collider2D[] enemyList = Physics2D.OverlapCircleAll(attackPoint.transform.position, attackRadius, enemyLayer);
-        Vector2 force;
+        shouldBeDamaging = true;
 
-        foreach (Collider2D enemyObject in enemyList)
-        {
-            Vector2 dir = enemyObject.transform.position - transform.position;
-            dir.Normalize();
-            float weightedForce = kickForce + (rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * movementForceMultiplier;
-            float weightedUpForce = kickUpForce + (rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * movementUpForceMultiplier;
-            Debug.Log("on ground kick? " + isGrounded);
-            // if isGrounded, add slight upward force, but don't multiply it by force
-            if (isGrounded) {
-                force = new Vector2(Mathf.Sign(dir.x) * weightedForce, weightedUpForce);
-                if (math.abs(force.x) > maxKickForce) { // clamp x
-                    force.x = force.x > 0 ? maxKickForce : maxKickForce * -1;
+        while (shouldBeDamaging) {
+            Collider2D[] enemyList = Physics2D.OverlapCircleAll(attackPoint.transform.position, attackRadius, enemyLayer);
+            Vector2 force;
+
+            foreach (Collider2D enemyObject in enemyList)
+            {
+                // calculate direction of force and factor in player and enemy velocity to strength
+                Vector2 dir = enemyObject.transform.position - transform.position;
+                dir.Normalize();
+                float weightedForce = kickForce + (rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * movementForceMultiplier;
+                float weightedUpForce = kickUpForce + (rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * movementUpForceMultiplier;
+
+                // if isGrounded, add slight upward force, but don't multiply it by force
+                // for both, clamp (maybe log max) force
+                if (isGrounded) {
+                    force = new Vector2(Mathf.Sign(dir.x) * weightedForce, weightedUpForce);
+                    if (math.abs(force.x) > maxKickForce) { // clamp x
+                        force.x = force.x > 0 ? maxKickForce : maxKickForce * -1;
+                    }
+                } else {
+                    dir = dir * weightedForce;
+                    force = Vector2.ClampMagnitude(dir * kickForce, maxKickForce); // clamp total force
                 }
-            } else {
-                dir = dir * weightedForce;
-                force = Vector2.ClampMagnitude(dir * kickForce, maxKickForce); // clamp total force
+
+                // apply damage + force to enemy 
+                IDamageable iDamageable = enemyObject.GetComponent<IDamageable>();
+                if (iDamageable != null && !iDamageableSet.Contains(iDamageable)) {
+                    Debug.Log("on ground kick? " + isGrounded);
+                    Debug.Log("Force of player kick: " + force);
+
+                    iDamageable.takeKick(kickDamage, force);
+                    iDamageableSet.Add(iDamageable);
+                }
             }
-            Debug.Log("Force of player kick: " + force);
-            // Debug.Log("Hit direction: " + dir);
-            enemyObject.GetComponent<Enemy_Basic>().takeKick(kickDamage, force);
+            yield return null; // wait a frame
         }
-        if (enemyList.Length == 0)
-        {
+
+        // post active frame processing
+        if (iDamageableSet.Count == 0) {
             audioSource.clip = MissAudio;
             audioSource.Play();
-        } else
-        {
+        } else {
             audioSource.clip = KickAudio;
             audioSource.Play();
         }
+        iDamageableSet.Clear();
     }
 
+    // set end of kick active frames
+    public void EndShouldBeDamaging() {
+        shouldBeDamaging = false;
+    } 
+
+    // set end of animation
     public void EndKick()
     {
         anim.SetBool("isKicking", false);

@@ -1322,6 +1322,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1419710306, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: m_Parameters.widthMultiplier
+      value: 0.05
+      objectReference: {fileID: 0}
     - target: {fileID: 5811921193137224075, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -1370,6 +1374,14 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 1444416760}
+    - target: {fileID: 5811921193137224078, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: maxHealth
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811921193137224078, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: chaseSpeed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5811921193137224085, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
       propertyPath: m_Name
       value: Enemy
