@@ -44,6 +44,7 @@ public class PlayerInput : MonoBehaviour
     public float maxKickForce; // clamping kick force
     [Range(0, 1)]
     public float movementForceMultiplier; // determines how much player & enemy velocity should affect kick force 
+    [Range(0, 1)]
     public float movementUpForceMultiplier; // determines how much player & enemy velocity affect grounded upward kick force
     //
 
@@ -218,7 +219,7 @@ public class PlayerInput : MonoBehaviour
             Vector2 dir = enemyObject.transform.position - transform.position;
             dir.Normalize();
             float weightedForce = kickForce + (rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * movementForceMultiplier;
-            float weightedUpForce = kickUpForce * movementUpForceMultiplier;
+            float weightedUpForce = kickUpForce + (rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * movementUpForceMultiplier;
             Debug.Log("on ground kick? " + isGrounded);
             // if isGrounded, add slight upward force, but don't multiply it by force
             if (isGrounded) {
