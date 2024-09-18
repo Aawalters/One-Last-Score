@@ -96,7 +96,7 @@ public class PlayerInput : MonoBehaviour
     private void Move()
     {
         rb.velocity = new Vector2(
-            Mathf.Clamp(rb.velocity.x + moveDirection * moveSpeed, -XMaxSpeed, XMaxSpeed),
+            Mathf.Clamp(moveDirection * moveSpeed, -XMaxSpeed, XMaxSpeed),
             Mathf.Clamp(rb.velocity.y, -30, YMaxSpeed));
 
         //rb.velocity = new Vector2(moveDirection * moveSpeed, rb.velocity.y);
