@@ -8,7 +8,7 @@ using UnityEngine.Tilemaps;
 public class PlayerInput : MonoBehaviour
 {
     // grappling
-    [Header("Scripts Ref:")]
+    [Header("Grappling")]
     public GrapplingRope grappleRope;
     public GrapplingGun grapplingGun;
     ///////////////////////
@@ -18,6 +18,7 @@ public class PlayerInput : MonoBehaviour
     ///////////////////////
 
     // player movement
+    [Header("Player Movement")]
     public float moveSpeed;
     public float jumpForce;
     public Transform groundCheck;
@@ -35,6 +36,7 @@ public class PlayerInput : MonoBehaviour
     //
 
     // attack tuning
+    [Header("Attack Tuning")]
     public GameObject attackPoint;
     public float attackRadius;
     public LayerMask enemyLayer;
@@ -51,6 +53,7 @@ public class PlayerInput : MonoBehaviour
     //
 
     // art audio
+    [Header("Art/Audio")]
     public AudioSource audioSource;
     public AudioClip KickAudio;
     public AudioClip MissAudio;
@@ -148,11 +151,11 @@ public class PlayerInput : MonoBehaviour
         }
         // Grappling hook Input
         grapplingGun.SetSpring(isGrounded);
-        if (Input.GetKeyDown(KeyCode.Mouse1))
+        if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.J))
         {
             grapplingGun.SetGrapplePoint();
         }
-        else if (Input.GetKeyUp(KeyCode.Mouse1))
+        else if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyUp(KeyCode.J))
         {
             grapplingGun.stopGrappling();
         }
@@ -180,6 +183,8 @@ public class PlayerInput : MonoBehaviour
     public IEnumerator Kick()
     {
         shouldBeDamaging = true;
+        Debug.Log("on ground kick? " + isGrounded);
+
 
         while (shouldBeDamaging) {
             Collider2D[] enemyList = Physics2D.OverlapCircleAll(attackPoint.transform.position, attackRadius, enemyLayer);
@@ -208,7 +213,6 @@ public class PlayerInput : MonoBehaviour
                 // apply damage + force to enemy 
                 IDamageable iDamageable = enemyObject.GetComponent<IDamageable>();
                 if (iDamageable != null && !iDamageableSet.Contains(iDamageable)) {
-                    Debug.Log("on ground kick? " + isGrounded);
                     Debug.Log("Force of player kick: " + force);
 
                     iDamageable.takeKick(kickDamage, force);

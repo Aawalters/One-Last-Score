@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy_Basic : MonoBehaviour, IDamageable
 {
     // game state
+    [Header("State")]
     public int maxHealth = 1000;
     public int currentHealth;
     private Animator anim;
@@ -14,6 +15,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     //
 
     // collision tuning
+    [Header("Collision Tuning")]
     public float collisionForceThreshold;
     private bool inImpact = false;
     [Range(0, 1)]
@@ -21,9 +23,13 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     public float bounceForce; // strength of bouncing against other things
     [Range(0, 1)]
     public float collisionForceMultiplier; // determines how much weight impact force factors into bounce
+    [Range(0, 1)]
+    public float postImpactMassScale; // affects enemy floatiness during Impact State
+    public float mass; // enemy base mass
     //
 
     // AI
+    [Header("AI")]
     public Transform player;
     public float chaseSpeed = 2f;
     public float jumpForce = 2f;
@@ -36,6 +42,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     //
 
     // tracing knockback path (debugging + fx later??)
+    [Header("Knockback Path Tracer")]
     private LineRenderer lineRenderer;
     public float pointSpacing = 0.5f;  // Minimum distance between recorded points
     private Vector3 lastRecordedPosition;  // Last recorded position to avoid redundant points
@@ -63,8 +70,13 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
 
     private void FixedUpdate() {
         // Only record a new point if the enemy has moved a significant distance
-        if (inImpact && Vector3.Distance(transform.position, lastRecordedPosition) > pointSpacing) {
-            AddPointToPath(transform.position);
+        if (inImpact) {
+            rb.mass = mass * postImpactMassScale;
+            if (Vector3.Distance(transform.position, lastRecordedPosition) > pointSpacing) {
+                AddPointToPath(transform.position);
+            }
+        } else {
+            rb.mass = mass;
         }
 
         // if low velocity, then no longer inImpact
