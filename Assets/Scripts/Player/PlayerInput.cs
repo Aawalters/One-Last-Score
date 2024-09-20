@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Tilemaps;
 
 public class PlayerInput : MonoBehaviour
@@ -67,6 +68,11 @@ public class PlayerInput : MonoBehaviour
     public Animator anim;
     //
 
+    public int maxHealth = 100;    // Maximum health of the player
+    public int currentHealth;      // Current health of the player
+    public Slider healthBar;       // UI Slider for health bar
+    public GameObject dieScreen;   // Reference to the die screen canvas
+
 
     private void Awake()
     {
@@ -80,6 +86,9 @@ public class PlayerInput : MonoBehaviour
         anim = GetComponent<Animator>();
         facingRight = false;
         audioSource = GetComponent<AudioSource>();
+        currentHealth = maxHealth; // Set health to max at start
+        healthBar.maxValue = maxHealth;
+        healthBar.value = currentHealth;
     }
 
     // Update is called once per frame
@@ -165,7 +174,7 @@ public class PlayerInput : MonoBehaviour
         //grapplingGun.SetSpring(isGrounded);
         if (Input.GetKeyDown(KeyCode.Mouse1)  || Input.GetKeyDown(KeyCode.J))
         {
-            isGrappling = true;
+            //isGrappling = true;
             grapplingGun.SetGrapplePoint();
         }
         if (Input.GetKey(KeyCode.Mouse1)  || Input.GetKey(KeyCode.J))
@@ -174,10 +183,10 @@ public class PlayerInput : MonoBehaviour
         }
         else if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyUp(KeyCode.J))
         {
-            isGrappling = false;
+            //isGrappling = false;
             grapplingGun.stopGrappling();
         }
-        // Pull Player
+        //Pull Player
         //else if (Input.GetKey(KeyCode.Q))
         //{
         //    grapplingGun.pull();
@@ -186,7 +195,7 @@ public class PlayerInput : MonoBehaviour
         //{
         //    grapplingGun.stopPulling();
         //}
-        // Pull Enemies
+        //Pull Enemies
         if (Input.GetKeyDown(KeyCode.E))
         {
             grapplingGun.PullEnemy();
@@ -268,6 +277,11 @@ public class PlayerInput : MonoBehaviour
         {
             currentOneWayPlatform = other.gameObject;
         }
+        // Check if the collided object has the layer "Enemy"
+        if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            TakeDamage(5); // Call TakeDamage from PlayerHealth
+        }
     }
 
     private void OnCollisionExit2D(Collision2D other)
@@ -298,5 +312,30 @@ public class PlayerInput : MonoBehaviour
         // Gizmos.DrawWireSphere(groundCheck.transform.position, checkRadius);
         // isGrounded = Physics2D.OverlapBox(groundCheck.position, new Vector2(2, 2), 0f);
         Gizmos.DrawCube(groundCheck.position, checkGroundSize);
+    }
+
+    // Function to take damage
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage; // Subtract damage from health
+        healthBar.value = currentHealth; // Update health bar UI
+        if (currentHealth <= 0)
+        {
+            Die(); // Call Die function if health reaches 0
+        }
+    }
+
+    // Player dies when health is 0
+    void Die()
+    {
+        Debug.Log("Player has died.");
+        // Add further actions like disabling player controls, showing Game Over screen, etc.
+
+        // Show the death screen
+        dieScreen.SetActive(true);
+
+        // Disable player controls by disabling the player game object or its movement script
+        this.gameObject.SetActive(false);
+
     }
 }
