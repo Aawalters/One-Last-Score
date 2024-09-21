@@ -27,7 +27,7 @@ public class PlayerInput : MonoBehaviour
     public LayerMask groundObjects;
     public Vector2 checkGroundSize; // width height of ground check box
     private Rigidbody2D rb;
-    private bool facingRight;
+    public bool facingRight;
     private float moveDirection;
     private bool isJumping = false;
     private bool isGrounded;
@@ -277,10 +277,9 @@ public class PlayerInput : MonoBehaviour
         {
             currentOneWayPlatform = other.gameObject;
         }
-        // Check if the collided object has the layer "Enemy"
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            TakeDamage(5); // Call TakeDamage from PlayerHealth
+            TakeDamage(5); 
         }
     }
 
@@ -300,7 +299,7 @@ public class PlayerInput : MonoBehaviour
         Physics2D.IgnoreCollision(playerCollider, platformCollider, false);
     }
 
-    private void FlipCharacter()
+    public void FlipCharacter()
     {
         facingRight = !facingRight;
         transform.Rotate(0.0f, 180.0f, 0.0f);
@@ -317,24 +316,18 @@ public class PlayerInput : MonoBehaviour
     // Function to take damage
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage; // Subtract damage from health
-        healthBar.value = currentHealth; // Update health bar UI
+        currentHealth -= damage;
+        healthBar.value = currentHealth; 
         if (currentHealth <= 0)
         {
-            Die(); // Call Die function if health reaches 0
+            Die(); 
         }
     }
 
-    // Player dies when health is 0
     void Die()
     {
-        Debug.Log("Player has died.");
-        // Add further actions like disabling player controls, showing Game Over screen, etc.
-
-        // Show the death screen
+        Debug.Log("DEATH");
         dieScreen.SetActive(true);
-
-        // Disable player controls by disabling the player game object or its movement script
         this.gameObject.SetActive(false);
 
     }

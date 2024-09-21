@@ -6,6 +6,7 @@ public class GrapplingGun : MonoBehaviour
 {
     [Header("Scripts Ref:")]
     public GrapplingRope grappleRope;
+    public PlayerInput playerInput;
 
     [Header("Layers Settings:")]
     [SerializeField] private LayerMask grappableLayerMask;
@@ -203,31 +204,26 @@ public class GrapplingGun : MonoBehaviour
 
     private void updateCursorLook()
     {
-        RaycastHit2D _hit = Physics2D.Raycast(firePoint.position, (m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position).normalized, maxDistance, grappableLayerMask);
-        if (_hit && currentCursor != specialCursor)
-        {
-
-        }
-        else if (!_hit && currentCursor != defaultCursor)
-        {
-
-        }
         // Move the cursor image to follow the mouse position
-
         Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
         if (!grappleRope.enabled)
         {
-            cursorImage.transform.position = Input.mousePosition; // Set the UI cursor position to the mouse position
-        } else
-        {
+            cursorImage.transform.position = Input.mousePosition; 
+        } else {
             cursorImage.transform.position = m_camera.WorldToScreenPoint(grapplePoint);
         }
 
-        // Calculate direction and angle
+        // Calculate direction and angle to rotate cursor
         Vector2 aimDirection = (mousePos - (Vector2)firePoint.position).normalized;
         float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
-
-        // Rotate the UI cursor to face the aim direction
         cursorImage.transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
+
+        // Face character on direction of cursor
+        if (aimDirection.x > 0 && !playerInput.facingRight)
+        {
+            playerInput.FlipCharacter();
+        } else if (aimDirection.x < 0 && playerInput.facingRight) {
+            playerInput.FlipCharacter();
+        }
     }
 }
