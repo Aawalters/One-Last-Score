@@ -29,13 +29,16 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        p.rb = GetComponent<Rigidbody2D>();
-        p.anim = GetComponent<Animator>();
+        // setting defaults
         p.facingRight = false;
-        audioSource = GetComponent<AudioSource>();
         p.healthCurrent = p.healthMax; // Set health to max at start
         p.healthBar.maxValue = p.healthMax;
         p.healthBar.value = p.healthCurrent;
+
+        // accessing components
+        p.rb = GetComponent<Rigidbody2D>();
+        p.anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -43,7 +46,6 @@ public class PlayerController : MonoBehaviour
     {
         ProcessInput();
         Animate();
-        // Debug.Log(isGrounded);
     }
 
     private void FixedUpdate()
