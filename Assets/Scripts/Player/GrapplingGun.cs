@@ -6,7 +6,10 @@ public class GrapplingGun : MonoBehaviour
 {
     [Header("Scripts Ref:")]
     public GrapplingRope grappleRope;
-    public PlayerInput playerInput;
+    public PlayerController playerController;
+
+    [Header("Player Ref:")]
+    public Player p;
 
     [Header("Layers Settings:")]
     [SerializeField] private LayerMask grappableLayerMask;
@@ -60,6 +63,8 @@ public class GrapplingGun : MonoBehaviour
         // Cursor.visible = false;
         grappleRope.enabled = false;
         m_springJoint2D.enabled = false;
+        //playerController = GameObject.Find("Player Controller").GetComponent<PlayerController>();
+        p = playerController.p;
         // Cursor.SetCursor(defaultCursor, cursorHotspot, CursorMode.Auto);
     }
 
@@ -68,7 +73,7 @@ public class GrapplingGun : MonoBehaviour
         Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
         RotateGun(mousePos); ////////////////// same thing?
         updateCursorLook();
-        if (isGrappling && grappleRope.enabled)
+        if (p.isGrappling && grappleRope.enabled)
         {
             if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy"))
                 grapplePoint = grappledObject.transform.position;
@@ -85,7 +90,7 @@ public class GrapplingGun : MonoBehaviour
             RotateGun(mousePos);  ///////////////// same thing?
         }
 
-        if (isGrappling)
+        if (p.isGrappling)
         {
             launch();
         }
@@ -97,13 +102,13 @@ public class GrapplingGun : MonoBehaviour
         m_springJoint2D.enabled = false;
         //m_rigidbody.gravityScale = 1;
         m_rigidbody.velocity = releaseVelocity; //momentum
-        isGrappling = false;
+        p.isGrappling = false;
         Debug.Log(m_rigidbody.gameObject.name + " velocity: " + m_rigidbody.velocity);
     }
 
     public void SetSpring(bool isGrounded)
     {
-        if (isGrappling && (gunHolder.position.y < grapplePoint.y) && !isGrounded && Mathf.Abs(gunHolder.GetComponent<Rigidbody2D>().velocity.x) < 5)
+        if (p.isGrappling && (gunHolder.position.y < grapplePoint.y) && !p.isGrounded && Mathf.Abs(gunHolder.GetComponent<Rigidbody2D>().velocity.x) < 5)
         {
             m_springJoint2D.autoConfigureDistance = false;
             m_springJoint2D.connectedAnchor = grapplePoint;
@@ -111,7 +116,7 @@ public class GrapplingGun : MonoBehaviour
             m_springJoint2D.distance = distanceVector.magnitude;
             m_springJoint2D.frequency = 0;
             m_springJoint2D.enabled = true;
-        } else if (!isGrappling || !(gunHolder.position.y < grapplePoint.y) || isGrounded)
+        } else if (!p.isGrappling || !(gunHolder.position.y < grapplePoint.y) || p.isGrounded)
         {
             stopPulling();
         }
@@ -142,7 +147,7 @@ public class GrapplingGun : MonoBehaviour
     {
         grappleRope.enabled = false;
         stopPulling();
-        isGrappling = false;
+        p.isGrappling = false;
     }
 
     public void launch()
@@ -171,7 +176,7 @@ public class GrapplingGun : MonoBehaviour
 
     public void PullEnemy()
     {
-        if (isGrappling)
+        if (p.isGrappling)
         {
             if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy"))
             {
@@ -188,7 +193,7 @@ public class GrapplingGun : MonoBehaviour
 
     public void StopPullingEnemy()
     {
-        if (isGrappling) 
+        if (p.isGrappling) 
         {
             if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy"))
             {
@@ -219,11 +224,11 @@ public class GrapplingGun : MonoBehaviour
         cursorImage.transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
         // Face character on direction of cursor
-        if (aimDirection.x > 0 && !playerInput.facingRight)
+        if (aimDirection.x > 0 && !p.facingRight)
         {
-            playerInput.FlipCharacter();
-        } else if (aimDirection.x < 0 && playerInput.facingRight) {
-            playerInput.FlipCharacter();
+            playerController.FlipCharacter();
+        } else if (aimDirection.x < 0 && p.facingRight) {
+            playerController.FlipCharacter();
         }
     }
 }
