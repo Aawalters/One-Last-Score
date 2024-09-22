@@ -27,11 +27,8 @@ public class Player
     [Header("Grappling")]
     public GrapplingRope grappleRope;
     public GrapplingGun grapplingGun;
-    ///////////////////////
     public SpringJoint2D m_springJoint2D;
     public float XMaxSpeed = 20f, YMaxSpeed = 30f;
-    public bool isGrappling = false;
-    ///////////////////////
 
     // player movement
     [Header("Player Movement")]

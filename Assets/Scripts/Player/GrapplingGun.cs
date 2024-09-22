@@ -64,7 +64,7 @@ public class GrapplingGun : MonoBehaviour
         grappleRope.enabled = false;
         m_springJoint2D.enabled = false;
         //playerController = GameObject.Find("Player Controller").GetComponent<PlayerController>();
-        p = playerController.p;
+        // p = playerController.p;
         // Cursor.SetCursor(defaultCursor, cursorHotspot, CursorMode.Auto);
     }
 
@@ -73,7 +73,7 @@ public class GrapplingGun : MonoBehaviour
         Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
         RotateGun(mousePos); ////////////////// same thing?
         updateCursorLook();
-        if (p.isGrappling && grappleRope.enabled)
+        if (isGrappling && grappleRope.enabled)
         {
             if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy"))
                 grapplePoint = grappledObject.transform.position;
@@ -90,7 +90,7 @@ public class GrapplingGun : MonoBehaviour
             RotateGun(mousePos);  ///////////////// same thing?
         }
 
-        if (p.isGrappling)
+        if (isGrappling)
         {
             launch();
         }
@@ -102,13 +102,13 @@ public class GrapplingGun : MonoBehaviour
         m_springJoint2D.enabled = false;
         //m_rigidbody.gravityScale = 1;
         m_rigidbody.velocity = releaseVelocity; //momentum
-        p.isGrappling = false;
+        isGrappling = false;
         Debug.Log(m_rigidbody.gameObject.name + " velocity: " + m_rigidbody.velocity);
     }
 
     public void SetSpring(bool isGrounded)
     {
-        if (p.isGrappling && (gunHolder.position.y < grapplePoint.y) && !p.isGrounded && Mathf.Abs(gunHolder.GetComponent<Rigidbody2D>().velocity.x) < 5)
+        if (isGrappling && (gunHolder.position.y < grapplePoint.y) && !p.isGrounded && Mathf.Abs(gunHolder.GetComponent<Rigidbody2D>().velocity.x) < 5)
         {
             m_springJoint2D.autoConfigureDistance = false;
             m_springJoint2D.connectedAnchor = grapplePoint;
@@ -116,7 +116,7 @@ public class GrapplingGun : MonoBehaviour
             m_springJoint2D.distance = distanceVector.magnitude;
             m_springJoint2D.frequency = 0;
             m_springJoint2D.enabled = true;
-        } else if (!p.isGrappling || !(gunHolder.position.y < grapplePoint.y) || p.isGrounded)
+        } else if (!isGrappling || !(gunHolder.position.y < grapplePoint.y) || p.isGrounded)
         {
             stopPulling();
         }
@@ -147,7 +147,7 @@ public class GrapplingGun : MonoBehaviour
     {
         grappleRope.enabled = false;
         stopPulling();
-        p.isGrappling = false;
+        isGrappling = false;
     }
 
     public void launch()
@@ -176,7 +176,7 @@ public class GrapplingGun : MonoBehaviour
 
     public void PullEnemy()
     {
-        if (p.isGrappling)
+        if (isGrappling)
         {
             if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy"))
             {
@@ -193,7 +193,7 @@ public class GrapplingGun : MonoBehaviour
 
     public void StopPullingEnemy()
     {
-        if (p.isGrappling) 
+        if (isGrappling) 
         {
             if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy"))
             {
@@ -223,12 +223,5 @@ public class GrapplingGun : MonoBehaviour
         float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
         cursorImage.transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
 
-        // Face character on direction of cursor
-        if (aimDirection.x > 0 && !p.facingRight)
-        {
-            playerController.FlipCharacter();
-        } else if (aimDirection.x < 0 && p.facingRight) {
-            playerController.FlipCharacter();
-        }
     }
 }

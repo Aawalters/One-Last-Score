@@ -53,7 +53,6 @@ public class PlayerController : MonoBehaviour
         }
 
         // if is Grounded and just ended midJump, then play landing animation
-        
         p.isGrounded = Physics2D.OverlapBox(p.groundCheck.position, p.checkGroundSize, 0f, p.groundObjects) && !p.midJump;
         Move();
     }
@@ -62,9 +61,9 @@ public class PlayerController : MonoBehaviour
     {
         // if !isGrounded and !isGrappling
         float adjustAirControl = 1;
-        if (!p.isGrounded && !p.isGrappling) {
+        if (!p.isGrounded && !p.grapplingGun.isGrappling) {
             adjustAirControl = p.airControl;
-        } else if (!p.isGrounded && p.isGrappling) {
+        } else if (!p.isGrounded && p.grapplingGun.isGrappling) {
             adjustAirControl = p.grappleAirControl;
         }
         // if in air, maintain prev x for momentum, add additoinal movement with restriction (adjustAirControl)
@@ -85,11 +84,19 @@ public class PlayerController : MonoBehaviour
 
     private void Animate()
     {
-        if (p.moveDirection > 0 && !p.facingRight)
+        Vector2 mousePos = p.grapplingGun.m_camera.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 aimDirection = (mousePos - (Vector2)p.grapplingGun.firePoint.position).normalized;
+
+        // Handle character flipping only based on movement when moving
+        if (p.moveDirection != 0)
         {
-            FlipCharacter();
+            if ((p.moveDirection > 0 && !p.facingRight) || (p.moveDirection < 0 && p.facingRight))
+            {
+                FlipCharacter();
+            }
         }
-        else if (p.moveDirection < 0 && p.facingRight)
+        // If not moving, flip character based on aim direction
+        else if ((aimDirection.x > 0 && !p.facingRight) || (aimDirection.x < 0 && p.facingRight))
         {
             FlipCharacter();
         }
@@ -118,39 +125,12 @@ public class PlayerController : MonoBehaviour
             p.anim.SetBool("isKicking", true);
         }
         // Grappling hook Input
-        //grapplingGun.SetSpring(isGrounded);
-        if (Input.GetKeyDown(KeyCode.Mouse1)  || Input.GetKeyDown(KeyCode.J))
-        {
-            //isGrappling = true;
-            p.grapplingGun.SetGrapplePoint();
-        }
-        if (Input.GetKey(KeyCode.Mouse1)  || Input.GetKey(KeyCode.J))
-        {
-            p.grapplingGun.pull();
-        }
-        else if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyUp(KeyCode.J))
-        {
-            //isGrappling = false;
-            p.grapplingGun.stopGrappling();
-        }
-        //Pull Player
-        //else if (Input.GetKey(KeyCode.Q))
-        //{
-        //    grapplingGun.pull();
-        //}
-        //else if (Input.GetKeyUp(KeyCode.Q))
-        //{
-        //    grapplingGun.stopPulling();
-        //}
-        //Pull Enemies
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            p.grapplingGun.PullEnemy();
-        }
-        if (Input.GetKeyUp(KeyCode.E))
-        {
-            p.grapplingGun.StopPullingEnemy();
-        }
+        if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.J)) p.grapplingGun.SetGrapplePoint();
+        if (Input.GetKey(KeyCode.Mouse1) || Input.GetKey(KeyCode.J)) p.grapplingGun.pull();
+        else if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyUp(KeyCode.J)) p.grapplingGun.stopGrappling();
+        // Pull enemies
+        if (Input.GetKeyDown(KeyCode.E)) p.grapplingGun.PullEnemy();
+        if (Input.GetKeyUp(KeyCode.E)) p.grapplingGun.StopPullingEnemy();
     }
 
     public IEnumerator Kick()
