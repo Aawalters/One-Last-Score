@@ -54,7 +54,6 @@ public class PlayerController : MonoBehaviour
 
         // if is Grounded and just ended midJump, then play landing animation
         
-        // isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundObjects);
         p.isGrounded = Physics2D.OverlapBox(p.groundCheck.position, p.checkGroundSize, 0f, p.groundObjects) && !p.midJump;
         Move();
     }
@@ -65,12 +64,13 @@ public class PlayerController : MonoBehaviour
         float adjustAirControl = 1;
         if (!p.isGrounded && !p.isGrappling) {
             adjustAirControl = p.airControl;
-        } else if (p.isGrappling) {
+        } else if (!p.isGrounded && p.isGrappling) {
             adjustAirControl = p.grappleAirControl;
         }
+        // if in air, maintain prev x for momentum, add additoinal movement with restriction (adjustAirControl)
         float xVelocity = (p.rb.velocity.x * (!p.isGrounded ? 1 : p.friction)) + (p.moveDirection * p.moveSpeed * adjustAirControl);
         p.rb.velocity = new Vector2( Mathf.Clamp(xVelocity, -p.XMaxSpeed, p.XMaxSpeed),
-            p.isGrappling ? Mathf.Clamp(p.rb.velocity.y, -p.YMaxSpeed, p.YMaxSpeed) : p.rb.velocity.y);
+            Mathf.Clamp(p.rb.velocity.y, -p.YMaxSpeed, p.YMaxSpeed));
 
         p.anim.SetBool("isWalking", Mathf.Abs(p.rb.velocity.x) > 0.1f);
 

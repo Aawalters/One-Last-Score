@@ -51,7 +51,7 @@ public class Player
     // attack tuning
     [Header("Attack Tuning")]
     public GameObject attackPoint;
-    public float kickForce = 0.5f, attackRadius, kickUpForce, maxKickForce; //max is clamping kick force
+    public float kickForce = 0.5f, kickUpForce, maxKickForce, attackRadius; //max is clamping kick force
     public LayerMask enemyLayer;
     public int kickDamage = 1;
     [Range(0, 1)]

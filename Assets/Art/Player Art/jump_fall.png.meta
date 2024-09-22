@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b20ae0d44a10fbf489885c25cad2a0e7
+guid: f3a1d957a9dfde14883c42c2b438fb2c
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -93,127 +93,211 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: IMG_7852_0
+      name: jump_fall_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 10
-        width: 800
-        height: 1240
+        x: 173
+        y: 16
+        width: 478
+        height: 934
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a20cec5897543054c9e47b06c5b6cb26
-      internalID: -806017669
+      spriteID: f25077157c38a1c41a5161b74667f862
+      internalID: 1542620949
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IMG_7852_1
+      name: jump_fall_1
       rect:
         serializedVersion: 2
-        x: 997
-        y: 10
-        width: 800
-        height: 1240
+        x: 1146
+        y: 9
+        width: 492
+        height: 876
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 085894ef104eab44593a0b4a04787560
-      internalID: -1934499592
+      spriteID: 4965a496dea7fd84dbaaac0ccaab34f1
+      internalID: -2092871452
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IMG_7852_2
+      name: jump_fall_2
       rect:
         serializedVersion: 2
-        x: 1890
-        y: 10
-        width: 800
-        height: 1240
+        x: 2063
+        y: 560
+        width: 9
+        height: 9
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cfaf28a2127513f4381cebb1b7c0f12a
-      internalID: -930690311
+      spriteID: 900922bc0feec3d41b1a677029275333
+      internalID: 1675039266
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IMG_7852_3
+      name: jump_fall_3
       rect:
         serializedVersion: 2
-        x: 2983
-        y: 10
-        width: 800
-        height: 1240
+        x: 2070
+        y: 227
+        width: 507
+        height: 1001
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e379a791b65f11845aca80389749fdab
-      internalID: -123998939
+      spriteID: 929ce1b51191e3c419c85c1efa152755
+      internalID: 235466702
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IMG_7852_4
+      name: jump_fall_4
       rect:
         serializedVersion: 2
-        x: 3985
-        y: 10
-        width: 800
-        height: 1240
+        x: 3139
+        y: 167
+        width: 536
+        height: 1003
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 77d328f5f3b7c754580babeda19734b2
-      internalID: -1451681865
+      spriteID: b145acb68e622c049b42376770936761
+      internalID: -1741500851
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: IMG_7852_5
+      name: jump_fall_5
       rect:
         serializedVersion: 2
-        x: 4985
-        y: 10
-        width: 794
-        height: 800
+        x: 4163
+        y: 24
+        width: 491
+        height: 876
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cbcba72082aa55e469b18b38136d21ba
-      internalID: -88582421
+      spriteID: 070e3987025286347b0b88017480a7e9
+      internalID: 834886012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump_fall_6
+      rect:
+        serializedVersion: 2
+        x: 5192
+        y: 8
+        width: 478
+        height: 934
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9880b068e6443842ada930ced43b85b
+      internalID: -1918715840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump_fall_7
+      rect:
+        serializedVersion: 2
+        x: 2066
+        y: 515
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69f1b8185c2fb904da867d6860cdf4f6
+      internalID: 332605964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump_fall_8
+      rect:
+        serializedVersion: 2
+        x: 3161
+        y: 502
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70c21893c46bad64fae6933c9ddae7f9
+      internalID: -248308371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jump_fall_9
+      rect:
+        serializedVersion: 2
+        x: 3165
+        y: 455
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bad04e06d59aa364c9370b30461ae1b3
+      internalID: 774271034
       vertices: []
       indices: 
       edges: []
@@ -229,12 +313,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      IMG_7852_0: -806017669
-      IMG_7852_1: -1934499592
-      IMG_7852_2: -930690311
-      IMG_7852_3: -123998939
-      IMG_7852_4: -1451681865
-      IMG_7852_5: -88582421
+      jump_fall_0: 1542620949
+      jump_fall_1: -2092871452
+      jump_fall_2: 1675039266
+      jump_fall_3: 235466702
+      jump_fall_4: -1741500851
+      jump_fall_5: 834886012
+      jump_fall_6: -1918715840
+      jump_fall_7: 332605964
+      jump_fall_8: -248308371
+      jump_fall_9: 774271034
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
