@@ -34,6 +34,8 @@ public class Player
     [Header("Player Movement")]
     public float moveSpeed, jumpForce, moveDirection;
     public bool isJumping = false, facingRight, isGrounded, midJump;
+    public float defaultGravity = 2.5f; // base gravity when jumping
+    public float fallingGravity = 3.5f; // set higher gravity when falling for less floatiness
     public Transform groundCheck;
     public LayerMask groundObjects;
     public Vector2 checkGroundSize; // width height of ground check box

@@ -57,9 +57,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1951913723139182555}
-  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.71428555, y: 0.9090907, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7012374598813654393}
@@ -73,9 +73,9 @@ LineRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1951913723139182555}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 0
   m_LightProbeUsage: 0
@@ -107,8 +107,8 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  - {x: 0, y: 0, z: -1}
+  - {x: 0, y: 0, z: -1}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.1
@@ -156,8 +156,8 @@ LineRenderer:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 1
-    numCapVertices: 10
+    numCornerVertices: 0
+    numCapVertices: 0
     alignment: 0
     textureMode: 0
     shadowBias: 0.5
@@ -450,42 +450,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6454f8b88be79974e9676fd4ed61d095, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grappleRope: {fileID: 5516453970350294432}
-  grapplingGun: {fileID: 5516453970350294433}
-  m_springJoint2D: {fileID: 7021618568593065068}
-  XMaxSpeed: 10
-  YMaxSpeed: 30
-  moveSpeed: 10
-  jumpForce: 700
-  groundCheck: {fileID: 2990557553756991438}
-  groundObjects:
-    serializedVersion: 2
-    m_Bits: 64
-  checkGroundSize: {x: 0.8, y: 0.1}
-  playerCollider: {fileID: 2990557554159055598}
-  waitTime: 1.5
-  airControl: 0.7
-  grappleAirControl: 0.5
-  friction: 0.2
-  attackPoint: {fileID: 6114587614926986967}
-  attackRadius: 0.8
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  kickDamage: 1
-  kickForce: 15
-  kickUpForce: 10
-  maxKickForce: 100
-  movementForceMultiplier: 0.3
-  movementUpForceMultiplier: 0.2
-  audioSource: {fileID: 7998308603484210774}
+  p:
+    healthCurrent: 100
+    healthMax: 100
+    healthBar: {fileID: 0}
+    attackCharge: 0
+    healCharge: 0
+    bleedValue: 0
+    dieScreen: {fileID: 0}
+    deckController: {fileID: 0}
+    deck:
+      deck: []
+      drawPile: []
+      hand: []
+      discardPile: []
+    anim: {fileID: 3976756146910260309}
+    grappleRope: {fileID: 5516453970350294432}
+    grapplingGun: {fileID: 5516453970350294433}
+    m_springJoint2D: {fileID: 7021618568593065068}
+    XMaxSpeed: 10
+    YMaxSpeed: 30
+    moveSpeed: 10
+    jumpForce: 700
+    moveDirection: 0
+    isJumping: 0
+    facingRight: 0
+    isGrounded: 1
+    midJump: 0
+    groundCheck: {fileID: 2990557553756991438}
+    groundObjects:
+      serializedVersion: 2
+      m_Bits: 64
+    checkGroundSize: {x: 1.15, y: 0.27}
+    rb: {fileID: 2990557554159055599}
+    currentOneWayPlatform: {fileID: 0}
+    playerCollider: {fileID: 2990557554159055598}
+    waitTime: 1
+    airControl: 0.7
+    grappleAirControl: 0.5
+    friction: 1
+    attackPoint: {fileID: 6114587614926986967}
+    kickForce: 15
+    kickUpForce: 10
+    maxKickForce: 50
+    attackRadius: 1
+    enemyLayer:
+      serializedVersion: 2
+      m_Bits: 512
+    kickDamage: 1
+    movementForceMultiplier: 0.3
+    movementUpForceMultiplier: 0.2
+  deckController: {fileID: 0}
+  audioSource: {fileID: 1444416753}
   KickAudio: {fileID: 8300000, guid: 97f613546e209fd4888e63a86e9a39d9, type: 3}
   MissAudio: {fileID: 8300000, guid: f3368c20d3503e3439553e27cec0ec10, type: 3}
-  anim: {fileID: 3976756146910260309}
-  maxHealth: 100
-  currentHealth: 100
-  healthBar: {fileID: 0}
-  dieScreen: {fileID: 0}
 --- !u!231 &7021618568593065068
 SpringJoint2D:
   m_ObjectHideFlags: 0
@@ -881,6 +899,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grappleRope: {fileID: 5516453970350294432}
+  playerController: {fileID: 2990557554159055600}
+  p:
+    healthCurrent: 0
+    healthMax: 100
+    healthBar: {fileID: 0}
+    attackCharge: 0
+    healCharge: 0
+    bleedValue: 0
+    dieScreen: {fileID: 0}
+    deckController: {fileID: 0}
+    deck:
+      deck: []
+      drawPile: []
+      hand: []
+      discardPile: []
+    anim: {fileID: 0}
+    grappleRope: {fileID: 0}
+    grapplingGun: {fileID: 0}
+    m_springJoint2D: {fileID: 0}
+    XMaxSpeed: 20
+    YMaxSpeed: 30
+    moveSpeed: 0
+    jumpForce: 0
+    moveDirection: 0
+    isJumping: 0
+    facingRight: 0
+    isGrounded: 0
+    midJump: 0
+    groundCheck: {fileID: 0}
+    groundObjects:
+      serializedVersion: 2
+      m_Bits: 0
+    checkGroundSize: {x: 0, y: 0}
+    rb: {fileID: 0}
+    currentOneWayPlatform: {fileID: 0}
+    playerCollider: {fileID: 0}
+    waitTime: 0
+    airControl: 0
+    grappleAirControl: 0
+    friction: 0
+    attackPoint: {fileID: 0}
+    kickForce: 0.5
+    kickUpForce: 0
+    maxKickForce: 0
+    attackRadius: 0
+    enemyLayer:
+      serializedVersion: 2
+      m_Bits: 0
+    kickDamage: 1
+    movementForceMultiplier: 0
+    movementUpForceMultiplier: 0
   grappableLayerMask:
     serializedVersion: 2
     m_Bits: 631
@@ -890,7 +959,7 @@ MonoBehaviour:
   firePoint: {fileID: 7012374598813654393}
   m_springJoint2D: {fileID: 7021618568593065068}
   m_rigidbody: {fileID: 2990557554159055599}
-  maxDistance: 20
+  maxDistance: 8
   launchType: 1
   launchSpeed: 1
   grapplePoint: {x: 0, y: 0}
