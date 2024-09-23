@@ -68,8 +68,9 @@ public class PlayerController : MonoBehaviour
         } else if (!p.isGrounded && p.grapplingGun.isGrappling) {
             adjustAirControl = p.grappleAirControl;
         }
-        // if in air/grappling, maintain prev x for momentum, add additoinal movement with restriction (adjustAirControl)
-        float xVelocity = (p.rb.velocity.x * (!p.isGrounded && !p.grapplingGun.isGrappling ? 1 : p.friction)) + (p.moveDirection * p.moveSpeed * adjustAirControl);
+        // if in air/grappling, maintain prev x for momentum (else add ground friction), add directed movement with air control restrictions
+        float xVelocity = (p.rb.velocity.x * (!p.isGrounded && !p.grapplingGun.isGrappling ? 1 : p.friction)) 
+            + (p.moveDirection * p.moveSpeed * adjustAirControl);
         p.rb.velocity = new Vector2( Mathf.Clamp(xVelocity, -p.XMaxSpeed, p.XMaxSpeed),
             Mathf.Clamp(p.rb.velocity.y, -p.YMaxSpeed, p.YMaxSpeed));
 

@@ -43,9 +43,9 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     public LayerMask groundLayer;
     public bool aiEnabled = false;
     public float stoppingDistance = 2f; // threshold for how player can be before moving
-    public float jumpXForce;
-    public float maxJumpYForce; 
-    private float bodyGravity; 
+    public float maxJumpYForce;
+    private float bodyGravity;
+    private BoxCollider2D collider;
 
     // state
     public bool isGrounded;
@@ -66,9 +66,13 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     private float maxJumpDistance; // threshold for x jump check for platforms
     private Vector2 platformDetectionOrigin; // should be at top of character head
     public LayerMask platformDetectionMask;
-    public float detectionDelay = 0.3f;
+    public float detectionDelay = 1f;
     public bool playerAbove;
-    public Vector2 landingTarget; // target for jump landing (consider jump min force? and/or target y offset)
+    public bool playerBelow;
+    public Vector2 landingTarget; // target for jump landing
+    public float landingOffset = 1.5f; // y offset from landing target, since calculation can't be pixel perfect (don't want it to be anyway)
+    public GameObject currentOneWayPlatform;
+    public float fallthroughTime = 0.5f; // time needed to fall through a platform before reenabling collisions
 
     [Header("Knockback Path Tracer")]
     public float pointSpacing = 0.5f;  // Minimum distance between recorded points
@@ -83,12 +87,16 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
         rb = gameObject.GetComponent<Rigidbody2D>();
         lineRenderer = gameObject.GetComponent<LineRenderer>();
         gameManager = FindObjectOfType<GameManager>(); // Reference the GameManager in the scene
+        collider = gameObject.GetComponent<BoxCollider2D>();
 
         // setting properties
         facingRight = false;
         currentHealth = maxHealth;
         bodyGravity = Mathf.Abs(Physics2D.gravity.y) * rb.gravityScale;
-        maxJumpHeight = Mathf.Pow(maxYJumpForce, 2) / (2 * bodyGravity); // Calculate max height AI can jump
+        topEnemyTransform = transform.position + (Vector3.up * topOfEnemy);
+        bottomEnemyTransform = transform.position + (Vector3.down * bottomOfEnemy);
+        maxJumpHeight = (Mathf.Pow(maxYJumpForce, 2) / (2 * bodyGravity)) - Math.Abs(topEnemyTransform.y - bottomEnemyTransform.y); // Calculate max height AI can jump
+        // Debug.Log((Mathf.Pow(maxYJumpForce, 2) / (2 * bodyGravity)) - Math.Abs(topOfEnemy - bottomOfEnemy));
         float timeToApex = maxYJumpForce / bodyGravity;
         maxJumpDistance = maxXJumpForce * timeToApex; // Calculate the max horizontal distance AI can jump
 
@@ -138,89 +146,62 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
 
             // checks
             playerAbove = (player.transform.position.y > topEnemyTransform.y) ? true : false; // check for need to jump to player level
+            playerBelow = (player.transform.position.y < bottomEnemyTransform.y) ? true : false;
             isGrounded = Physics2D.Raycast(bottomEnemyTransform, Vector2.down * .3f, groundLayer) && !midJump; // check if standing on ground
 
             // direction to player
             direction = player.position - transform.position;  
             int xDirection = direction.x == 0 ? 0 : (direction.x > 0 ? 1 : -1);
 
-            if (isGrounded && !inImpact) { // grounded and in control abilities
-                // if out of reach, walk towards player, otherwise idle
-                bool isOutOfReach = Math.Abs(direction.x) > stoppingDistance;
-                rb.velocity = new Vector2(isOutOfReach ? xDirection * chaseSpeed : 0, rb.velocity.y);
-                FlipCharacter(isOutOfReach ? xDirection > 0 : facingRight); // Maintain direction if idle
-                anim.SetBool("isWalking", isOutOfReach);
+            // grounded and in control abilities
+            if (isGrounded && !inImpact) { 
+                WalkToPlayer(xDirection);
 
-                if (playerAbove) {
+                if (playerAbove) { // look for landing target if player above
                     StartCoroutine(DetectTargetFromPlatform());
                     shouldJump = true;
                 }
                 // looking to jump and valid landing target exists
                 if (shouldJump && landingTarget != Vector2.zero) {
-                    // rb.velocity = new Vector2(xDirection * jumpXForce, 0f);
-                    Vector2 val = CalculateJumpForce(landingTarget);
-                    rb.AddForce(val, ForceMode2D.Impulse);
+                    Vector2 val = CalculateJumpForce(landingTarget + (Vector2.up * landingOffset));
+                    rb.velocity = new Vector2(val.x, 0f);
+                    rb.AddForce(new Vector2(0f, val.y), ForceMode2D.Impulse);
                     Debug.Log("landing target: " + landingTarget + " -> jump force: " + val);
                     shouldJump = false;
                     midJump = true;
                 }
-                // Player above and platform above checks
-                // Vector2 upwardVector = Vector2.up * 3f;
-                // bool isPlayerAbove = Physics2D.Raycast(topEnemyTransform, upwardVector, 1 << player.gameObject.layer);
-                // RaycastHit2D platformAbove = Physics2D.Raycast(topEnemyTransform, upwardVector, groundLayer);
+
+                if (playerBelow && currentOneWayPlatform != null) {
+                    StartCoroutine(DisableCollision());
+                }
             }
 
             if (midJump && rb.velocity.y < 0) { // if falling from a jump, regain control
-                Debug.Log("regain control from jump");
-                rb.velocity = new Vector2(0f, rb.velocity.y);
+                WalkToPlayer(xDirection);
             }
-            // isGrounded = Physics2D.Raycast(bottomEnemyTransform, Vector2.down * .3f, groundLayer);
-            // direction = Mathf.Sign(player.position.x - transform.position.x); 
-            // // bool isPlayerBelow = Physics2D.Raycast(transform.position, Vector2.up, 4f, 1 << player.gameObject.layer);
-
-            // if (isGrounded && !inImpact) {
-            //     rb.velocity = new Vector2(direction * chaseSpeed, rb.velocity.y);
-            //     FlipCharacter(direction > 0);
-            //     Vector2 directionVector = new Vector2(direction, 0);
-
-            //     // Ground in front and gap ahead checks
-            //     RaycastHit2D groundInFront = Physics2D.Raycast(bottomEnemyTransform, directionVector * 2f, groundLayer);
-            //     RaycastHit2D gapAhead = Physics2D.Raycast(bottomEnemyTransform + (Vector3)directionVector, Vector2.down * 1.5f, groundLayer);
-
-            //     // Player above and platform above checks
-            //     Vector2 upwardVector = Vector2.up * 3f;
-            //     bool isPlayerAbove = Physics2D.Raycast(topEnemyTransform, upwardVector, 1 << player.gameObject.layer);
-            //     RaycastHit2D platformAbove = Physics2D.Raycast(topEnemyTransform, upwardVector, groundLayer);
-                
-            //     // if no ground and gap ahead, or player above and platform available, then jump
-            //     if ((!groundInFront.collider && !gapAhead.collider) || (isPlayerAbove && platformAbove.collider)) {
-            //         Debug.Log("jump params at time of jump: " + groundInFront.collider + gapAhead.collider + isPlayerAbove + platformAbove.collider);
-            //         shouldJump = true;
-            //     }
-            // }
-
-            // // basic guessing/heuristic jump logic
-            // if (isGrounded && shouldJump) {
-            //     Debug.Log(gameObject.name + "jumped");
-            //     shouldJump = false;
-            //     Vector2 direction = (player.position - transform.position).normalized;
-            //     Vector2 jumpDirection = direction * jumpForce;
-            //     rb.AddForce(new Vector2(jumpDirection.x, jumpForce), ForceMode2D.Impulse);
-            // }
         }
     }
 
+    // if out of reach, walk towards player, otherwise idle
+    private void WalkToPlayer(int xDirection) {
+        bool isOutOfReach = Math.Abs(direction.x) > stoppingDistance;
+        rb.velocity = new Vector2(isOutOfReach ? xDirection * chaseSpeed : 0, rb.velocity.y);
+        FlipCharacter(isOutOfReach ? xDirection > 0 : facingRight); // Maintain direction if idle
+        anim.SetBool("isWalking", isOutOfReach);
+    }
+
+    // find x and y jump force needed to reach platformPosition
     public Vector2 CalculateJumpForce(Vector2 platformPosition) {
         // Horizontal and vertical distances
-        float deltaX = platformPosition.x - transform.position.x;
-        float deltaY = platformPosition.y - bottomEnemyTransform.y;
+        float deltaX = Math.Abs(platformPosition.x - transform.position.x);
+        float deltaY = Math.Abs(platformPosition.y - bottomEnemyTransform.y);
 
         // Calculate the vertical velocity needed to reach the platform height
-        float verticalVelocity = Mathf.Sqrt(2 * bodyGravity * deltaY);
+        float verticalVelocity = Math.Min(Mathf.Sqrt(2 * bodyGravity * deltaY), maxYJumpForce);
         // Time to reach the apex (top of the jump) at platform height
         float timeToApex = verticalVelocity / bodyGravity;
         // Calculate the horizontal velocity needed to reach the platform during that time
-        float horizontalVelocity = deltaX / (timeToApex * 2);
+        float horizontalVelocity = (facingRight ? 1 : -1) * Math.Min(maxXJumpForce, deltaX / timeToApex);
 
         // Return the calculated initial velocity as a 2D vector (x, y)
         return new Vector2(horizontalVelocity, verticalVelocity);
@@ -229,8 +210,8 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     // look for platforms within detection box (max jump dist/height) and find furthest landing target within max jump
     public IEnumerator DetectTargetFromPlatform() {
         yield return new WaitForSeconds(detectionDelay);
-        Vector2 boxSize = new Vector2(maxJumpDistance, maxJumpHeight);
 
+        Vector2 boxSize = new Vector2(maxJumpDistance, maxJumpHeight);
         Collider2D[] hits = Physics2D.OverlapBoxAll(platformDetectionOrigin, boxSize, 0f, platformDetectionMask);
         if (hits.Length == 0) { // No platforms detected, exit early
             landingTarget = Vector2.zero; // special val
@@ -251,18 +232,35 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
             }
 
             // Get the collider bounds of the furthest platform
-            Bounds platformBounds = furthestPlatform.GetComponent<Collider2D>().bounds;
-            landingTarget = new Vector2(
-                Math.Min(facingRight ? platformBounds.max.x : platformBounds.min.x, maxJumpDistance * (facingRight ? 1 : -1)),
-                platformBounds.max.y
-            );
+            if (furthestPlatform != null) {
+                Bounds platformBounds = furthestPlatform.GetComponent<Collider2D>().bounds;
+                landingTarget = new Vector2(
+                    Math.Min(facingRight ? platformBounds.max.x : platformBounds.min.x, maxJumpDistance * (facingRight ? 1 : -1)),
+                    platformBounds.max.y
+                );
+            } else {
+                landingTarget = Vector2.zero; // special val
+            }
         }
     }
 
+    private IEnumerator DisableCollision()
+    {
+        yield return new WaitForSeconds(detectionDelay);
+
+        BoxCollider2D platformCollider = currentOneWayPlatform.GetComponent<BoxCollider2D>();
+        Physics2D.IgnoreCollision(collider, platformCollider);
+        yield return new WaitForSeconds(fallthroughTime);
+        Physics2D.IgnoreCollision(collider, platformCollider, false);
+    }
 
     // receiving impact reaction
     void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.CompareTag("OneWayPlatform")) {
+            currentOneWayPlatform = collision.gameObject;
+        }
+
         if (!collision.gameObject.CompareTag("OneWayPlatform") && (inImpact || collision.gameObject.CompareTag("enemy"))) {
             
             float impactForce = collision.relativeVelocity.magnitude;
@@ -342,11 +340,12 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(transform.position + (Vector3.down * bottomOfEnemy), Vector2.down * .3f); // isGrounded
+        Gizmos.DrawRay(bottomEnemyTransform, Vector2.down * .3f); // isGrounded
 
         Gizmos.color = new Color(0f, 1f, 0f, 0.5f);
         Gizmos.DrawCube(platformDetectionOrigin, new Vector2(maxJumpDistance, maxJumpHeight));
 
+        Gizmos.DrawLine(bottomEnemyTransform, landingTarget);
 
         // Gizmos.color = Color.blue;
         // Gizmos.DrawRay(topEnemyTransform, Vector2.up * maxJumpHeight); // max height detection
