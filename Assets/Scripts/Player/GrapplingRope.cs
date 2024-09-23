@@ -42,7 +42,6 @@ public class GrapplingRope : MonoBehaviour
 
     private void LinePointsToFirePoint()
     {
-        grapplingGun.firePoint.position = new Vector3(grapplingGun.firePoint.position.x, grapplingGun.firePoint.position.y, -1);
         for (int i = 0; i < precision; i++)
         {
             my_lineRenderer.SetPosition(i, grapplingGun.firePoint.position);
@@ -89,6 +88,13 @@ public class GrapplingRope : MonoBehaviour
                 DrawRopeNoWaves();
             }
         }
+        // Lock all points of the line renderer to a specific z-plane (e.g., z = 0)
+        for (int i = 0; i < my_lineRenderer.positionCount; i++)
+        {
+            Vector3 position = my_lineRenderer.GetPosition(i);
+            position.z = 0; // Or the desired z-coordinate
+            my_lineRenderer.SetPosition(i, position);
+        }
     }
 
     void DrawRopeWaves()
@@ -100,16 +106,12 @@ public class GrapplingRope : MonoBehaviour
             Vector2 targetPosition = Vector2.Lerp(grapplingGun.firePoint.position, grapplingGun.grapplePoint, delta) + offset;
             Vector2 currentPosition = Vector2.Lerp(grapplingGun.firePoint.position, targetPosition, ropeProgressionCurve.Evaluate(moveTime) * ropeProgressionSpeed);
 
-            currentPosition = new Vector3(currentPosition.x, currentPosition.y, -1);
-
             my_lineRenderer.SetPosition(i, currentPosition);
         }
     }
 
     void DrawRopeNoWaves()
     {
-        grapplingGun.firePoint.position = new Vector3(grapplingGun.firePoint.position.x, grapplingGun.firePoint.position.y, -1);
-        grapplingGun.grapplePoint = new Vector3(grapplingGun.grapplePoint.x, grapplingGun.grapplePoint.y, -1);
         my_lineRenderer.SetPosition(0, grapplingGun.firePoint.position);
         my_lineRenderer.SetPosition(1, grapplingGun.grapplePoint);
     }

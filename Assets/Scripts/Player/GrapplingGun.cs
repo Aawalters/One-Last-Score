@@ -75,8 +75,11 @@ public class GrapplingGun : MonoBehaviour
         updateCursorLook();
         if (isGrappling && grappleRope.enabled)
         {
-            if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy"))
+            if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy")) 
+            {
                 grapplePoint = grappledObject.transform.position;
+            }
+                
         }
     }
 
