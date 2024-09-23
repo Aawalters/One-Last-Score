@@ -11,7 +11,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Beautiful Corner.unity
     guid: e1804ab2dd4d7c643aacd47cd284c45b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Sprint 2 test.unity
     guid: 31131ed07b5566340a63a30b7a0dcf9a
+  - enabled: 1
+    path: Assets/Scenes/MainMenuScene.unity
+    guid: b99de5a4f1f25f54297736642f477e87
+  - enabled: 1
+    path: Assets/Scenes/DiegoTestingScene.unity
+    guid: c9546ad68c1cc9e41b4894d1e80fd721
   m_configObjects: {}

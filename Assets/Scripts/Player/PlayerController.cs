@@ -257,7 +257,8 @@ public class PlayerController : MonoBehaviour
     void Die()
     {
         Debug.Log("DEATH");
-        p.dieScreen.SetActive(true);
-        gameObject.SetActive(false);
+        // p.dieScreen.SetActive(true);
+        // gameObject.SetActive(false);
+        p.DeathScreen.Setup(2);
     }
 }
