@@ -457,13 +457,15 @@ MonoBehaviour:
     attackCharge: 0
     healCharge: 0
     bleedValue: 0
-    dieScreen: {fileID: 0}
+    DeathScreen: {fileID: 0}
     deckController: {fileID: 0}
     deck:
       deck: []
       drawPile: []
       hand: []
       discardPile: []
+    wager: 0
+    multiplier: 0
     anim: {fileID: 3976756146910260309}
     grappleRope: {fileID: 5516453970350294432}
     grapplingGun: {fileID: 5516453970350294433}
@@ -477,6 +479,8 @@ MonoBehaviour:
     facingRight: 0
     isGrounded: 1
     midJump: 0
+    defaultGravity: 2.5
+    fallingGravity: 3.5
     groundCheck: {fileID: 2990557553756991438}
     groundObjects:
       serializedVersion: 2
@@ -907,13 +911,15 @@ MonoBehaviour:
     attackCharge: 0
     healCharge: 0
     bleedValue: 0
-    dieScreen: {fileID: 0}
+    DeathScreen: {fileID: 0}
     deckController: {fileID: 0}
     deck:
       deck: []
       drawPile: []
       hand: []
       discardPile: []
+    wager: 0
+    multiplier: 0
     anim: {fileID: 0}
     grappleRope: {fileID: 0}
     grapplingGun: {fileID: 0}
@@ -927,6 +933,8 @@ MonoBehaviour:
     facingRight: 0
     isGrounded: 0
     midJump: 0
+    defaultGravity: 2.5
+    fallingGravity: 3.5
     groundCheck: {fileID: 0}
     groundObjects:
       serializedVersion: 2

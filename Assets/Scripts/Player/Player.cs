@@ -23,6 +23,9 @@ public class Player
     public DeckController deckController;
     public Deck deck;
 
+    [Header("Status")]
+    public int wager, multiplier;
+
     public Animator anim;
     
     // grappling
