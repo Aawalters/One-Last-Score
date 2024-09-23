@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f66beef85fdfd4e813cbbfed2073f3, type: 3}
+  m_Name: MultiplierCard1
+  m_EditorClassIdentifier: Assembly-CSharp::Multiplier
+  cardName: Multipler Card 1
+  cardDescription: 
+  cardImage: {fileID: -1277805959, guid: ee1b248854ebce84ca7ab8f45642f53f, type: 3}
+  effectValue: 2
+  id: 0
+  cardUserAnim: 

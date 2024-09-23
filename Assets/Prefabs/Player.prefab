@@ -58,7 +58,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1951913723139182555}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -107,8 +107,8 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: 0, z: -1}
-  - {x: 0, y: 0, z: -1}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 0.1
@@ -457,13 +457,15 @@ MonoBehaviour:
     attackCharge: 0
     healCharge: 0
     bleedValue: 0
-    dieScreen: {fileID: 0}
+    DeathScreen: {fileID: 0}
     deckController: {fileID: 0}
     deck:
       deck: []
       drawPile: []
       hand: []
       discardPile: []
+    wager: 0
+    multiplier: 0
     anim: {fileID: 3976756146910260309}
     grappleRope: {fileID: 5516453970350294432}
     grapplingGun: {fileID: 5516453970350294433}
@@ -477,6 +479,8 @@ MonoBehaviour:
     facingRight: 0
     isGrounded: 1
     midJump: 0
+    defaultGravity: 2.5
+    fallingGravity: 3.5
     groundCheck: {fileID: 2990557553756991438}
     groundObjects:
       serializedVersion: 2
@@ -907,13 +911,15 @@ MonoBehaviour:
     attackCharge: 0
     healCharge: 0
     bleedValue: 0
-    dieScreen: {fileID: 0}
+    DeathScreen: {fileID: 0}
     deckController: {fileID: 0}
     deck:
       deck: []
       drawPile: []
       hand: []
       discardPile: []
+    wager: 0
+    multiplier: 0
     anim: {fileID: 0}
     grappleRope: {fileID: 0}
     grapplingGun: {fileID: 0}
@@ -927,6 +933,8 @@ MonoBehaviour:
     facingRight: 0
     isGrounded: 0
     midJump: 0
+    defaultGravity: 2.5
+    fallingGravity: 3.5
     groundCheck: {fileID: 0}
     groundObjects:
       serializedVersion: 2
