@@ -33,7 +33,8 @@ public class DeckController : MonoBehaviour
         //     DeckAdd(clanCards[2], temp);
         // }
 
-        PopulateDraw(temp);
+        //PopulateDraw(temp);
+        PopulateHand(temp);
         return temp;
     }
 
@@ -114,11 +115,20 @@ public class DeckController : MonoBehaviour
         deck.drawPile = deck.deck;
     }
 
+    //put all the cards in the hand
+    public void PopulateHand(Deck deck){
+        deck.hand = deck.deck;
+    }
+
+    public Card infinDrawCard(Deck deck) {
+        return deck.hand[Random.Range(0, deck.hand.Count)];
+    }
+
     //good to call after a turn, will draw until hand has 5 cards in it
-    public void DrawUntilFull(Deck deck){
+    public void DrawUntilFull(Deck deck) {
         //if this doesn't work then switch to a while loop
         var num = 5 - deck.hand.Count;
-        for(var i = 0; i < num; i++){
+        for (var i = 0; i < num; i++) {
             DrawCard(deck);
         }
     }

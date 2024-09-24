@@ -39,6 +39,9 @@ public class PlayerController : MonoBehaviour
         p.rb = GetComponent<Rigidbody2D>();
         p.anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
+
+        //p.deckController = GetComponent<DeckController>();
+        p.deck = p.deckController.GetNewDeck();
     }
 
     // Update is called once per frame
@@ -149,6 +152,8 @@ public class PlayerController : MonoBehaviour
         // Pull enemies
         if (Input.GetKeyDown(KeyCode.E)) p.grapplingGun.PullEnemy();
         if (Input.GetKeyUp(KeyCode.E)) p.grapplingGun.StopPullingEnemy();
+        //card drawing - TODO: ADD COOLDOWN (in battle manager maybe?)
+        if (Input.GetKeyDown(KeyCode.F)) p.deckController.infinDrawCard(p.deck).use(p);
     }
 
     // kick active frames
