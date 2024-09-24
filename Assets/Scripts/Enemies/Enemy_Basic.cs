@@ -74,11 +74,12 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     public float fallthroughTime = 0.5f; // time needed to fall through a platform before reenabling collisions
 
     // punching!
-    public GameObject attackPoint;
-    private float attackRadius;
+    public GameObject detectAttack;
+    public float attackRadius;
     public int punchDamage;
     public bool shouldBeDamaging { get; private set;} = false;
     public LayerMask playerLayer; // **bars**
+    public float attackWait = 1f;
 
     [Header("Knockback Path Tracer")]
     public float pointSpacing = 0.5f;  // Minimum distance between recorded points
@@ -105,7 +106,6 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
         float timeToApex = maxYJumpForce / bodyGravity;
         maxJumpDistance = maxXJumpForce * timeToApex; // Calculate the max horizontal distance AI can jump
         landingTarget = Vector2.zero;
-        attackRadius = transform.Find("attackPoint").GetComponent<CircleCollider2D>().radius;
 
         // Initialize the last recorded position
         lastRecordedPosition = transform.position;
@@ -160,7 +160,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
             int xDirection = direction.x == 0 ? 0 : (direction.x > 0 ? 1 : -1);
 
             // grounded and in control abilities
-            if (isGrounded && !inImpact) { // && !isPaused
+            if (isGrounded && !inImpact && !anim.GetBool("isPunching")) { // && !isPaused
                 WalkToPlayer(xDirection); // chase after player
 
                 if (playerAbove) { // look for landing target if player above
@@ -366,10 +366,11 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     // punch active frames
     public IEnumerator Punch() {
         shouldBeDamaging = true;
-
         while (shouldBeDamaging) {
-            Collider2D player = Physics2D.OverlapCircle(attackPoint.transform.position, attackRadius, playerLayer);
-            player.GetComponent<PlayerController>().TakeDamage(punchDamage);
+            Collider2D player = Physics2D.OverlapCircle(detectAttack.transform.position, attackRadius, playerLayer);
+            if (player != null) {
+                StartCoroutine(player.GetComponent<PlayerController>().TakeDamage(punchDamage));
+            }
             yield return null; // wait a frame
         }
     }
@@ -382,6 +383,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     // set end of animation
     public void EndPunch() {
         anim.SetBool("isPunching", false);
+        StartCoroutine(PauseAction(attackWait));
     }
 
     private void OnDrawGizmos()
@@ -392,5 +394,10 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
         Gizmos.color = new Color(0f, 1f, 0f, 0.5f);
         Gizmos.DrawCube(platformDetectionOrigin, new Vector2(maxJumpDistance, maxJumpHeight)); // jump detection box
         Gizmos.DrawLine(bottomEnemyTransform, landingTarget); // visual for where jumping landing target is
+
+        Gizmos.DrawWireSphere(detectAttack.transform.position, attackRadius);
+
+        Gizmos.color = new Color(0f, 0f, 1f, 0.5f);
+        Gizmos.DrawRay(bottomEnemyTransform, (facingRight ? Vector2.right : Vector2.left) * stoppingDistance); // stopping distance
     }
 }

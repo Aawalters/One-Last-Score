@@ -21,4 +21,13 @@ public class enemyAttackPoint : MonoBehaviour
             enemy.OnPlayerInAttackRange(collision.gameObject);
         }
     }
+
+    private void OnTriggerStay2D(Collider2D collision) {
+        Debug.Log("call trigger stay?");
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        {
+            // Call a method on the enemy object to handle this event
+            enemy.OnPlayerInAttackRange(collision.gameObject);
+        }
+    }
 }
