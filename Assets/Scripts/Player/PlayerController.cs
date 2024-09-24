@@ -151,6 +151,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.E)) p.grapplingGun.StopPullingEnemy();
     }
 
+    // kick active frames
     public IEnumerator Kick()
     {
         shouldBeDamaging = true;
@@ -251,17 +252,21 @@ public class PlayerController : MonoBehaviour
     // Function to take damage
     public IEnumerator TakeDamage(int damage)
     {
-        p.healthCurrent -= damage;
-        p.healthBar.value = p.healthCurrent; 
-        p.anim.SetBool("isHurt", true);
-        p.anim.SetBool("isKicking", false); // if you get hurt, cancel kick (rewards precision maybe?)
-        shouldBeDamaging = false;
-        if (p.healthCurrent <= 0)
-        {
-            Die(); 
+        if (!p.isHit) {
+            p.isHit = true;
+            p.healthCurrent -= damage;
+            p.healthBar.value = p.healthCurrent; 
+            p.anim.SetBool("isHurt", p.isHit);
+            p.anim.SetBool("isKicking", false); // if you get hurt, cancel kick (rewards precision maybe?)
+            shouldBeDamaging = false;
+            if (p.healthCurrent <= 0)
+            {
+                Die(); 
+            }
+            yield return new WaitForSeconds(1f);
+            p.isHit = false;
+            p.anim.SetBool("isHurt", p.isHit);
         }
-        yield return new WaitForSeconds(1f);
-        p.anim.SetBool("isHurt", false);
     }
 
     void Die()
