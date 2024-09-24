@@ -31,7 +31,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     [Tooltip("Determines how much impact force is factored into bounce")]
     public float collisionForceMultiplier;
 
-    public float mass;
+    public float baseMass;
     [Range(0, 1)]
     [Tooltip("Affects enemy floatiness during Impact State (for easier juggles)")]
     public float postImpactMassScale;
@@ -52,6 +52,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     public bool shouldJump;
     public bool midJump;
     public Vector2 direction;
+    public bool isPaused = false;
 
     // transforms for detection
     public float topOfEnemy; // used for 'isXabove' detection
@@ -66,7 +67,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     private float maxJumpDistance; // threshold for x jump check for platforms
     private Vector2 platformDetectionOrigin; // should be at top of character head
     public LayerMask platformDetectionMask;
-    public float detectionDelay = 1f;
+    public float jumpDelay = .3f;
     public bool playerAbove;
     public bool playerBelow;
     public Vector2 landingTarget; // target for jump landing
@@ -99,6 +100,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
         // Debug.Log((Mathf.Pow(maxYJumpForce, 2) / (2 * bodyGravity)) - Math.Abs(topOfEnemy - bottomOfEnemy));
         float timeToApex = maxYJumpForce / bodyGravity;
         maxJumpDistance = maxXJumpForce * timeToApex; // Calculate the max horizontal distance AI can jump
+        landingTarget = Vector2.zero;
 
         // Initialize the last recorded position
         lastRecordedPosition = transform.position;
@@ -117,12 +119,12 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
 
         // record path during impact
         if (inImpact) {
-            rb.mass = mass * postImpactMassScale;
+            rb.mass = baseMass * postImpactMassScale;
             if (Vector3.Distance(transform.position, lastRecordedPosition) > pointSpacing) {
                 AddPointToPath(transform.position);
             }
         } else {
-            rb.mass = mass;
+            rb.mass = baseMass;
         }
 
         // if low velocity, then no longer inImpact
@@ -132,13 +134,13 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
             anim.SetBool("ImpactBool", false);
         }
 
-        enemyAI(aiEnabled);
+        StartCoroutine(enemyAI(aiEnabled && !isPaused));
 
         rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxVelocity);
     }
 
     // basic AI script
-    private void enemyAI(bool enabled) {
+    private IEnumerator enemyAI(bool enabled) {
         if (enabled) {
             if (rb.velocity.y == 0) { // exit jump state when landing
                 midJump = false;
@@ -154,16 +156,19 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
             int xDirection = direction.x == 0 ? 0 : (direction.x > 0 ? 1 : -1);
 
             // grounded and in control abilities
-            if (isGrounded && !inImpact) { 
+            if (isGrounded && !inImpact && !isPaused) { 
                 WalkToPlayer(xDirection);
 
                 if (playerAbove) { // look for landing target if player above
-                    StartCoroutine(DetectTargetFromPlatform());
-                    shouldJump = true;
+                    DetectTargetFromPlatform();
+                    shouldJump = landingTarget != Vector2.zero;
                 }
                 // looking to jump and valid landing target exists
-                if (shouldJump && landingTarget != Vector2.zero) {
+                if (shouldJump) {
                     Vector2 val = CalculateJumpForce(landingTarget + (Vector2.up * landingOffset));
+
+                    yield return PauseAction(jumpDelay);
+
                     rb.velocity = new Vector2(val.x, 0f);
                     rb.AddForce(new Vector2(0f, val.y), ForceMode2D.Impulse);
                     Debug.Log("landing target: " + landingTarget + " -> jump force: " + val);
@@ -172,6 +177,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
                 }
 
                 if (playerBelow && currentOneWayPlatform != null) {
+                    yield return PauseAction(jumpDelay);
                     StartCoroutine(DisableCollision());
                 }
             }
@@ -182,6 +188,13 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
         }
     }
 
+    // Helper function to encapsulate the pause logic
+    private IEnumerator PauseAction(float delay) {
+        isPaused = true;
+        anim.SetBool("isWalking", false);
+        yield return new WaitForSeconds(delay);
+        isPaused = false;
+    }
     // if out of reach, walk towards player, otherwise idle
     private void WalkToPlayer(int xDirection) {
         bool isOutOfReach = Math.Abs(direction.x) > stoppingDistance;
@@ -208,18 +221,19 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     }
 
     // look for platforms within detection box (max jump dist/height) and find furthest landing target within max jump
-    public IEnumerator DetectTargetFromPlatform() {
-        yield return new WaitForSeconds(detectionDelay);
+    public void DetectTargetFromPlatform() {
 
         Vector2 boxSize = new Vector2(maxJumpDistance, maxJumpHeight);
         Collider2D[] hits = Physics2D.OverlapBoxAll(platformDetectionOrigin, boxSize, 0f, platformDetectionMask);
         if (hits.Length == 0) { // No platforms detected, exit early
+            // Debug.Log("no colliders detected");
             landingTarget = Vector2.zero; // special val
         } else { // look for platform furthest from enemy
             float maxDistance = float.MinValue;
             Collider2D furthestPlatform = null;
 
             foreach (var hit in hits) {
+                Debug.Log("hit: " + hit.name);
                 // Check if the hit object has the "OneWayPlatform" tag
                 if (hit.CompareTag("OneWayPlatform")) {
                     // Calculate the distance between the enemy and the hit platform
@@ -234,11 +248,14 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
             // Get the collider bounds of the furthest platform
             if (furthestPlatform != null) {
                 Bounds platformBounds = furthestPlatform.GetComponent<Collider2D>().bounds;
+                float platformXDist = Math.Abs(rb.transform.position.x - (facingRight ? platformBounds.max.x : platformBounds.min.x));
+                float jumpX = (facingRight ? 1 : -1) * Math.Min(platformXDist, maxJumpDistance);
                 landingTarget = new Vector2(
-                    Math.Min(facingRight ? platformBounds.max.x : platformBounds.min.x, maxJumpDistance * (facingRight ? 1 : -1)),
+                    jumpX,
                     platformBounds.max.y
                 );
             } else {
+                // Debug.Log("no platforms detected");
                 landingTarget = Vector2.zero; // special val
             }
         }
@@ -246,8 +263,6 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
 
     private IEnumerator DisableCollision()
     {
-        yield return new WaitForSeconds(detectionDelay);
-
         BoxCollider2D platformCollider = currentOneWayPlatform.GetComponent<BoxCollider2D>();
         Physics2D.IgnoreCollision(collider, platformCollider);
         yield return new WaitForSeconds(fallthroughTime);

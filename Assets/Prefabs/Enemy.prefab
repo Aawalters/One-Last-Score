@@ -205,22 +205,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 1000
   currentHealth: 1000
+  facingRight: 0
+  inImpact: 0
+  maxVelocity: 60
   collisionForceThreshold: 10
   collisionDamageMultiplier: 0.5
-  bounceForce: 5
   collisionForceMultiplier: 0.5
-  postImpactMassScale: 0.8
-  mass: 1
-  maxVelocity: 60
+  baseMass: 1
+  postImpactMassScale: 0.9
   player: {fileID: 0}
-  chaseSpeed: 0
-  jumpForce: 4
+  chaseSpeed: 2
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  aiEnabled: 1
+  stoppingDistance: 2
+  maxJumpYForce: 100
   isGrounded: 0
-  enemyHeight: 0.89
-  aiEnabled: 0
+  shouldJump: 0
+  midJump: 0
+  direction: {x: 0, y: 0}
+  isPaused: 0
+  topOfEnemy: 0.91
+  bottomOfEnemy: 1.48
+  maxYJumpForce: 15
+  maxXJumpForce: 5
+  platformDetectionMask:
+    serializedVersion: 2
+    m_Bits: 64
+  jumpDelay: 0.3
+  playerAbove: 0
+  playerBelow: 0
+  landingTarget: {x: 0, y: 0}
+  landingOffset: 1.5
+  currentOneWayPlatform: {fileID: 0}
+  fallthroughTime: 1
   pointSpacing: 0.5
 --- !u!231 &1667829834687669964
 SpringJoint2D:

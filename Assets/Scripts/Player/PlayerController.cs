@@ -61,6 +61,11 @@ public class PlayerController : MonoBehaviour
 
     private void Move()
     {
+        // if grapping, lower grav
+        // otherwise, if falling set higher grav for snappiness
+        p.rb.gravityScale = (p.rb.velocity.y < 0) ? p.fallingGravity : p.defaultGravity;
+        if (p.grapplingGun.isGrappling) p.rb.gravityScale = 1f;
+
         // if !isGrounded and !isGrappling
         float adjustAirControl = 1;
         if (!p.isGrounded && !p.grapplingGun.isGrappling) {
@@ -90,8 +95,16 @@ public class PlayerController : MonoBehaviour
         Vector2 mousePos = p.grapplingGun.m_camera.ScreenToWorldPoint(Input.mousePosition);
         Vector2 aimDirection = (mousePos - (Vector2)p.grapplingGun.firePoint.position).normalized;
 
+        p.anim.SetBool("midJump", p.midJump);
+
+        // when kicking, face player towards cursor to make attack easier
+        if (p.anim.GetBool("isKicking")) {
+            if ((aimDirection.x > 0 && !p.facingRight) || (aimDirection.x < 0 && p.facingRight)) {
+                FlipCharacter();
+            }
+        }
         // Handle character flipping only based on movement when moving
-        if (p.moveDirection != 0)
+        else if (p.moveDirection != 0) 
         {
             if ((p.moveDirection > 0 && !p.facingRight) || (p.moveDirection < 0 && p.facingRight))
             {
@@ -103,6 +116,7 @@ public class PlayerController : MonoBehaviour
         {
             FlipCharacter();
         }
+        
     }
 
     private void ProcessInput()
@@ -113,7 +127,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && p.isGrounded)
         {
             p.isJumping = true;
-            p.midJump = true;
         }
         if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
         {
@@ -123,7 +136,6 @@ public class PlayerController : MonoBehaviour
             }
 
         }
-        p.rb.gravityScale = p.rb.velocity.y < 0 ? p.fallingGravity : p.defaultGravity;
 
         // attacks
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.K))
@@ -210,17 +222,9 @@ public class PlayerController : MonoBehaviour
         }
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            TakeDamage(5); 
+            StartCoroutine(TakeDamage(5)); 
         }
     }
-
-    // private void OnCollisionExit2D(Collision2D other)
-    // {
-    //     if (other.gameObject.CompareTag("OneWayPlatform"))
-    //     {
-    //         p.currentOneWayPlatform = null;
-    //     }
-    // }
 
     private IEnumerator DisableCollision()
     {
@@ -245,14 +249,19 @@ public class PlayerController : MonoBehaviour
     }
 
     // Function to take damage
-    public void TakeDamage(int damage)
+    public IEnumerator TakeDamage(int damage)
     {
         p.healthCurrent -= damage;
         p.healthBar.value = p.healthCurrent; 
+        p.anim.SetBool("isHurt", true);
+        p.anim.SetBool("isKicking", false); // if you get hurt, cancel kick (rewards precision maybe?)
+        shouldBeDamaging = false;
         if (p.healthCurrent <= 0)
         {
             Die(); 
         }
+        yield return new WaitForSeconds(1f);
+        p.anim.SetBool("isHurt", false);
     }
 
     void Die()
