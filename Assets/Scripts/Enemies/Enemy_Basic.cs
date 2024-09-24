@@ -36,16 +36,16 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     [Tooltip("Affects enemy floatiness during Impact State (for easier juggles)")]
     public float postImpactMassScale;
 
-    [Header("AI")]
+    [Header("AI")] // rn the variables are horrendous, need to move everything into a sep class (AI Brain?) later for reusability/decoupling
     // set properties
     public Transform player;
     public float chaseSpeed = 2f;
     public LayerMask groundLayer;
     public bool aiEnabled = false;
-    public float stoppingDistance = 2f; // threshold for how player can be before moving
+    public float stoppingDistance = 1f; // threshold for how player can be before moving
     public float maxJumpYForce;
     private float bodyGravity;
-    private BoxCollider2D collider;
+    private BoxCollider2D collider; // read only
 
     // state
     public bool isGrounded;
@@ -55,9 +55,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     public bool isPaused = false;
 
     // transforms for detection
-    public float topOfEnemy; // used for 'isXabove' detection
     private Vector3 topEnemyTransform;
-    public float bottomOfEnemy; // used for 'isXbelow' detection
     private Vector3 bottomEnemyTransform;
 
     // jumping and platforms
@@ -74,6 +72,13 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     public float landingOffset = 1.5f; // y offset from landing target, since calculation can't be pixel perfect (don't want it to be anyway)
     public GameObject currentOneWayPlatform;
     public float fallthroughTime = 0.5f; // time needed to fall through a platform before reenabling collisions
+
+    // punching!
+    public GameObject attackPoint;
+    private float attackRadius;
+    public int punchDamage;
+    public bool shouldBeDamaging { get; private set;} = false;
+    public LayerMask playerLayer; // **bars**
 
     [Header("Knockback Path Tracer")]
     public float pointSpacing = 0.5f;  // Minimum distance between recorded points
@@ -94,13 +99,13 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
         facingRight = false;
         currentHealth = maxHealth;
         bodyGravity = Mathf.Abs(Physics2D.gravity.y) * rb.gravityScale;
-        topEnemyTransform = transform.position + (Vector3.up * topOfEnemy);
-        bottomEnemyTransform = transform.position + (Vector3.down * bottomOfEnemy);
+        topEnemyTransform = transform.position + (Vector3.up * collider.bounds.extents.y); // height based on collider
+        bottomEnemyTransform = transform.position + (Vector3.down * collider.bounds.extents.y); // feet based on collider
         maxJumpHeight = (Mathf.Pow(maxYJumpForce, 2) / (2 * bodyGravity)) - Math.Abs(topEnemyTransform.y - bottomEnemyTransform.y); // Calculate max height AI can jump
-        // Debug.Log((Mathf.Pow(maxYJumpForce, 2) / (2 * bodyGravity)) - Math.Abs(topOfEnemy - bottomOfEnemy));
         float timeToApex = maxYJumpForce / bodyGravity;
         maxJumpDistance = maxXJumpForce * timeToApex; // Calculate the max horizontal distance AI can jump
         landingTarget = Vector2.zero;
+        attackRadius = transform.Find("attackPoint").GetComponent<CircleCollider2D>().radius;
 
         // Initialize the last recorded position
         lastRecordedPosition = transform.position;
@@ -113,10 +118,9 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     }
 
     private void FixedUpdate() {
-        topEnemyTransform = transform.position + (Vector3.up * topOfEnemy);
-        bottomEnemyTransform = transform.position + (Vector3.down * bottomOfEnemy);
+        topEnemyTransform = transform.position + (Vector3.up * collider.bounds.extents.y);
+        bottomEnemyTransform = transform.position + (Vector3.down * collider.bounds.extents.y);
         platformDetectionOrigin = topEnemyTransform + (Vector3.up * (maxJumpHeight / 2)) + ((facingRight ? Vector3.right : Vector3.left) * (maxJumpDistance / 2));
-
         // record path during impact
         if (inImpact) {
             rb.mass = baseMass * postImpactMassScale;
@@ -156,8 +160,8 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
             int xDirection = direction.x == 0 ? 0 : (direction.x > 0 ? 1 : -1);
 
             // grounded and in control abilities
-            if (isGrounded && !inImpact && !isPaused) { 
-                WalkToPlayer(xDirection);
+            if (isGrounded && !inImpact) { // && !isPaused
+                WalkToPlayer(xDirection); // chase after player
 
                 if (playerAbove) { // look for landing target if player above
                     DetectTargetFromPlatform();
@@ -176,10 +180,13 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
                     midJump = true;
                 }
 
+                // looking to drop down to player
                 if (playerBelow && currentOneWayPlatform != null) {
                     yield return PauseAction(jumpDelay);
                     StartCoroutine(DisableCollision());
                 }
+
+                
             }
 
             if (midJump && rb.velocity.y < 0) { // if falling from a jump, regain control
@@ -352,32 +359,38 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
         }
     }
 
+    public void OnPlayerInAttackRange(GameObject player) {
+        anim.SetBool("isPunching", true);
+    }
+
+    // punch active frames
+    public IEnumerator Punch() {
+        shouldBeDamaging = true;
+
+        while (shouldBeDamaging) {
+            Collider2D player = Physics2D.OverlapCircle(attackPoint.transform.position, attackRadius, playerLayer);
+            player.GetComponent<PlayerController>().TakeDamage(punchDamage);
+            yield return null; // wait a frame
+        }
+    }
+
+    // end punch active frames
+    public void EndShouldBeDamaging() {
+        shouldBeDamaging = false;
+    }
+
+    // set end of animation
+    public void EndPunch() {
+        anim.SetBool("isPunching", false);
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawRay(bottomEnemyTransform, Vector2.down * .3f); // isGrounded
 
         Gizmos.color = new Color(0f, 1f, 0f, 0.5f);
-        Gizmos.DrawCube(platformDetectionOrigin, new Vector2(maxJumpDistance, maxJumpHeight));
-
-        Gizmos.DrawLine(bottomEnemyTransform, landingTarget);
-
-        // Gizmos.color = Color.blue;
-        // Gizmos.DrawRay(topEnemyTransform, Vector2.up * maxJumpHeight); // max height detection
-        // Gizmos.color = Color.red;
-        // Gizmos.DrawRay(topEnemyTransform, Vector2.left * maxJumpDistance); // max jump x distance detection
-        // Gizmos.DrawRay(topEnemyTransform, Vector2.right * maxJumpDistance); // max jump x distance detection
-
-
-        // Gizmos.color = Color.blue;
-        // Gizmos.DrawRay(transform.position + (Vector3.down * bottomOfEnemy), new Vector2(direction, 0) * 2f); // groundInFront
-
-        // Gizmos.color = Color.red;
-        // Gizmos.DrawRay(transform.position + (Vector3.down * bottomOfEnemy) + new Vector3(direction, 0, 0), Vector2.down * 1.5f); // gapAhead
-
-        // Gizmos.color = Color.green;
-        // Gizmos.DrawRay(transform.position + (Vector3.up * topOfEnemy), Vector2.up * 3f); // isPlatformAbove/isPlayerAbove (they can be diff, but for now we're saying they're the same)
+        Gizmos.DrawCube(platformDetectionOrigin, new Vector2(maxJumpDistance, maxJumpHeight)); // jump detection box
+        Gizmos.DrawLine(bottomEnemyTransform, landingTarget); // visual for where jumping landing target is
     }
-
-
 }

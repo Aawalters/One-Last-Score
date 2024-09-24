@@ -11,6 +11,7 @@ public class Player
     public int healthCurrent;       // Current health of the player
     public int healthMax = 100;     // Maximum health of the player
     public Slider healthBar;       // UI Slider for health bar
+    public bool isHit = false;
 
     public int attackCharge;
     public int healCharge;
@@ -62,5 +63,4 @@ public class Player
     public float movementForceMultiplier; // determines how much player & enemy velocity should affect kick force 
     [Range(0, 1)]
     public float movementUpForceMultiplier; // determines how much player & enemy velocity affect grounded upward kick force
- 
 }
