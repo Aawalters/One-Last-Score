@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip KickAudio;
     public AudioClip MissAudio;
+    public AudioClip CardPullAudio;
+    public AudioClip GoodPullAudio;
+    public AudioClip BadPullAudio;
 
     private void Awake()
     {
@@ -156,10 +159,23 @@ public class PlayerController : MonoBehaviour
         //card drawing - TODO: ADD COOLDOWN (in battle manager maybe?)
         if (Input.GetKeyDown(KeyCode.F)) {
             Card card = p.deckController.infinDrawCard(p.deck);
+            StartCoroutine(playCardSound(card));
             card.use(p);
             p.UICard.sprite = card.cardImage;
             p.UICard.GetComponentInChildren<TextMeshProUGUI>().text = card.cardDescription + card.effectValue.ToString();
         }
+    }
+
+    IEnumerator playCardSound(Card card) {
+            audioSource.clip = CardPullAudio;
+            audioSource.Play();
+            yield return new WaitForSeconds(CardPullAudio.length);
+            if (card.cardType == CardType.Multiplier || card.cardType == CardType.PlayerBuff) {
+                audioSource.clip = GoodPullAudio;
+            } else { 
+                audioSource.clip = BadPullAudio;
+            }
+            audioSource.Play();
     }
 
     // kick active frames
