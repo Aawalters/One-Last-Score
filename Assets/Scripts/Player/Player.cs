@@ -25,6 +25,8 @@ public class Player
     public Deck deck;
     public Image UICard;
     public GameEnemyManager GameEnemyManager;
+    public float cardCDTime = 5.0f, cardCDTimer = 0;
+    public bool cardIsOnCD = false;
 
     [Header("Status")]
     public int wager, multiplier;

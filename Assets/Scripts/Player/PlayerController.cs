@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip CardPullAudio;
     public AudioClip GoodPullAudio;
     public AudioClip BadPullAudio;
+    public AudioClip DeckShuffle;
 
     private void Awake()
     {
@@ -53,6 +54,9 @@ public class PlayerController : MonoBehaviour
     {
         ProcessInput();
         Animate();
+        if (p.cardIsOnCD) {
+            ApplyCooldown();
+        }
     }
 
     private void FixedUpdate()
@@ -158,6 +162,17 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.E)) p.grapplingGun.StopPullingEnemy();
         //card drawing - TODO: ADD COOLDOWN (in battle manager maybe?)
         if (Input.GetKeyDown(KeyCode.F)) {
+            useCard ();
+        }
+    }
+
+    private void useCard ()
+    {
+        if (p.cardIsOnCD) { //don't do anything if the card is on CD
+            return;
+        } else {
+            p.cardIsOnCD = true;
+            p.cardCDTimer = p.cardCDTime;
             Card card = p.deckController.infinDrawCard(p.deck);
             StartCoroutine(playCardSound(card));
             card.use(p);
@@ -166,16 +181,31 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator playCardSound(Card card) {
-            audioSource.clip = CardPullAudio;
+    IEnumerator playCardSound(Card card) 
+    {
+        audioSource.clip = CardPullAudio;
+        audioSource.Play();
+        yield return new WaitForSeconds(CardPullAudio.length);
+        if (card.cardType == CardType.Multiplier || card.cardType == CardType.PlayerBuff) {
+            audioSource.clip = GoodPullAudio;
+        } else { 
+            audioSource.clip = BadPullAudio;
+        }
+        audioSource.Play();
+    }
+
+    void ApplyCooldown()
+    {
+        p.cardCDTimer -= Time.deltaTime;
+
+        if (p.cardCDTimer < 0) {
+            p.cardIsOnCD = false;
+            p.cardCDTimer = 0;
+            audioSource.clip = DeckShuffle;
             audioSource.Play();
-            yield return new WaitForSeconds(CardPullAudio.length);
-            if (card.cardType == CardType.Multiplier || card.cardType == CardType.PlayerBuff) {
-                audioSource.clip = GoodPullAudio;
-            } else { 
-                audioSource.clip = BadPullAudio;
-            }
-            audioSource.Play();
+        } else {
+
+        }
     }
 
     // kick active frames
