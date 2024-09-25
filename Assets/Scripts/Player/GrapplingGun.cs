@@ -72,13 +72,13 @@ public class GrapplingGun : MonoBehaviour
         Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
         RotateGun(mousePos); ////////////////// same thing?
         updateCursorLook();
-        Debug.Log(grappledObject + "1");
+        // Debug.Log(grappledObject + "1");
         if (isGrappling && grappleRope.enabled)
         {
-            Debug.Log(grappledObject + "2");
+            // Debug.Log(grappledObject + "2");
             if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy")) 
             {
-                Debug.Log(grappledObject + "3");
+                // Debug.Log(grappledObject + "3");
                 grapplePoint = grappledObject.transform.position;
                 
             }

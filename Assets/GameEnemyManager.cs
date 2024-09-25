@@ -1,20 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameEnemyManager : MonoBehaviour
 {
     public Transform playerTransform;
-    // public int numberOfEnemies;
     public List<GameObject> spawnedEnemies = new List<GameObject>();
+    public int TotalNumberOfEnemiesLeft;
+
 
     [Header("Spawn Settings")]
     public List<Transform> spawnPoints;  // List of possible spawn points
     public GameObject enemyPrefab;
     public float firstSpawnDelay = 7f;   // initial delay before first wave
     public float spawnInterval = 5f;     // Time between each wave
-    public int enemiesPerWaveIncrement = 5; // Base number of enemies per wave increment
 
     [Header("Wave Settings")]
     public List<int> waveConfigurations; // List of enemy count per wave
@@ -33,12 +34,14 @@ public class GameEnemyManager : MonoBehaviour
     }
 
     public void StartWaves() {
+        TotalNumberOfEnemiesLeft = waveConfigurations.Sum();
         StartCoroutine(SpawnWaveRoutine());
     }
 
     public void death(GameObject enemy)
     {
         if (enemy != null) {
+            TotalNumberOfEnemiesLeft -= 1;
             spawnedEnemies.Remove(enemy);
             Destroy(enemy);
         }

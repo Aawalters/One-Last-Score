@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public GameEnemyManager GameEnemyManager;
-    public int previousN = 0;
+    // public int previousN = 0;
 
     void Start()
     {
@@ -16,13 +16,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (GameEnemyManager.spawnedEnemies.Count < previousN && GameEnemyManager.spawnedEnemies.Count == 0)
+        if (GameEnemyManager.TotalNumberOfEnemiesLeft <= 0)
         {
             // You Win
             SceneManager.LoadScene("WinScreen");
-        } else
-        {
-            previousN = GameEnemyManager.spawnedEnemies.Count;
         }
     }
 }

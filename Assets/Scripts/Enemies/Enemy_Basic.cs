@@ -103,8 +103,8 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
         facingRight = false;
         currentHealth = maxHealth;
         bodyGravity = Mathf.Abs(Physics2D.gravity.y) * rb.gravityScale;
-        topEnemyTransform = transform.position + (Vector3.up * collider.bounds.extents.y); // height based on collider
-        bottomEnemyTransform = transform.position + (Vector3.down * collider.bounds.extents.y); // feet based on collider
+        topEnemyTransform = collider.bounds.center + (Vector3.up * collider.bounds.extents.y); // height based on collider
+        bottomEnemyTransform = collider.bounds.center + (Vector3.down * collider.bounds.extents.y); // feet based on collider
         maxJumpHeight = (Mathf.Pow(maxYJumpForce, 2) / (2 * bodyGravity)) - Math.Abs(topEnemyTransform.y - bottomEnemyTransform.y); // Calculate max height AI can jump
         float timeToApex = maxYJumpForce / bodyGravity;
         maxJumpDistance = maxXJumpForce * timeToApex; // Calculate the max horizontal distance AI can jump
