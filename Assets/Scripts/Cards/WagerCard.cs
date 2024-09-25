@@ -12,5 +12,6 @@ public class WagerCard : Card
      */
     public override void use(Player p) {
         p.wager += effectValue;
+        p.GameManager.updateWager();
     }
 }

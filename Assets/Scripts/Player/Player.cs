@@ -26,6 +26,7 @@ public class Player
     public Image UICard;
     public Image CooldownImg;
     public GameEnemyManager GameEnemyManager;
+    public GameManager GameManager;
     public StatusEffectManager StatusEffectManager;
     public float cardCDTime = 5.0f, cardCDTimer = 0;
     public bool cardIsOnCD = false;

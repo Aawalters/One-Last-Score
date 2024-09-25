@@ -12,7 +12,7 @@ public class DeathScreen : MonoBehaviour
     public void Setup(int score)
     {
         gameObject.SetActive(true);
-        ScoreText.text = "SCORE: " + score.ToString();
+        ScoreText.text = "Final Payout: " + score.ToString();
     }
     public void Restart(int score)
     {

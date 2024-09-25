@@ -12,5 +12,6 @@ public class MultiplierCard : Card
      */
     public override void use(Player p) {
         p.multiplier += effectValue;
+        p.GameManager.updateWager();
     }
 }
