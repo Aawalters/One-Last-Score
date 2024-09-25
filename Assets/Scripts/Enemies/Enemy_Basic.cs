@@ -359,7 +359,8 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
             {
                 isDead = true;
                 // Perform death logic, animations, destruction, etc.
-                Destroy(gameObject);
+                // Destroy(gameObject);
+               GameEnemyManager.death(gameObject); // call this one cause list with enemies needs to be updated, this one calls Destroy too
             }
         }
     }

@@ -56,7 +56,6 @@ public class GrapplingGun : MonoBehaviour
     // Track the current cursor to avoid setting it unnecessarily
     private Texture2D currentCursor;
 
-    private Transform grapplePointTransform;
 
     private void Start()
     {
@@ -73,11 +72,19 @@ public class GrapplingGun : MonoBehaviour
         Vector2 mousePos = m_camera.ScreenToWorldPoint(Input.mousePosition);
         RotateGun(mousePos); ////////////////// same thing?
         updateCursorLook();
+        Debug.Log(grappledObject + "1");
         if (isGrappling && grappleRope.enabled)
         {
+            Debug.Log(grappledObject + "2");
             if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy")) 
             {
+                Debug.Log(grappledObject + "3");
                 grapplePoint = grappledObject.transform.position;
+                
+            }
+            if (grappledObject == null)
+            {
+                stopGrappling(); // if enemy dies as player is grappling it
             }
                 
         }
@@ -142,7 +149,6 @@ public class GrapplingGun : MonoBehaviour
             grappleDistanceVector = grapplePoint - (Vector2)gunPivot.position;
             grappleRope.enabled = true;
             grappledObject = _hit.collider.gameObject;
-            grapplePointTransform = _hit.transform;
         }
     }
 

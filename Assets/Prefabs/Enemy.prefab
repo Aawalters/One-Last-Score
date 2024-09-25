@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1780041903}
   - component: {fileID: 1780041904}
   - component: {fileID: 1780041905}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DetectAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,6 +280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 80
   currentHealth: 80
+  GameEnemyManager: {fileID: 0}
   facingRight: 0
   inImpact: 0
   maxVelocity: 60

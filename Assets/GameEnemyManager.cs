@@ -7,7 +7,7 @@ public class GameEnemyManager : MonoBehaviour
 {
     public Transform playerTransform;
     // public int numberOfEnemies;
-    private List<GameObject> spawnedEnemies = new List<GameObject>();
+    public List<GameObject> spawnedEnemies = new List<GameObject>();
 
     [Header("Spawn Settings")]
     public List<Transform> spawnPoints;  // List of possible spawn points
@@ -127,6 +127,7 @@ public class GameEnemyManager : MonoBehaviour
         GameObject newEnemy = Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
         Enemy_Basic enemyRef = newEnemy.GetComponent<Enemy_Basic>();
         enemyRef.player = playerTransform;
+        enemyRef.GameEnemyManager = this;
         spawnedEnemies.Add(newEnemy);
     }
 }
