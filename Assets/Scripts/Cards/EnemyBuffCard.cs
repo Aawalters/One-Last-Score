@@ -7,7 +7,8 @@ public class EnemyBuffCard : Card
 {
     //public GameEnemyManager GameEnemyManager;
     // public int ExtraHealth = 50;
-    public int ExtraDamage = 20;
+    public int ExtraDamage = 15;
+    public float ExtraSpeed = 0.2f;
     public override CardType cardType{get{return CardType.EnemyBuff;}}
 
     /* 
@@ -15,6 +16,6 @@ public class EnemyBuffCard : Card
      */
     public override void use(Player p) {
         Debug.Log("IT BUFFS ENEMIES ");
-        p.GameEnemyManager.BuffEnemies(effectValue, ExtraDamage);
+        p.GameEnemyManager.BuffEnemies(effectValue, ExtraDamage, ExtraSpeed);
     }
 }
