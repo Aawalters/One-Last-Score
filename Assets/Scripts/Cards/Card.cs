@@ -11,6 +11,7 @@ public abstract class Card : ScriptableObject
     public string cardName;
     public string cardDescription;
     public Sprite cardImage;
+    public Sprite effectImage;
     public abstract CardType cardType{get;}
     public int effectValue;
     public int id;

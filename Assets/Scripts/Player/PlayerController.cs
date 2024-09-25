@@ -176,8 +176,8 @@ public class PlayerController : MonoBehaviour
             Card card = p.deckController.infinDrawCard(p.deck);
             StartCoroutine(playCardSound(card));
             card.use(p);
-            p.UICard.sprite = card.cardImage;
-            p.UICard.GetComponentInChildren<TextMeshProUGUI>().text = card.cardDescription + card.effectValue.ToString();
+            p.CooldownImg.sprite = card.cardImage;
+            p.StatusEffectManager.AddStatusEffect(card.effectImage);
         }
     }
 
@@ -201,10 +201,12 @@ public class PlayerController : MonoBehaviour
         if (p.cardCDTimer < 0) {
             p.cardIsOnCD = false;
             p.cardCDTimer = 0;
+            p.UICard.GetComponentInChildren<TextMeshProUGUI>().text = " ";
             audioSource.clip = DeckShuffle;
             audioSource.Play();
         } else {
-
+            p.UICard.GetComponentInChildren<TextMeshProUGUI>().text = Mathf.RoundToInt(p.cardCDTimer).ToString();
+            p.CooldownImg.fillAmount = p.cardCDTimer / p.cardCDTime;
         }
     }
 

@@ -15,6 +15,7 @@ MonoBehaviour:
   cardName: Attack Power Debuff Card
   cardDescription: ' Attack '
   cardImage: {fileID: -220727521, guid: cdc11f2a2cc379f40b160f16ad26c643, type: 3}
+  effectImage: {fileID: 21300000, guid: 23bf6557133d116408f743952f6873b8, type: 3}
   effectValue: -1
   id: 0
   cardUserAnim: 

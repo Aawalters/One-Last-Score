@@ -15,6 +15,7 @@ MonoBehaviour:
   cardName: Decrease Wager Card
   cardDescription: ' Wager '
   cardImage: {fileID: -220727521, guid: cdc11f2a2cc379f40b160f16ad26c643, type: 3}
+  effectImage: {fileID: 21300000, guid: 12725981541179b4fb07a5c7e532b5c1, type: 3}
   effectValue: -200
   id: 0
   cardUserAnim: 

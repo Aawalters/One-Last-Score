@@ -24,7 +24,9 @@ public class Player
     public DeckController deckController;
     public Deck deck;
     public Image UICard;
+    public Image CooldownImg;
     public GameEnemyManager GameEnemyManager;
+    public StatusEffectManager StatusEffectManager;
     public float cardCDTime = 5.0f, cardCDTimer = 0;
     public bool cardIsOnCD = false;
 
