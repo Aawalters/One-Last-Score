@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Tilemaps;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -153,7 +154,12 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E)) p.grapplingGun.PullEnemy();
         if (Input.GetKeyUp(KeyCode.E)) p.grapplingGun.StopPullingEnemy();
         //card drawing - TODO: ADD COOLDOWN (in battle manager maybe?)
-        if (Input.GetKeyDown(KeyCode.F)) p.deckController.infinDrawCard(p.deck).use(p);
+        if (Input.GetKeyDown(KeyCode.F)) {
+            Card card = p.deckController.infinDrawCard(p.deck);
+            card.use(p);
+            p.UICard.sprite = card.cardImage;
+            p.UICard.GetComponentInChildren<TextMeshProUGUI>().text = card.cardDescription + card.effectValue.ToString();
+        }
     }
 
     // kick active frames

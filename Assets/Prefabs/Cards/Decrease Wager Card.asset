@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Decrease Wager Card
   m_EditorClassIdentifier: 
   cardName: Decrease Wager Card
-  cardDescription: 
+  cardDescription: ' Wager '
   cardImage: {fileID: -220727521, guid: cdc11f2a2cc379f40b160f16ad26c643, type: 3}
   effectValue: -200
   id: 0

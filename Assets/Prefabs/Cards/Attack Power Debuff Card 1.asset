@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Attack Power Debuff Card 1
   m_EditorClassIdentifier: 
   cardName: Attack Power Debuff Card
-  cardDescription: 
+  cardDescription: ' Attack '
   cardImage: {fileID: -220727521, guid: cdc11f2a2cc379f40b160f16ad26c643, type: 3}
   effectValue: -1
   id: 0

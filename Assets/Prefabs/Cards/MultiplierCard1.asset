@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MultiplierCard1
   m_EditorClassIdentifier: Assembly-CSharp::Multiplier
   cardName: Multipler Card 1
-  cardDescription: 
+  cardDescription: Multipler x
   cardImage: {fileID: -1277805959, guid: ee1b248854ebce84ca7ab8f45642f53f, type: 3}
   effectValue: 2
   id: 0

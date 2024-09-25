@@ -23,6 +23,7 @@ public class Player
     [Header("Cards")]
     public DeckController deckController;
     public Deck deck;
+    public Image UICard;
     public GameEnemyManager GameEnemyManager;
 
     [Header("Status")]

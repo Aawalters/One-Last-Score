@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: New Enemy Buff Card Data
   m_EditorClassIdentifier: 
   cardName: Enemy Buff Card
-  cardDescription: 
+  cardDescription: Enemy Dmg +20 & Enemy Health +
   cardImage: {fileID: -220727521, guid: cdc11f2a2cc379f40b160f16ad26c643, type: 3}
-  effectValue: 0
+  effectValue: 50
   id: 0
   cardUserAnim: 
   ExtraHealth: 50

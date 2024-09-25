@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Knockback Card 1
   m_EditorClassIdentifier: 
   cardName: Knockback Card 1
-  cardDescription: 
+  cardDescription: Knockback +
   cardImage: {fileID: -1277805959, guid: ee1b248854ebce84ca7ab8f45642f53f, type: 3}
   effectValue: 1
   id: 0

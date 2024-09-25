@@ -6,7 +6,7 @@ using UnityEngine;
 public class EnemyBuffCard : Card
 {
     //public GameEnemyManager GameEnemyManager;
-    public int ExtraHealth = 50;
+    // public int ExtraHealth = 50;
     public int ExtraDamage = 20;
     public override CardType cardType{get{return CardType.EnemyBuff;}}
 
@@ -15,6 +15,6 @@ public class EnemyBuffCard : Card
      */
     public override void use(Player p) {
         Debug.Log("IT BUFFS ENEMIES ");
-        p.GameEnemyManager.BuffEnemies(ExtraHealth, ExtraDamage);
+        p.GameEnemyManager.BuffEnemies(effectValue, ExtraDamage);
     }
 }
