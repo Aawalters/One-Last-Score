@@ -580,6 +580,54 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &102507143
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 102507145}
+  - component: {fileID: 102507144}
+  m_Layer: 0
+  m_Name: GameEnemyManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &102507144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 102507143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4475c1130409e284c8c2b5fdf12abfd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPoint: {fileID: 1878135179}
+  EnemyPrefab: {fileID: 5811921193137224085, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+  playerTransform: {fileID: 1086008308}
+  numberOfEnemies: 3
+--- !u!4 &102507145
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 102507143}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 15.319609, y: 5.930628, z: -1.5151843}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &108688922
 GameObject:
   m_ObjectHideFlags: 0
@@ -1922,9 +1970,17 @@ PrefabInstance:
       propertyPath: bottomOfEnemy
       value: 1.48
       objectReference: {fileID: 0}
+    - target: {fileID: 5811921193137224078, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: GameEnemyManager
+      value: 
+      objectReference: {fileID: 102507144}
     - target: {fileID: 5811921193137224085, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811921193137224085, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
@@ -5228,6 +5284,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1524890680}
   m_CullTransparentMesh: 1
+--- !u!114 &1528418145 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8692746747735126740, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+  m_PrefabInstance: {fileID: 1710969592}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eda8d608d5d1281478a0a39d5dcbaac8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1565880668
 GameObject:
   m_ObjectHideFlags: 0
@@ -5580,13 +5647,41 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.friction
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
       propertyPath: p.healthBar
       value: 
       objectReference: {fileID: 792733760}
     - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.jumpForce
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
       propertyPath: p.DeathScreen
       value: 
       objectReference: {fileID: 2101122631}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.attackRadius
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.deckController
+      value: 
+      objectReference: {fileID: 1528418145}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.defaultGravity
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.fallingGravity
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.GameEnemyManager
+      value: 
+      objectReference: {fileID: 102507144}
     - target: {fileID: 5516453970350294433, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
       propertyPath: m_camera
       value: 
@@ -5595,6 +5690,14 @@ PrefabInstance:
       propertyPath: cursorImage
       value: 
       objectReference: {fileID: 1524890682}
+    - target: {fileID: 8692746747735126740, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: allCards.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8692746747735126740, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: allCards.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: f20a718285d15474aaab6ed11483391b, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
 --- !u!1 &1752155503

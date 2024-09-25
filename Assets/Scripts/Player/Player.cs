@@ -23,6 +23,7 @@ public class Player
     [Header("Cards")]
     public DeckController deckController;
     public Deck deck;
+    public GameEnemyManager GameEnemyManager;
 
     [Header("Status")]
     public int wager, multiplier;

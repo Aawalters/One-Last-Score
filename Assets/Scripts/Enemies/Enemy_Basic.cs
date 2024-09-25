@@ -13,8 +13,11 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     public int currentHealth;
     private Animator anim;
     private Rigidbody2D rb;
-    private GameManager gameManager;
+    public GameEnemyManager GameEnemyManager;
     public bool facingRight;
+    private object deathLock = new object();
+    private bool isDead = false;
+
 
     [Header("Collision Tuning")]
     public bool inImpact = false;
@@ -93,7 +96,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
         anim = transform.Find("Sprite").GetComponent<Animator>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         lineRenderer = gameObject.GetComponent<LineRenderer>();
-        gameManager = FindObjectOfType<GameManager>(); // Reference the GameManager in the scene
+        // GameEnemyManager = FindObjectOfType<GameEnemyManager>(); // Reference the GameManager in the scene
         collider = gameObject.GetComponent<BoxCollider2D>();
 
         // setting properties
@@ -348,14 +351,30 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
         rb.AddForce(force, ForceMode2D.Impulse);
     }
 
+    public void Die()
+    {
+        lock (deathLock) // Ensure only one thread executes this block at a time
+        {
+            if (!isDead)
+            {
+                isDead = true;
+                // Perform death logic, animations, destruction, etc.
+                Destroy(gameObject);
+            }
+        }
+    }
+
     public void Damage(int damage)
     {
         currentHealth -= damage;
         anim.SetTrigger("ImpactTrigger");
 
         if (currentHealth <= 0) {
-            Destroy(gameObject);
-            Debug.Log("dead as hell");
+            if (!gameObject.IsDestroyed())
+            {
+                Die();
+                Debug.Log("dead as hell");
+            }
         }
     }
 

@@ -278,8 +278,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b57793e512845b142ac8fa3991401cf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1000
-  currentHealth: 1000
+  maxHealth: 80
+  currentHealth: 80
   facingRight: 0
   inImpact: 0
   maxVelocity: 60

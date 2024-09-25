@@ -1,5 +1,59 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &331455298931874358
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8219657067719687924}
+  - component: {fileID: 8692746747735126740}
+  m_Layer: 0
+  m_Name: DeckController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8219657067719687924
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 331455298931874358}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -3.451428, y: -8.771336, z: -0.3094964}
+  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2990557554159055597}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8692746747735126740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 331455298931874358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eda8d608d5d1281478a0a39d5dcbaac8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allCards:
+  - {fileID: 11400000, guid: 67e42547c1622aa489d6c5eba5a4c04f, type: 2}
+  - {fileID: 11400000, guid: 39a69d4e9a575904886b382be02b47f2, type: 2}
+  - {fileID: 11400000, guid: 99936fece226fde4a9cb0657c0ad1fe2, type: 2}
+  - {fileID: 11400000, guid: e015b186915226b48acfa1d60887ce6d, type: 2}
+  currentDeck:
+    deck: []
+    drawPile: []
+    hand: []
+    discardPile: []
 --- !u!1 &1715844539554913110
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,6 +390,7 @@ Transform:
   - {fileID: 2990557553756991438}
   - {fileID: 7427512630093263643}
   - {fileID: 1050991548157220790}
+  - {fileID: 8219657067719687924}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -454,6 +509,7 @@ MonoBehaviour:
     healthCurrent: 100
     healthMax: 100
     healthBar: {fileID: 0}
+    isHit: 0
     attackCharge: 0
     healCharge: 0
     bleedValue: 0
@@ -908,6 +964,7 @@ MonoBehaviour:
     healthCurrent: 0
     healthMax: 100
     healthBar: {fileID: 0}
+    isHit: 0
     attackCharge: 0
     healCharge: 0
     bleedValue: 0
