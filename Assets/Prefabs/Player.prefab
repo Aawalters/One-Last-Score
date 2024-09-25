@@ -522,6 +522,9 @@ MonoBehaviour:
       discardPile: []
     UICard: {fileID: 0}
     GameEnemyManager: {fileID: 0}
+    cardCDTime: 5
+    cardCDTimer: 0
+    cardIsOnCD: 0
     wager: 0
     multiplier: 0
     anim: {fileID: 3976756146910260309}
@@ -569,6 +572,7 @@ MonoBehaviour:
   CardPullAudio: {fileID: 8300000, guid: 17246abd4703a844f8ad51233921d7f6, type: 3}
   GoodPullAudio: {fileID: 8300000, guid: 8cbe3aa4478e5dd4293f5a00e5862f6e, type: 3}
   BadPullAudio: {fileID: 8300000, guid: 93e66970dea988a48b790a371ec086a4, type: 3}
+  DeckShuffle: {fileID: 8300000, guid: 8557bd154fdbcf0459775d05282aed72, type: 3}
 --- !u!231 &7021618568593065068
 SpringJoint2D:
   m_ObjectHideFlags: 0
@@ -982,6 +986,9 @@ MonoBehaviour:
       discardPile: []
     UICard: {fileID: 0}
     GameEnemyManager: {fileID: 0}
+    cardCDTime: 5
+    cardCDTimer: 0
+    cardIsOnCD: 0
     wager: 0
     multiplier: 0
     anim: {fileID: 0}
