@@ -31,7 +31,8 @@ public class Player
     public bool cardIsOnCD = false;
 
     [Header("Status")]
-    public int wager, multiplier;
+    public float wager = 500;
+    public float multiplier = 1f; // baseline need 5x multiplier? so 2500, nerf to like 2300
 
     public Animator anim;
     
