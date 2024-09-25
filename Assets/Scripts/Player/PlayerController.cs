@@ -315,7 +315,7 @@ public class PlayerController : MonoBehaviour
             p.isHit = true;
             p.healthCurrent -= damage;
             p.healthBar.value = p.healthCurrent; 
-            p.anim.SetBool("isHurt", p.isHit);
+            p.anim.SetBool("isHurt", true);
             p.anim.SetBool("isKicking", false); // if you get hurt, cancel kick (rewards precision maybe?)
             shouldBeDamaging = false;
             if (p.healthCurrent <= 0)
@@ -324,7 +324,7 @@ public class PlayerController : MonoBehaviour
             }
             yield return new WaitForSeconds(1f);
             p.isHit = false;
-            p.anim.SetBool("isHurt", p.isHit);
+            p.anim.SetBool("isHurt", false);
         }
     }
 
