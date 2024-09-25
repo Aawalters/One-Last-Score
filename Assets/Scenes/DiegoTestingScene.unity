@@ -4171,17 +4171,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1528418145 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8692746747735126740, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
-  m_PrefabInstance: {fileID: 1710969592}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eda8d608d5d1281478a0a39d5dcbaac8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1565880668
 GameObject:
   m_ObjectHideFlags: 0
@@ -4831,21 +4820,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1623543807}
     - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
-      propertyPath: p.friction
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
       propertyPath: p.healthBar
       value: 
       objectReference: {fileID: 792733760}
-    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
-      propertyPath: p.jumpForce
-      value: 900
-      objectReference: {fileID: 0}
-    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
-      propertyPath: p.cardCDTime
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
       propertyPath: p.CooldownImg
       value: 
@@ -4854,22 +4831,6 @@ PrefabInstance:
       propertyPath: p.DeathScreen
       value: 
       objectReference: {fileID: 2101122631}
-    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
-      propertyPath: p.attackRadius
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
-      propertyPath: p.deckController
-      value: 
-      objectReference: {fileID: 1528418145}
-    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
-      propertyPath: p.defaultGravity
-      value: 3.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
-      propertyPath: p.fallingGravity
-      value: 4.5
-      objectReference: {fileID: 0}
     - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
       propertyPath: p.GameEnemyManager
       value: 
@@ -4886,18 +4847,6 @@ PrefabInstance:
       propertyPath: cursorImage
       value: 
       objectReference: {fileID: 1524890682}
-    - target: {fileID: 5516453970350294433, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
-      propertyPath: maxDistance
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 8692746747735126740, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
-      propertyPath: allCards.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8692746747735126740, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
-      propertyPath: allCards.Array.data[4]
-      value: 
-      objectReference: {fileID: 11400000, guid: f20a718285d15474aaab6ed11483391b, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
 --- !u!1 &1751937654

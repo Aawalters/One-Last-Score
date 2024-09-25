@@ -49,6 +49,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 39a69d4e9a575904886b382be02b47f2, type: 2}
   - {fileID: 11400000, guid: 99936fece226fde4a9cb0657c0ad1fe2, type: 2}
   - {fileID: 11400000, guid: e015b186915226b48acfa1d60887ce6d, type: 2}
+  - {fileID: 11400000, guid: f20a718285d15474aaab6ed11483391b, type: 2}
   currentDeck:
     deck: []
     drawPile: []
@@ -514,15 +515,17 @@ MonoBehaviour:
     healCharge: 0
     bleedValue: 0
     DeathScreen: {fileID: 0}
-    deckController: {fileID: 0}
+    deckController: {fileID: 8692746747735126740}
     deck:
       deck: []
       drawPile: []
       hand: []
       discardPile: []
     UICard: {fileID: 0}
+    CooldownImg: {fileID: 0}
     GameEnemyManager: {fileID: 0}
-    cardCDTime: 5
+    StatusEffectManager: {fileID: 0}
+    cardCDTime: 10
     cardCDTimer: 0
     cardIsOnCD: 0
     wager: 0
@@ -534,14 +537,14 @@ MonoBehaviour:
     XMaxSpeed: 10
     YMaxSpeed: 30
     moveSpeed: 10
-    jumpForce: 700
+    jumpForce: 900
     moveDirection: 0
     isJumping: 0
     facingRight: 0
     isGrounded: 1
     midJump: 0
-    defaultGravity: 2.5
-    fallingGravity: 3.5
+    defaultGravity: 3.5
+    fallingGravity: 4.5
     groundCheck: {fileID: 2990557553756991438}
     groundObjects:
       serializedVersion: 2
@@ -553,12 +556,12 @@ MonoBehaviour:
     waitTime: 1
     airControl: 0.7
     grappleAirControl: 0.5
-    friction: 1
+    friction: 0.2
     attackPoint: {fileID: 6114587614926986967}
     kickForce: 15
     kickUpForce: 10
     maxKickForce: 50
-    attackRadius: 1
+    attackRadius: 2
     enemyLayer:
       serializedVersion: 2
       m_Bits: 512
@@ -985,7 +988,9 @@ MonoBehaviour:
       hand: []
       discardPile: []
     UICard: {fileID: 0}
+    CooldownImg: {fileID: 0}
     GameEnemyManager: {fileID: 0}
+    StatusEffectManager: {fileID: 0}
     cardCDTime: 5
     cardCDTimer: 0
     cardIsOnCD: 0
@@ -1038,7 +1043,7 @@ MonoBehaviour:
   firePoint: {fileID: 7012374598813654393}
   m_springJoint2D: {fileID: 7021618568593065068}
   m_rigidbody: {fileID: 2990557554159055599}
-  maxDistance: 8
+  maxDistance: 10
   launchType: 1
   launchSpeed: 1
   grapplePoint: {x: 0, y: 0}
