@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,8 +18,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        wager_text.text = "Wager:" + p.p.wager.ToString();
         p = Player.GetComponent<PlayerController>();
+        wager_text.text = "Wager:" + p.p.wager.ToString();
     
     }
 
@@ -41,6 +42,8 @@ public class GameManager : MonoBehaviour
 
     public void updateWager()
     {
+        // Debug.Log("player cur wager: " + p.p.wager);
+        // Debug.Log("player cur multiplier: " + p.p.multiplier);
         wager_text.text = "Wager:" + (p.p.wager * p.p.multiplier).ToString();
     }
 }

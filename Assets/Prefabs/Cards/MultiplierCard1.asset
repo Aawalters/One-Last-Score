@@ -16,6 +16,6 @@ MonoBehaviour:
   cardDescription: Multipler x
   cardImage: {fileID: -1277805959, guid: ee1b248854ebce84ca7ab8f45642f53f, type: 3}
   effectImage: {fileID: 21300000, guid: c15c61e81477c1e42ac73359ebc12f7a, type: 3}
-  effectValue: 1
+  effectValue: 2
   id: 0
   cardUserAnim: 
