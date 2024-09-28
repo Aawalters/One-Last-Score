@@ -7,6 +7,9 @@ using UnityEngine.Tilemaps;
 [System.Serializable]
 public class Player
 {
+    [Header("Controls")]
+    public bool ControlsEnabled = true;
+
     [Header("Health")]
     public int healthCurrent;       // Current health of the player
     public int healthMax = 100;     // Maximum health of the player
@@ -16,9 +19,6 @@ public class Player
     public int attackCharge;
     public int healCharge;
     public int bleedValue;
-
-    [Header("Screens")]
-    public DeathScreen DeathScreen;   // Reference to the die screen script
 
     [Header("Cards")]
     public DeckController deckController;

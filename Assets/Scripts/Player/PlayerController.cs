@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     public Player p;
     public DeckController deckController;
     public HashSet<IDamageable> iDamageableSet = new HashSet<IDamageable>();
-    public bool shouldBeDamaging { get; private set;} = false;
+    public bool shouldBeDamaging { get; private set; } = false;
     // art audio
     [Header("Art/Audio")]
     public AudioSource audioSource;
@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        p.GameManager.Wager();
+
         // setting defaults
         p.facingRight = false;
         p.healthCurrent = p.healthMax; // Set health to max at start
@@ -52,8 +54,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ProcessInput();
-        Animate();
+        if (p.ControlsEnabled)
+        {
+            ProcessInput();
+            Animate();
+        }
         if (p.cardIsOnCD) {
             ApplyCooldown();
         }
@@ -85,9 +90,9 @@ public class PlayerController : MonoBehaviour
             adjustAirControl = p.grappleAirControl;
         }
         // if in air/grappling, maintain prev x for momentum (else add ground friction), add directed movement with air control restrictions
-        float xVelocity = (p.rb.velocity.x * (!p.isGrounded || p.grapplingGun.isGrappling ? 1 : p.friction)) 
+        float xVelocity = (p.rb.velocity.x * (!p.isGrounded || p.grapplingGun.isGrappling ? 1 : p.friction))
             + (p.moveDirection * p.moveSpeed * adjustAirControl);
-        p.rb.velocity = new Vector2( Mathf.Clamp(xVelocity, -p.XMaxSpeed, p.XMaxSpeed),
+        p.rb.velocity = new Vector2(Mathf.Clamp(xVelocity, -p.XMaxSpeed, p.XMaxSpeed),
             Mathf.Clamp(p.rb.velocity.y, -p.YMaxSpeed, p.YMaxSpeed));
 
         p.anim.SetBool("isWalking", Mathf.Abs(p.rb.velocity.x) > 0.1f);
@@ -115,7 +120,7 @@ public class PlayerController : MonoBehaviour
             }
         }
         // Handle character flipping only based on movement when moving
-        else if (p.moveDirection != 0) 
+        else if (p.moveDirection != 0)
         {
             if ((p.moveDirection > 0 && !p.facingRight) || (p.moveDirection < 0 && p.facingRight))
             {
@@ -127,7 +132,7 @@ public class PlayerController : MonoBehaviour
         {
             FlipCharacter();
         }
-        
+
     }
 
     private void ProcessInput()
@@ -162,11 +167,14 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.E)) p.grapplingGun.StopPullingEnemy();
         //card drawing - TODO: ADD COOLDOWN (in battle manager maybe?)
         if (Input.GetKeyDown(KeyCode.F)) {
-            useCard ();
+            useCard();
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            p.GameManager.Pause();
         }
     }
-
-    private void useCard ()
+    private void useCard()
     {
         if (p.cardIsOnCD) { //don't do anything if the card is on CD
             return;
@@ -181,14 +189,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator playCardSound(Card card) 
+    IEnumerator playCardSound(Card card)
     {
         audioSource.clip = CardPullAudio;
         audioSource.Play();
         yield return new WaitForSeconds(CardPullAudio.length);
         if (card.cardType == CardType.Multiplier || card.cardType == CardType.PlayerBuff) {
             audioSource.clip = GoodPullAudio;
-        } else { 
+        } else {
             audioSource.clip = BadPullAudio;
         }
         audioSource.Play();
@@ -266,7 +274,7 @@ public class PlayerController : MonoBehaviour
     // set end of kick active frames
     public void EndShouldBeDamaging() {
         shouldBeDamaging = false;
-    } 
+    }
 
     // set end of animation
     public void EndKick()
@@ -280,10 +288,10 @@ public class PlayerController : MonoBehaviour
         {
             p.currentOneWayPlatform = other.gameObject;
         }
-        if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-        {
-            StartCoroutine(TakeDamage(5)); 
-        }
+        //if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        //{
+        //    StartCoroutine(TakeDamage(5)); 
+        //}
     }
 
     private IEnumerator DisableCollision()
@@ -314,13 +322,13 @@ public class PlayerController : MonoBehaviour
         if (!p.isHit) {
             p.isHit = true;
             p.healthCurrent -= damage;
-            p.healthBar.value = p.healthCurrent; 
+            p.healthBar.value = p.healthCurrent;
             p.anim.SetBool("isHurt", true);
             p.anim.SetBool("isKicking", false); // if you get hurt, cancel kick (rewards precision maybe?)
             shouldBeDamaging = false;
             if (p.healthCurrent <= 0)
             {
-                Die(); 
+                p.GameManager.Death();
             }
             yield return new WaitForSeconds(1f);
             p.isHit = false;
@@ -328,11 +336,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Die()
+    public void SetControls(bool status)
     {
-        Debug.Log("DEATH");
-        // p.dieScreen.SetActive(true);
-        // gameObject.SetActive(false);
-        p.DeathScreen.Setup(2);
+        p.ControlsEnabled = status;
     }
 }
