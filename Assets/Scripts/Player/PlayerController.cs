@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 
     public Player p;
     public DeckController deckController;
+    public GameObject MovementJoystick;
     public HashSet<IDamageable> iDamageableSet = new HashSet<IDamageable>();
     public bool shouldBeDamaging { get; private set; } = false;
     // art audio
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip GoodPullAudio;
     public AudioClip BadPullAudio;
     public AudioClip DeckShuffle;
+    private MovementJoystick MovementJoystickScript;
 
     private void Awake()
     {
@@ -49,6 +51,11 @@ public class PlayerController : MonoBehaviour
 
         //p.deckController = GetComponent<DeckController>();
         p.deck = p.deckController.GetNewDeck();
+
+        if (MovementJoystick.activeSelf)
+        {
+            MovementJoystickScript = MovementJoystick.GetComponent<MovementJoystick>();
+        }
     }
 
     // Update is called once per frame
@@ -139,7 +146,13 @@ public class PlayerController : MonoBehaviour
     {
         // Normal Movement Input
         // scale of -1 -> 1
-        p.moveDirection = Input.GetAxis("Horizontal");
+        if (MovementJoystickScript) // inclusivity build
+        {
+            p.moveDirection = MovementJoystickScript.joystickVec.x;
+        } else
+        {
+            p.moveDirection = Input.GetAxis("Horizontal");
+        }
         if (Input.GetButtonDown("Jump") && p.isGrounded)
         {
             p.isJumping = true;
