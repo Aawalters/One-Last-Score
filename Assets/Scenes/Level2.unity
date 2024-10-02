@@ -1684,8 +1684,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c42dc6c81c7be8949a36a880dd8fde2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xMin: 10
-  yMin: -50
+  xMin: 1
+  yMin: 0
   xMax: 50
   yMax: 50
 --- !u!1 &934387458
@@ -5761,7 +5761,7 @@ PrefabInstance:
       objectReference: {fileID: 1581961621}
     - target: {fileID: 2988686022776805779, guid: db3046cb3a9e8db42971f9c66dbf94c6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: Menu
+      value: Level2
       objectReference: {fileID: 0}
     - target: {fileID: 2988686022914423749, guid: db3046cb3a9e8db42971f9c66dbf94c6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target

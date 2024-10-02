@@ -1091,7 +1091,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &143776513
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3116,7 +3116,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: DiegoTestingScene
+          m_StringArgument: Level3
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &891855923
@@ -7242,7 +7242,7 @@ MonoBehaviour:
   GameEnemyManager: {fileID: 102507144}
   Player: {fileID: 836372526}
   Canvas: {fileID: 1134951733}
-  mobile: 0
+  mobile: 1
   quota: 2300
 --- !u!4 &1581961622
 Transform:
@@ -8004,7 +8004,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1426531965171240446, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.82
       objectReference: {fileID: 0}
     - target: {fileID: 2990557554159055595, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
       propertyPath: m_Name
