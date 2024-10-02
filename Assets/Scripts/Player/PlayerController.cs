@@ -74,6 +74,10 @@ public class PlayerController : MonoBehaviour
             {
                 ProcessInput();
                 p.anim.SetBool("midJump", p.midJump);
+                if (p.grapplingGun.isGrappling)
+                {
+                    p.anim.SetBool("midJump", true);
+                }
                 directionPlayerFaces();
             }
         }
@@ -113,7 +117,10 @@ public class PlayerController : MonoBehaviour
         p.rb.velocity = new Vector2(Mathf.Clamp(xVelocity, -p.XMaxSpeed, p.XMaxSpeed),
             Mathf.Clamp(p.rb.velocity.y, -p.YMaxSpeed, p.YMaxSpeed));
 
-        p.anim.SetBool("isWalking", Mathf.Abs(p.rb.velocity.x) > 0.1f);
+        if (p.isGrounded)
+        {
+            p.anim.SetBool("isWalking", Mathf.Abs(p.rb.velocity.x) > 0.1f);
+        }
 
         if (p.isJumping)
         {
@@ -190,9 +197,17 @@ public class PlayerController : MonoBehaviour
             p.anim.SetBool("isKicking", true);
         }
         // Grappling hook Input
-        if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.J)) p.grapplingGun.SetGrapplePoint();
+        if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.J)) 
+        { 
+            p.grapplingGun.SetGrapplePoint(); 
+            //p.anim.SetBool("midJump", true); 
+        }
         if (Input.GetKey(KeyCode.Mouse1) || Input.GetKey(KeyCode.J)) p.grapplingGun.pull();
-        else if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyUp(KeyCode.J)) p.grapplingGun.stopGrappling();
+        else if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyUp(KeyCode.J)) 
+        { 
+            p.grapplingGun.stopGrappling(); 
+            //p.anim.SetBool("midJump", false); 
+        }
         // Pull enemies
         if (Input.GetKeyDown(KeyCode.E)) p.grapplingGun.PullEnemy();
         if (Input.GetKeyUp(KeyCode.E)) p.grapplingGun.StopPullingEnemy();

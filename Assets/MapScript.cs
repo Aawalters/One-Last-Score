@@ -7,7 +7,19 @@ public class MapScript : MonoBehaviour
 {
     public void PlayLevel_1()
     {
-        SceneManager.LoadScene("DiegoTestingScene");
+        SceneManager.LoadScene("Level1");
+
+    }
+
+    public void PlayLevel_2()
+    {
+        SceneManager.LoadScene("Level2");
+
+    }
+
+    public void PlayLevel_3()
+    {
+        SceneManager.LoadScene("Level3");
 
     }
 

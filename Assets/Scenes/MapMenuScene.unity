@@ -1434,7 +1434,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2101122631}
         m_TargetAssemblyTypeName: MapScript, Assembly-CSharp
-        m_MethodName: PlayLevel_1
+        m_MethodName: PlayLevel_3
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1973,7 +1973,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2101122631}
         m_TargetAssemblyTypeName: MapScript, Assembly-CSharp
-        m_MethodName: PlayLevel_1
+        m_MethodName: PlayLevel_2
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
