@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
 
     public Player p;
     public DeckController deckController;
-    public GameObject MovementJoystick;
+    public GameObject iOSPanel;
     public HashSet<IDamageable> iDamageableSet = new HashSet<IDamageable>();
     public bool shouldBeDamaging { get; private set; } = false;
     // art audio
@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     public AudioClip BadPullAudio;
     public AudioClip DeckShuffle;
     private MovementJoystick MovementJoystickScript;
+    private ButtonsAndClick ButtonsAndClickScript;
 
     private void Awake()
     {
@@ -52,9 +53,10 @@ public class PlayerController : MonoBehaviour
         //p.deckController = GetComponent<DeckController>();
         p.deck = p.deckController.GetNewDeck();
 
-        if (MovementJoystick.activeSelf)
+        if (iOSPanel.activeSelf)
         {
-            MovementJoystickScript = MovementJoystick.GetComponent<MovementJoystick>();
+            MovementJoystickScript = iOSPanel.GetComponent<MovementJoystick>();
+            ButtonsAndClickScript = iOSPanel.GetComponent<ButtonsAndClick>();
         }
     }
 
@@ -63,8 +65,17 @@ public class PlayerController : MonoBehaviour
     {
         if (p.ControlsEnabled)
         {
-            ProcessInput();
-            Animate();
+            if (p.GameManager.mobile)
+            {
+                ProcessInputMobile();
+                p.anim.SetBool("midJump", p.midJump);
+                directionPlayerFacesMobile();
+            } else
+            {
+                ProcessInput();
+                p.anim.SetBool("midJump", p.midJump);
+                directionPlayerFaces();
+            }
         }
         if (p.cardIsOnCD) {
             ApplyCooldown();
@@ -113,12 +124,10 @@ public class PlayerController : MonoBehaviour
         p.isJumping = false;
     }
 
-    private void Animate()
+    private void directionPlayerFaces()
     {
         Vector2 mousePos = p.grapplingGun.m_camera.ScreenToWorldPoint(Input.mousePosition);
         Vector2 aimDirection = (mousePos - (Vector2)p.grapplingGun.firePoint.position).normalized;
-
-        p.anim.SetBool("midJump", p.midJump);
 
         // when kicking, face player towards cursor to make attack easier
         if (p.anim.GetBool("isKicking")) {
@@ -142,17 +151,26 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    private void directionPlayerFacesMobile()
+    {
+        Vector2 mousePos = Input.mousePosition;
+
+        // Handle character flipping only based on movement when moving
+        if (p.moveDirection != 0)
+        {
+            if ((p.moveDirection > 0 && !p.facingRight) || (p.moveDirection < 0 && p.facingRight))
+            {
+                FlipCharacter();
+            }
+        }
+
+    }
+
     private void ProcessInput()
     {
         // Normal Movement Input
         // scale of -1 -> 1
-        if (MovementJoystickScript) // inclusivity build
-        {
-            p.moveDirection = MovementJoystickScript.joystickVec.x;
-        } else
-        {
-            p.moveDirection = Input.GetAxis("Horizontal");
-        }
+        p.moveDirection = Input.GetAxis("Horizontal");
         if (Input.GetButtonDown("Jump") && p.isGrounded)
         {
             p.isJumping = true;
@@ -187,6 +205,51 @@ public class PlayerController : MonoBehaviour
             p.GameManager.Pause();
         }
     }
+
+
+    private void ProcessInputMobile()
+    {
+        // Normal Movement Input
+        // scale of -1 -> 1
+        p.moveDirection = MovementJoystickScript.joystickVec.x;
+        
+        if (ButtonsAndClickScript.isJumping && p.isGrounded)
+        {
+            p.isJumping = true;
+            ButtonsAndClickScript.isJumping = false; // so that jumping is not spammed
+        }
+        if (MovementJoystickScript.joystickVec.normalized.y < -0.90)
+        {
+            if (p.currentOneWayPlatform != null)
+            {
+                StartCoroutine(DisableCollision());
+            }
+
+        }
+
+        // attacks
+        if (ButtonsAndClickScript.isKicking)
+        {
+            p.anim.SetBool("isKicking", true);
+            ButtonsAndClickScript.isKicking = false;
+        }
+        // Grappling hook Input
+        //if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.J)) p.grapplingGun.SetGrapplePoint();
+        if (ButtonsAndClickScript.pulling) p.grapplingGun.pull();
+        //else if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyUp(KeyCode.J)) p.grapplingGun.stopGrappling();
+
+        if (ButtonsAndClickScript.drawCard)
+        {
+            useCard();
+            ButtonsAndClickScript.drawCard = false;
+        }
+        if (ButtonsAndClickScript.pause)
+        {
+            p.GameManager.Pause();
+            ButtonsAndClickScript.pause = false;
+        }
+    }
+
     private void useCard()
     {
         if (p.cardIsOnCD) { //don't do anything if the card is on CD
