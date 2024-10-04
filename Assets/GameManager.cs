@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public GameEnemyManager GameEnemyManager;
     public GameObject Player;
     public GameObject Canvas;
+    public bool mobile;
 
     private GameObject PlayScreen;
     private GameObject WagerScreen;
