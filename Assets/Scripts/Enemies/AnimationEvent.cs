@@ -2,27 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimationCalls : MonoBehaviour
+public class AnimationEvent : MonoBehaviour
 {
-    private Enemy_Basic parentEnemy;
+    private Enemy _enemy;
     private SpriteRenderer sprite;
 
     void Start() {
-        parentEnemy = GetComponentInParent<Enemy_Basic>();
+        _enemy = GetComponentInParent<Enemy>();
         sprite = GetComponent<SpriteRenderer>();
     }
     
     public void Punch() {
-        StartCoroutine(parentEnemy.Punch());
+        _enemy.AnimationTriggerEvent(Enemy.AnimationTriggerType.StartPunch);
     }
 
     public void EndPunch() {
         sprite.color = Color.white;
-        parentEnemy.EndPunch();
+        _enemy.AnimationTriggerEvent(Enemy.AnimationTriggerType.EndPunch);
     }
 
     public void EndShouldBeDamaging() {
-        parentEnemy.EndShouldBeDamaging();
+        _enemy.AnimationTriggerEvent(Enemy.AnimationTriggerType.EndPunchDamaging);
     }
 
     // temp until we get polish animations

@@ -53,8 +53,8 @@ public class GameEnemyManager : MonoBehaviour
             if (enemy != null) {
                 Enemy_Basic enemyRef = enemy.GetComponent<Enemy_Basic>();
                 // Code to execute for each item
-                enemyRef.maxHealth += ExtraHealth;
-                enemyRef.currentHealth += ExtraHealth;
+                enemyRef.MaxHealth += ExtraHealth;
+                enemyRef.CurrentHealth += ExtraHealth;
                 enemyRef.chaseSpeed += ExtraSpeed;
                 enemyRef.punchDamage += ExtraDamage;
             }

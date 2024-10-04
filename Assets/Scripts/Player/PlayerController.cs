@@ -249,7 +249,7 @@ public class PlayerController : MonoBehaviour
                 float weightedForce = p.kickForce + (p.rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * p.movementForceMultiplier;
                 float weightedUpForce = p.kickUpForce + (p.rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * p.movementUpForceMultiplier;
 
-                // if isGrounded, add slight upward force, but don't multiply it by force
+                // if isGrounded, add slight upward force but don't multiply upward force
                 // for both, clamp (maybe log max) force
                 if (p.isGrounded) {
                     force = new Vector2(Mathf.Sign(dir.x) * weightedForce, weightedUpForce);
@@ -266,7 +266,8 @@ public class PlayerController : MonoBehaviour
                 if (iDamageable != null && !iDamageableSet.Contains(iDamageable)) {
                     Debug.Log("Force of player kick: " + force);
 
-                    iDamageable.takeKick(p.kickDamage, force);
+                    iDamageable.TakeKick(p.kickDamage, force);
+                    iDamageable.StopAttack(); // cancel enemy attack
                     iDamageableSet.Add(iDamageable);
                 }
             }
@@ -301,10 +302,6 @@ public class PlayerController : MonoBehaviour
         {
             p.currentOneWayPlatform = other.gameObject;
         }
-        //if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-        //{
-        //    StartCoroutine(TakeDamage(5)); 
-        //}
     }
 
     private IEnumerator DisableCollision()
@@ -343,7 +340,7 @@ public class PlayerController : MonoBehaviour
             {
                 p.GameManager.Death();
             }
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1f); // hitstun (i-frames?), should make sep later
             p.isHit = false;
             p.anim.SetBool("isHurt", false);
         }

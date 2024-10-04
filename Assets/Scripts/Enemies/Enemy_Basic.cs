@@ -8,16 +8,14 @@ using UnityEngine;
 
 public class Enemy_Basic : MonoBehaviour, IDamageable
 {
-    [Header("State")]
-    public int maxHealth = 1000;
-    public int currentHealth;
-    private Animator anim;
+    [field: SerializeField] public int MaxHealth { get; set; }
+    [field: SerializeField] public int CurrentHealth { get; set; }
+    public Animator Anim { get; set; }
     private Rigidbody2D rb;
     public GameEnemyManager GameEnemyManager;
     public bool facingRight;
-    private object deathLock = new object();
-    private bool isDead = false;
-
+    public object DeathLock { get; set; } = new object();
+    public bool IsDead { get; set; } = false;
 
     [Header("Collision Tuning")]
     public bool inImpact = false;
@@ -81,6 +79,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     public float attackRadius;
     public int punchDamage;
     public bool shouldBeDamaging { get; private set;} = false;
+
     public LayerMask playerLayer; // **bars**
     public float attackWait = 1f;
 
@@ -93,7 +92,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     void Start()
     {
         // accessing components
-        anim = transform.Find("Sprite").GetComponent<Animator>();
+        Anim = transform.Find("Sprite").GetComponent<Animator>();
         rb = gameObject.GetComponent<Rigidbody2D>();
         lineRenderer = gameObject.GetComponent<LineRenderer>();
         // GameEnemyManager = FindObjectOfType<GameEnemyManager>(); // Reference the GameManager in the scene
@@ -101,7 +100,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
 
         // setting properties
         facingRight = false;
-        currentHealth = maxHealth;
+        CurrentHealth = MaxHealth;
         bodyGravity = Mathf.Abs(Physics2D.gravity.y) * rb.gravityScale;
         topEnemyTransform = collider.bounds.center + (Vector3.up * collider.bounds.extents.y); // height based on collider
         bottomEnemyTransform = collider.bounds.center + (Vector3.down * collider.bounds.extents.y); // feet based on collider
@@ -121,6 +120,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     }
 
     private void FixedUpdate() {
+        // updating transforms
         topEnemyTransform = transform.position + (Vector3.up * collider.bounds.extents.y);
         bottomEnemyTransform = transform.position + (Vector3.down * collider.bounds.extents.y);
         platformDetectionOrigin = topEnemyTransform + (Vector3.up * (maxJumpHeight / 2)) + ((facingRight ? Vector3.right : Vector3.left) * (maxJumpDistance / 2));
@@ -138,7 +138,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
         if (rb.velocity.magnitude < collisionForceThreshold) {
             inImpact = false;
             ClearPath();
-            anim.SetBool("ImpactBool", false);
+            Anim.SetBool("ImpactBool", false);
         }
 
         StartCoroutine(enemyAI(aiEnabled && !isPaused));
@@ -163,7 +163,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
             int xDirection = direction.x == 0 ? 0 : (direction.x > 0 ? 1 : -1);
 
             // grounded and in control abilities
-            if (isGrounded && !inImpact && !anim.GetBool("isPunching")) { // && !isPaused
+            if (isGrounded && !inImpact && !Anim.GetBool("isPunching")) { // && !isPaused
                 WalkToPlayer(xDirection); // chase after player
 
                 if (playerAbove) { // look for landing target if player above
@@ -201,7 +201,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     // Helper function to encapsulate the pause logic
     private IEnumerator PauseAction(float delay) {
         isPaused = true;
-        anim.SetBool("isWalking", false);
+        Anim.SetBool("isWalking", false);
         yield return new WaitForSeconds(delay);
         isPaused = false;
     }
@@ -210,7 +210,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
         bool isOutOfReach = Math.Abs(direction.x) > stoppingDistance;
         rb.velocity = new Vector2(isOutOfReach ? xDirection * chaseSpeed : 0, rb.velocity.y);
         FlipCharacter(isOutOfReach ? xDirection > 0 : facingRight); // Maintain direction if idle
-        anim.SetBool("isWalking", isOutOfReach);
+        Anim.SetBool("isWalking", isOutOfReach);
     }
 
     // find x and y jump force needed to reach platformPosition
@@ -298,7 +298,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
                 // if collide wtih enemy, treat as if you were inImpact
                 if (collision.gameObject.CompareTag("enemy")) { 
                     inImpact = true;
-                    anim.SetBool("ImpactBool", true);
+                    Anim.SetBool("ImpactBool", true);
                 } else { // bounce off surfaces, not enemies
                     Vector2 bounceDirection = collision.contacts[0].normal;
                     if (Math.Abs(bounceDirection.x) > 0) {
@@ -336,10 +336,10 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
         lineRenderer.positionCount = 0;
     }
 
-    public void takeKick(int damage, Vector2 force) {
+    public void TakeKick(int damage, Vector2 force) {
         Damage(damage);
         inImpact = true;
-        anim.SetBool("ImpactBool", true);
+        Anim.SetBool("ImpactBool", true);
 
         if (force.x < 0) {
             FlipCharacter(true);
@@ -353,11 +353,11 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
 
     public void Die()
     {
-        lock (deathLock) // Ensure only one thread executes this block at a time
+        lock (DeathLock) // Ensure only one thread executes this block at a time
         {
-            if (!isDead)
+            if (!IsDead)
             {
-                isDead = true;
+                IsDead = true;
                 // Perform death logic, animations, destruction, etc.
                 // Destroy(gameObject);
                GameEnemyManager.death(gameObject); // call this one cause list with enemies needs to be updated, this one calls Destroy too
@@ -367,10 +367,10 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
 
     public void Damage(int damage)
     {
-        currentHealth -= damage;
-        anim.SetTrigger("ImpactTrigger");
+        CurrentHealth -= damage;
+        Anim.SetTrigger("ImpactTrigger");
 
-        if (currentHealth <= 0) {
+        if (CurrentHealth <= 0) {
             if (!gameObject.IsDestroyed())
             {
                 Die();
@@ -380,7 +380,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
     }
 
     public void OnPlayerInAttackRange(GameObject player) {
-        anim.SetBool("isPunching", true);
+        Anim.SetBool("isPunching", true);
     }
 
     // punch active frames
@@ -402,7 +402,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
 
     // set end of animation
     public void EndPunch() {
-        anim.SetBool("isPunching", false);
+        Anim.SetBool("isPunching", false);
         StartCoroutine(PauseAction(attackWait));
     }
 
@@ -419,5 +419,10 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
 
         Gizmos.color = new Color(0f, 0f, 1f, 0.5f);
         Gizmos.DrawRay(bottomEnemyTransform, (facingRight ? Vector2.right : Vector2.left) * stoppingDistance); // stopping distance
+    }
+
+    public void StopAttack()
+    {
+        //ignore
     }
 }

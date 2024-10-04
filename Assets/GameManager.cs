@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
         {
             p.SetControls(true);
             Time.timeScale = 1f;
-        }
+        }   
     }
 
     public void updateWager()
