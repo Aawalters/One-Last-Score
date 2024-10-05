@@ -28,4 +28,10 @@ public class MapScript : MonoBehaviour
         SceneManager.LoadScene("MainMenuScene");
 
     }
+
+    public void Map()
+    {
+        SceneManager.LoadScene("MapMenuScene");
+
+    }
 }
