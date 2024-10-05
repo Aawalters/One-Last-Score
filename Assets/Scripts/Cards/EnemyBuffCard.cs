@@ -14,8 +14,8 @@ public class EnemyBuffCard : Card
     /* 
      * using this card increases the damage the enemies deal by effectValue
      */
-    public override void use(Player p) {
+    public override void use(GameManager GM) {
         Debug.Log("IT BUFFS ENEMIES ");
-        p.GameEnemyManager.BuffEnemies(effectValue, ExtraDamage, ExtraSpeed);
+        GM.GameEnemyManager.BuffEnemies(effectValue, ExtraDamage, ExtraSpeed);
     }
 }

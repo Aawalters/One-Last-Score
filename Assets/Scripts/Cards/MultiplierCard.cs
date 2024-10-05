@@ -10,8 +10,8 @@ public class MultiplierCard : Card
     /* 
      * using this card increases the end multiplier for the player by effectValue
      */
-    public override void use(Player p) {
-        p.multiplier = p.multiplier * effectValue;
-        p.GameManager.updateWager();
+    public override void use(GameManager GM) {
+        GM.multiplier = GM.multiplier * effectValue;
+        GM.updateWager();
     }
 }

@@ -10,8 +10,8 @@ public class WagerCard : Card
     /* 
      * using this card increases/decreases the wager val. for the player by effectValue
      */
-    public override void use(Player p) {
-        p.wager += effectValue;
-        p.GameManager.updateWager();
+    public override void use(GameManager GM) {
+        GM.wager += effectValue;
+        GM.updateWager();
     }
 }

@@ -17,7 +17,7 @@ public abstract class Card : ScriptableObject
     public int id;
     public string cardUserAnim;
 
-    public abstract void use(Player p);
+    public abstract void use(GameManager GM);
 
     //public abstract void use(Player p, Enemy e);
     //public abstract void use(Player p);

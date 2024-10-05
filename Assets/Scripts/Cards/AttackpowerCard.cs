@@ -10,7 +10,7 @@ public class AttackpowerCard : Card
     /* 
      * using this card increases the damage the player's kick deals by effectValue
      */
-    public override void use(Player p) {
-        p.kickDamage += effectValue;
+    public override void use(GameManager GM) {
+        GM.p.kickDamage += effectValue;
     }
 }

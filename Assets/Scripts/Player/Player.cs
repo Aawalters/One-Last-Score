@@ -7,33 +7,19 @@ using UnityEngine.Tilemaps;
 [System.Serializable]
 public class Player
 {
+    // Game Manager
+    public GameManager GameManager;
+
     [Header("Controls")]
     public bool ControlsEnabled = true;
+    public MovementJoystick MovementJoystickScript;
+    public ButtonsAndClick ButtonsAndClickScript;
 
     [Header("Health")]
-    public int healthCurrent;       // Current health of the player
-    public int healthMax = 100;     // Maximum health of the player
-    public Slider healthBar;       // UI Slider for health bar
     public bool isHit = false;
-
     public int attackCharge;
     public int healCharge;
     public int bleedValue;
-
-    [Header("Cards")]
-    public DeckController deckController;
-    public Deck deck;
-    public Image UICard;
-    public Image CooldownImg;
-    public GameEnemyManager GameEnemyManager;
-    public GameManager GameManager;
-    public StatusEffectManager StatusEffectManager;
-    public float cardCDTime = 5.0f, cardCDTimer = 0;
-    public bool cardIsOnCD = false;
-
-    [Header("Status")]
-    public float wager = 500;
-    public float multiplier = 1f; // baseline need 5x multiplier? so 2500, nerf to like 2300
 
     public Animator anim;
     

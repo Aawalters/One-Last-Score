@@ -1,60 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &331455298931874358
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8219657067719687924}
-  - component: {fileID: 8692746747735126740}
-  m_Layer: 0
-  m_Name: DeckController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8219657067719687924
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 331455298931874358}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.451428, y: -8.771336, z: -0.3094964}
-  m_LocalScale: {x: 4, y: 4, z: 4}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2990557554159055597}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8692746747735126740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 331455298931874358}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eda8d608d5d1281478a0a39d5dcbaac8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  allCards:
-  - {fileID: 11400000, guid: 67e42547c1622aa489d6c5eba5a4c04f, type: 2}
-  - {fileID: 11400000, guid: 39a69d4e9a575904886b382be02b47f2, type: 2}
-  - {fileID: 11400000, guid: 99936fece226fde4a9cb0657c0ad1fe2, type: 2}
-  - {fileID: 11400000, guid: e015b186915226b48acfa1d60887ce6d, type: 2}
-  - {fileID: 11400000, guid: f20a718285d15474aaab6ed11483391b, type: 2}
-  currentDeck:
-    deck: []
-    drawPile: []
-    hand: []
-    discardPile: []
 --- !u!1 &1715844539554913110
 GameObject:
   m_ObjectHideFlags: 0
@@ -79,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1715844539554913110}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 3.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -391,7 +336,6 @@ Transform:
   - {fileID: 2990557553756991438}
   - {fileID: 7427512630093263643}
   - {fileID: 1050991548157220790}
-  - {fileID: 8219657067719687924}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -507,29 +451,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   p:
-    healthCurrent: 100
-    healthMax: 100
-    healthBar: {fileID: 0}
+    GameManager: {fileID: 0}
+    ControlsEnabled: 1
+    MovementJoystickScript: {fileID: 0}
+    ButtonsAndClickScript: {fileID: 0}
     isHit: 0
     attackCharge: 0
     healCharge: 0
     bleedValue: 0
-    DeathScreen: {fileID: 0}
-    deckController: {fileID: 8692746747735126740}
-    deck:
-      deck: []
-      drawPile: []
-      hand: []
-      discardPile: []
-    UICard: {fileID: 0}
-    CooldownImg: {fileID: 0}
-    GameEnemyManager: {fileID: 0}
-    StatusEffectManager: {fileID: 0}
-    cardCDTime: 10
-    cardCDTimer: 0
-    cardIsOnCD: 0
-    wager: 0
-    multiplier: 0
     anim: {fileID: 3976756146910260309}
     grappleRope: {fileID: 5516453970350294432}
     grapplingGun: {fileID: 5516453970350294433}
@@ -568,14 +497,6 @@ MonoBehaviour:
     kickDamage: 1
     movementForceMultiplier: 0.3
     movementUpForceMultiplier: 0.2
-  deckController: {fileID: 0}
-  audioSource: {fileID: 1444416753}
-  KickAudio: {fileID: 8300000, guid: 97f613546e209fd4888e63a86e9a39d9, type: 3}
-  MissAudio: {fileID: 8300000, guid: f3368c20d3503e3439553e27cec0ec10, type: 3}
-  CardPullAudio: {fileID: 8300000, guid: 17246abd4703a844f8ad51233921d7f6, type: 3}
-  GoodPullAudio: {fileID: 8300000, guid: 8cbe3aa4478e5dd4293f5a00e5862f6e, type: 3}
-  BadPullAudio: {fileID: 8300000, guid: 93e66970dea988a48b790a371ec086a4, type: 3}
-  DeckShuffle: {fileID: 8300000, guid: 8557bd154fdbcf0459775d05282aed72, type: 3}
 --- !u!231 &7021618568593065068
 SpringJoint2D:
   m_ObjectHideFlags: 0
@@ -624,7 +545,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2990557554159055595}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 97f613546e209fd4888e63a86e9a39d9, type: 3}
@@ -720,7 +641,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2990557554159055595}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 97f613546e209fd4888e63a86e9a39d9, type: 3}
@@ -864,7 +785,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8065346434939192077}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -11}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -898,8 +819,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8728709147080681934}
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0, z: 0}
-  m_LocalScale: {x: 0.55, y: 0.7, z: 1}
+  m_LocalPosition: {x: -0.25, y: 0.065, z: 0}
+  m_LocalScale: {x: 0.434618, y: 0.302358, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7012374598813654393}
@@ -947,8 +868,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.33333334}
+  m_Sprite: {fileID: 21300000, guid: 516c03c10e037e146801838698519805, type: 3}
+  m_Color: {r: 0.654088, g: 0.654088, b: 0.654088, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -973,29 +894,14 @@ MonoBehaviour:
   grappleRope: {fileID: 5516453970350294432}
   playerController: {fileID: 2990557554159055600}
   p:
-    healthCurrent: 0
-    healthMax: 100
-    healthBar: {fileID: 0}
+    GameManager: {fileID: 0}
+    ControlsEnabled: 1
+    MovementJoystickScript: {fileID: 0}
+    ButtonsAndClickScript: {fileID: 0}
     isHit: 0
     attackCharge: 0
     healCharge: 0
     bleedValue: 0
-    DeathScreen: {fileID: 0}
-    deckController: {fileID: 0}
-    deck:
-      deck: []
-      drawPile: []
-      hand: []
-      discardPile: []
-    UICard: {fileID: 0}
-    CooldownImg: {fileID: 0}
-    GameEnemyManager: {fileID: 0}
-    StatusEffectManager: {fileID: 0}
-    cardCDTime: 5
-    cardCDTimer: 0
-    cardIsOnCD: 0
-    wager: 0
-    multiplier: 0
     anim: {fileID: 0}
     grappleRope: {fileID: 0}
     grapplingGun: {fileID: 0}

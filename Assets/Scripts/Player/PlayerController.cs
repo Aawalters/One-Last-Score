@@ -3,60 +3,44 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Tilemaps;
-using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
 
     public Player p;
-    public DeckController deckController;
-    public GameObject iOSPanel;
     public HashSet<IDamageable> iDamageableSet = new HashSet<IDamageable>();
     public bool shouldBeDamaging { get; private set; } = false;
-    // art audio
-    [Header("Art/Audio")]
-    public AudioSource audioSource;
-    public AudioClip KickAudio;
-    public AudioClip MissAudio;
-    public AudioClip CardPullAudio;
-    public AudioClip GoodPullAudio;
-    public AudioClip BadPullAudio;
-    public AudioClip DeckShuffle;
-    private MovementJoystick MovementJoystickScript;
-    private ButtonsAndClick ButtonsAndClickScript;
+
+    private GameManager GM;
 
     private void Awake()
     {
-        // instance = transform.Find("Player Controller").GetComponent<PlayerController>();
-        // DontDestroyOnLoad(this);
-        //p = new Player();
+        GM = p.GameManager;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        p.GameManager.Wager();
+        // GM.Wager();
 
         // setting defaults
         p.facingRight = false;
-        p.healthCurrent = p.healthMax; // Set health to max at start
-        p.healthBar.maxValue = p.healthMax;
-        p.healthBar.value = p.healthCurrent;
+
+        GM.healthCurrent = GM.healthMax; // Set health to max at start
+        GM.healthBar.maxValue = GM.healthMax;
+        GM.healthBar.value = GM.healthCurrent;
 
         // accessing components
         p.rb = GetComponent<Rigidbody2D>();
         p.anim = GetComponent<Animator>();
-        audioSource = GetComponent<AudioSource>();
 
         //p.deckController = GetComponent<DeckController>();
-        p.deck = p.deckController.GetNewDeck();
+        GM.deckController.currentDeck = GM.deckController.GetNewDeck();
 
-        if (iOSPanel.activeSelf)
+        if (GM.iOSPanel.activeSelf)
         {
-            MovementJoystickScript = iOSPanel.GetComponent<MovementJoystick>();
-            ButtonsAndClickScript = iOSPanel.GetComponent<ButtonsAndClick>();
+            p.MovementJoystickScript = GM.iOSPanel.GetComponent<MovementJoystick>();
+            p.ButtonsAndClickScript = GM.iOSPanel.GetComponent<ButtonsAndClick>();
         }
     }
 
@@ -80,9 +64,6 @@ public class PlayerController : MonoBehaviour
                 }
                 directionPlayerFaces();
             }
-        }
-        if (p.cardIsOnCD) {
-            ApplyCooldown();
         }
     }
 
@@ -170,7 +151,6 @@ public class PlayerController : MonoBehaviour
                 FlipCharacter();
             }
         }
-
     }
 
     private void ProcessInput()
@@ -213,7 +193,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.E)) p.grapplingGun.StopPullingEnemy();
         //card drawing - TODO: ADD COOLDOWN (in battle manager maybe?)
         if (Input.GetKeyDown(KeyCode.F)) {
-            useCard();
+            GM.useCard();
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -221,19 +201,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     private void ProcessInputMobile()
     {
         // Normal Movement Input
         // scale of -1 -> 1
-        p.moveDirection = MovementJoystickScript.joystickVec.x;
+        p.moveDirection = p.MovementJoystickScript.joystickVec.x;
         
-        if (ButtonsAndClickScript.isJumping && p.isGrounded)
+        if (p.ButtonsAndClickScript.isJumping && p.isGrounded)
         {
             p.isJumping = true;
-            ButtonsAndClickScript.isJumping = false; // so that jumping is not spammed
+            p.ButtonsAndClickScript.isJumping = false; // so that jumping is not spammed
         }
-        if (MovementJoystickScript.joystickVec.normalized.y < -0.90)
+        if (p.MovementJoystickScript.joystickVec.normalized.y < -0.90)
         {
             if (p.currentOneWayPlatform != null)
             {
@@ -243,69 +222,25 @@ public class PlayerController : MonoBehaviour
         }
 
         // attacks
-        if (ButtonsAndClickScript.isKicking)
+        if (p.ButtonsAndClickScript.isKicking)
         {
             p.anim.SetBool("isKicking", true);
-            ButtonsAndClickScript.isKicking = false;
+            p.ButtonsAndClickScript.isKicking = false;
         }
         // Grappling hook Input
         //if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.J)) p.grapplingGun.SetGrapplePoint();
-        if (ButtonsAndClickScript.pulling) p.grapplingGun.pull();
+        if (p.ButtonsAndClickScript.pulling) p.grapplingGun.pull();
         //else if (Input.GetKeyUp(KeyCode.Mouse1) || Input.GetKeyUp(KeyCode.J)) p.grapplingGun.stopGrappling();
 
-        if (ButtonsAndClickScript.drawCard)
+        if (p.ButtonsAndClickScript.drawCard)
         {
-            useCard();
-            ButtonsAndClickScript.drawCard = false;
+            GM.useCard();
+            p.ButtonsAndClickScript.drawCard = false;
         }
-        if (ButtonsAndClickScript.pause)
+        if (p.ButtonsAndClickScript.pause)
         {
             p.GameManager.Pause();
-            ButtonsAndClickScript.pause = false;
-        }
-    }
-
-    private void useCard()
-    {
-        if (p.cardIsOnCD) { //don't do anything if the card is on CD
-            return;
-        } else {
-            p.cardIsOnCD = true;
-            p.cardCDTimer = p.cardCDTime;
-            Card card = p.deckController.infinDrawCard(p.deck);
-            StartCoroutine(playCardSound(card));
-            card.use(p);
-            p.CooldownImg.sprite = card.cardImage;
-            p.StatusEffectManager.AddStatusEffect(card.effectImage);
-        }
-    }
-
-    IEnumerator playCardSound(Card card)
-    {
-        audioSource.clip = CardPullAudio;
-        audioSource.Play();
-        yield return new WaitForSeconds(CardPullAudio.length);
-        if (card.cardType == CardType.Multiplier || card.cardType == CardType.PlayerBuff) {
-            audioSource.clip = GoodPullAudio;
-        } else {
-            audioSource.clip = BadPullAudio;
-        }
-        audioSource.Play();
-    }
-
-    void ApplyCooldown()
-    {
-        p.cardCDTimer -= Time.deltaTime;
-
-        if (p.cardCDTimer < 0) {
-            p.cardIsOnCD = false;
-            p.cardCDTimer = 0;
-            p.UICard.GetComponentInChildren<TextMeshProUGUI>().text = " ";
-            audioSource.clip = DeckShuffle;
-            audioSource.Play();
-        } else {
-            p.UICard.GetComponentInChildren<TextMeshProUGUI>().text = Mathf.RoundToInt(p.cardCDTimer).ToString();
-            p.CooldownImg.fillAmount = p.cardCDTimer / p.cardCDTime;
+            p.ButtonsAndClickScript.pause = false;
         }
     }
 
@@ -354,11 +289,11 @@ public class PlayerController : MonoBehaviour
 
         // post active frame processing
         if (iDamageableSet.Count == 0) {
-            audioSource.clip = MissAudio;
-            audioSource.Play();
+            GM.audioSource.clip = GM.MissAudio;
+            GM.audioSource.Play();
         } else {
-            audioSource.clip = KickAudio;
-            audioSource.Play();
+            GM.audioSource.clip = GM.KickAudio;
+            GM.audioSource.Play();
         }
         iDamageableSet.Clear();
     }
@@ -409,12 +344,12 @@ public class PlayerController : MonoBehaviour
     {
         if (!p.isHit) {
             p.isHit = true;
-            p.healthCurrent -= damage;
-            p.healthBar.value = p.healthCurrent;
+            GM.healthCurrent -= damage;
+            GM.healthBar.value = GM.healthCurrent;
             p.anim.SetBool("isHurt", true);
             p.anim.SetBool("isKicking", false); // if you get hurt, cancel kick (rewards precision maybe?)
             shouldBeDamaging = false;
-            if (p.healthCurrent <= 0)
+            if (GM.healthCurrent <= 0)
             {
                 p.GameManager.Death();
             }
