@@ -100,6 +100,7 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
     [field: SerializeField, Header("Attacking")] public GameObject DetectAttack { get; set; }
     [field: SerializeField] public float AttackRadius { get; set; }
     [field: SerializeField] public int PunchDamage { get; set; }
+    [field: SerializeField] public Vector2 PunchForce { get; set; }
     public bool ShouldBeDamaging { get; set; } = false;
     [field: SerializeField] public float AttackWait { get; set; } = 1f;
     #endregion
@@ -415,8 +416,9 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
         while (ShouldBeDamaging) {
             Collider2D player = Physics2D.OverlapCircle(DetectAttack.transform.position, AttackRadius, 1 << Player.layer);
             if (player != null) {
-                Debug.Log(player.GetComponentInParent<Transform>().name);
-                StartCoroutine(player.GetComponent<PlayerController>().TakeDamage(PunchDamage));
+                Debug.Log(gameObject.name + " punched " + player.GetComponentInParent<Transform>().name);
+                Vector2 force = new Vector2((FacingRight ? 1 : -1) * Math.Abs(PunchForce.x), PunchForce.y);
+                StartCoroutine(player.GetComponent<PlayerController>().TakeDamage(PunchDamage, force));
             }
             yield return null; // wait a frame
         }

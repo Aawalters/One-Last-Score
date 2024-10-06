@@ -389,7 +389,7 @@ public class Enemy_Basic : MonoBehaviour, IDamageable
         while (shouldBeDamaging) {
             Collider2D player = Physics2D.OverlapCircle(detectAttack.transform.position, attackRadius, playerLayer);
             if (player != null) {
-                StartCoroutine(player.GetComponent<PlayerController>().TakeDamage(punchDamage));
+                // StartCoroutine(player.GetComponent<PlayerController>().TakeDamage(punchDamage));
             }
             yield return null; // wait a frame
         }

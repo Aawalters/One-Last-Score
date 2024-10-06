@@ -8,6 +8,7 @@ public interface IPuncher
     GameObject DetectAttack { get; set; }
     float AttackRadius { get; set; }
     int PunchDamage { get; set; }
+    Vector2 PunchForce { get; set; }
     bool ShouldBeDamaging { get; set; }
     float AttackWait { get; set; }
 

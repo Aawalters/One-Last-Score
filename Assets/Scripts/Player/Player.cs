@@ -20,6 +20,7 @@ public class Player
     public int attackCharge;
     public int healCharge;
     public int bleedValue;
+    public float iFrames = .5f;
 
     public Animator anim;
     

@@ -531,6 +531,7 @@ MonoBehaviour:
   <DetectAttack>k__BackingField: {fileID: 1780041902}
   <AttackRadius>k__BackingField: 1.2
   <PunchDamage>k__BackingField: 5
+  <PunchForce>k__BackingField: {x: 45, y: 7}
   <AttackWait>k__BackingField: 1
   PointSpacing: 0.5
 --- !u!1 &6430424488172574266

@@ -119,22 +119,15 @@ public class PlayerController : MonoBehaviour
 
         // when kicking, face player towards cursor to make attack easier
         if (p.anim.GetBool("isKicking")) {
-            if ((aimDirection.x > 0 && !p.facingRight) || (aimDirection.x < 0 && p.facingRight)) {
-                FlipCharacter();
-            }
+            FlipCharacter(aimDirection.x > 0);
         }
         // Handle character flipping only based on movement when moving
-        else if (p.moveDirection != 0)
-        {
-            if ((p.moveDirection > 0 && !p.facingRight) || (p.moveDirection < 0 && p.facingRight))
-            {
-                FlipCharacter();
-            }
+        else if (p.moveDirection != 0) {
+            FlipCharacter(p.moveDirection > 0);
         }
         // If not moving, flip character based on aim direction
-        else if ((aimDirection.x > 0 && !p.facingRight) || (aimDirection.x < 0 && p.facingRight))
-        {
-            FlipCharacter();
+        else {
+            FlipCharacter(aimDirection.x > 0);
         }
 
     }
@@ -146,10 +139,7 @@ public class PlayerController : MonoBehaviour
         // Handle character flipping only based on movement when moving
         if (p.moveDirection != 0)
         {
-            if ((p.moveDirection > 0 && !p.facingRight) || (p.moveDirection < 0 && p.facingRight))
-            {
-                FlipCharacter();
-            }
+            FlipCharacter(p.moveDirection > 0);
         }
     }
 
@@ -325,10 +315,13 @@ public class PlayerController : MonoBehaviour
         Physics2D.IgnoreCollision(p.playerCollider, platformCollider, false);
     }
 
-    public void FlipCharacter()
+    public void FlipCharacter(bool right)
     {
-        p.facingRight = !p.facingRight;
-        transform.Rotate(0.0f, 180.0f, 0.0f);
+        // storing whether object is already facingRight to avoid double flipping
+        if (right != p.facingRight) {
+            p.facingRight = !p.facingRight;
+            transform.Rotate(0.0f, 180.0f, 0.0f);
+        }
     }
 
     private void OnDrawGizmos()
@@ -339,8 +332,8 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawCube(p.groundCheck.position, p.checkGroundSize);
     }
 
-    // Function to take damage
-    public IEnumerator TakeDamage(int damage)
+    // Function to take damage + iframes + knockback
+    public IEnumerator TakeDamage(int damage, Vector2 force)
     {
         if (!p.isHit) {
             p.isHit = true;
@@ -349,13 +342,17 @@ public class PlayerController : MonoBehaviour
             p.anim.SetBool("isHurt", true);
             p.anim.SetBool("isKicking", false); // if you get hurt, cancel kick (rewards precision maybe?)
             shouldBeDamaging = false;
-            if (GM.healthCurrent <= 0)
-            {
+
+            p.rb.velocity = Vector2.zero; // so previous velocity doesn't interfere (would super stop player momentum tho? maybe change in future)
+            p.rb.AddForce(force, ForceMode2D.Impulse);
+
+            if (GM.healthCurrent <= 0) {
                 p.GameManager.Death();
+            } else {
+                yield return new WaitForSeconds(p.iFrames); // hitstun (i-frames?), should make sep later
+                p.isHit = false;
+                p.anim.SetBool("isHurt", false);
             }
-            yield return new WaitForSeconds(1f); // hitstun (i-frames?), should make sep later
-            p.isHit = false;
-            p.anim.SetBool("isHurt", false);
         }
     }
 
