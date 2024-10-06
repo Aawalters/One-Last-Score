@@ -8,7 +8,7 @@ public class EnemyIdleState : EnemyState
     private float _currentTime = 0f;
 
     public EnemyIdleState(Enemy enemy, EnemyStateMachine enemyStateMachine) : base(enemy, enemyStateMachine) {
-        id = 1;
+        id = EnemyStateMachine.EnemyStates.Idle;
     }
 
     public override void EnterState() {

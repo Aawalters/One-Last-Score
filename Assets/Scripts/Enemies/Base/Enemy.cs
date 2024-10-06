@@ -8,41 +8,53 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckable, IPuncher
 {
 
-    // general fields    
+    [Header("Game Object Dependencies")]
     public GameEnemyManager GameEnemyManager;
-    public bool InImpact = false;
     public GameObject Player;
     public Animator Anim { get; set; }
 
+    [Header("State Variables")]
+    public bool InImpact = false;
+
+    // IMoveable State Variables
+    [field: SerializeField] public bool IsPaused { get; set; }
+    [field: SerializeField] public bool FacingRight { get; set; } = false;
+    [field: SerializeField] public bool IsGrounded { get; set; }
+    [field: SerializeField] public bool ShouldJump { get; set; }
+    [field: SerializeField] public bool MidJump { get; set; }
+    [field: SerializeField] public bool PlayerAbove { get; set; }
+    [field: SerializeField] public bool PlayerBelow { get; set; }
+
+    // ITriggerCheckable Variables
+    [field: SerializeField] public bool InChaseRange { get; set; }
+    [field: SerializeField] public bool InAttackRange { get; set; }
+
+    // State Machine Variables
+    public EnemyStateMachine.EnemyStates enemyState;
+
+    #region Collision Tuning
     [Header("Collision Tuning")]
     public float maxVelocity; // don't want enemies to break game speed
 
     [Tooltip("Force threshold needed to cause damage and impact state, if not met then return to normal control")]
     public float collisionForceThreshold;
-
-    [Range(0, 1)]
-    [Tooltip("Determines how much collision force is factored into impact damage")]
+    
+    [Tooltip("Determines how much collision force is factored into impact damage"), Range(0, 1)]
     public float collisionDamageMultiplier;
 
-    [Range(0, 1)]
-    [Tooltip("Determines how much impact force is factored into bounce")]
+    [Tooltip("Determines how much impact force is factored into bounce"), Range(0, 1)]
     public float collisionForceMultiplier;
 
     public float baseMass;
-    [Range(0, 1)]
-    [Tooltip("Affects enemy floatiness during Impact State (for easier juggles)")]
+    [Tooltip("Affects enemy floatiness during Impact State (for easier juggles)"), Range(0, 1)]
     public float postImpactMassScale;
-
-    #region ITriggerCheckable Variables
-    [field: SerializeField] public bool InChaseRange { get; set; }
-    [field: SerializeField] public bool InAttackRange { get; set; }
     #endregion
     
     #region IDamageable Variables
-    [field: SerializeField] public int MaxHealth { get; set; }
+    [field: SerializeField, Header("Health/Death")] public int MaxHealth { get; set; }
     [field: SerializeField] public int CurrentHealth { get; set; }
     public object DeathLock { get; set; } = new object();
-    public bool IsDead { get; set; } = false;
+    [field: SerializeField] public bool IsDead { get; set; } = false;
     #endregion
 
     #region IMoveable Variables
@@ -50,8 +62,6 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
     public Rigidbody2D RB { get; set; }
 
     // state
-    public bool IsPaused { get; set; }
-    public bool FacingRight { get; set; } = false;
     public Vector3 TopEnemyTransform { get; set; }
     public Vector3 BottomEnemyTransform { get; set; }
     public float BodyGravity { get; set; }
@@ -61,14 +71,9 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
     public Vector2 LandingTarget { get; set; }
     public GameObject CurrentOneWayPlatform { get; set; }
     public BoxCollider2D Collider { get; set; }
-    public bool IsGrounded { get; set; }
-    public bool ShouldJump { get; set; }
-    public bool MidJump { get; set; }
-    public bool PlayerAbove { get; set; }
-    public bool PlayerBelow { get; set; }
 
     // editor properties
-    [field: SerializeField] public float ChaseSpeed { get; set; }
+    [field: SerializeField, Header("Movement")] public float ChaseSpeed { get; set; }
     [field: SerializeField] public float MaxYJumpForce { get; set; }
     [field: SerializeField] public float MaxXJumpForce { get; set; }
     [field: SerializeField] public LayerMask PlatformDetectionMask { get; set; }
@@ -80,19 +85,19 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
 
     #region State Machine Variables
     public EnemyStateMachine StateMachine { get; set; }
-    public int enemyState;
     public EnemyIdleState IdleState { get; set; }
     public EnemyChaseState ChaseState { get; set; }
     public EnemyAttackState AttackState { get; set; }
     #endregion
 
     #region IdleState Variables
+    [Header("Idle Variables")]
     public float IdleRange = 5f;
     public float IdleTimeBetweenMove = 2f;
     #endregion
 
     #region Punching Variables
-    [field: SerializeField] public GameObject DetectAttack { get; set; }
+    [field: SerializeField, Header("Attacking")] public GameObject DetectAttack { get; set; }
     [field: SerializeField] public float AttackRadius { get; set; }
     [field: SerializeField] public int PunchDamage { get; set; }
     public bool ShouldBeDamaging { get; set; } = false;
@@ -104,9 +109,9 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
     private LineRenderer _lineRenderer;
     private Vector3 _lastRecordedPosition;  // Last recorded position to avoid redundant points
 
-    #region Enable Gizmos
-    public bool IdleDetection = true;
-    #endregion
+    // #region Enable Gizmos
+    // public bool IdleDetection = true;
+    // #endregion
 
     // called before start when script is loaded
     private void Awake() {

@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyAttackState : EnemyState
 {
     public EnemyAttackState(Enemy enemy, EnemyStateMachine enemyStateMachine) : base(enemy, enemyStateMachine) {
-        id = 3;
+        id = EnemyStateMachine.EnemyStates.Attack;
     }
 
     public override void AnimationTriggerEvent(Enemy.AnimationTriggerType triggerType) {

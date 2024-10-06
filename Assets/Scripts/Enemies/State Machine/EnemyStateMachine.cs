@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class EnemyStateMachine
 {
+    public enum EnemyStates {
+            Idle,
+            Chase,
+            Attack
+        }
     public EnemyState currentEnemyState { get; set; }
 
     public void Initialize(EnemyState startingState) {

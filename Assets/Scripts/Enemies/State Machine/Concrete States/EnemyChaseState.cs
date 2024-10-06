@@ -8,7 +8,7 @@ public class EnemyChaseState : EnemyState
     private bool PlayerBelow;
 
     public EnemyChaseState(Enemy enemy, EnemyStateMachine enemyStateMachine) : base(enemy, enemyStateMachine) {
-        id = 2;
+        id = EnemyStateMachine.EnemyStates.Chase;
     }
 
     public override void FrameUpdate() {

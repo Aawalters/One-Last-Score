@@ -6,7 +6,7 @@ public class EnemyState
 {
     protected Enemy e;
     protected EnemyStateMachine enemyStateMachine;   
-    public int id; // id of each type of state
+    public EnemyStateMachine.EnemyStates id;
 
     public EnemyState(Enemy enemy, EnemyStateMachine enemyStateMachine) {
         this.e = enemy;
