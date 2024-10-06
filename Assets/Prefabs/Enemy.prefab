@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1780041903}
   - component: {fileID: 1780041904}
-  - component: {fileID: 1780041905}
-  m_Layer: 10
+  - component: {fileID: 6430424488159186565}
+  m_Layer: 0
   m_Name: DetectAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49,7 +49,7 @@ CircleCollider2D:
   m_Offset: {x: 0.28, y: 0}
   serializedVersion: 2
   m_Radius: 0.5854304
---- !u!114 &1780041905
+--- !u!114 &6430424488159186565
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -58,7 +58,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1780041902}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29ad71036d4cdc64e95fffc3deed2480, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d545e3d491b54f409359934a34e9851, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5811921192025995566
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 5811921192025995567}
   - component: {fileID: 5811921192025995564}
   - component: {fileID: 5811921192025995565}
-  - component: {fileID: 1837207621}
+  - component: {fileID: 690566457899941637}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -168,7 +168,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1837207621
+--- !u!114 &690566457899941637
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -177,7 +177,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5811921192025995566}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 018fc41fa4ca40140ade43d623634fae, type: 3}
+  m_Script: {fileID: 11500000, guid: fc6ae7a2af38bd742ad2472fb07871d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5811921193137224085
@@ -191,10 +191,10 @@ GameObject:
   - component: {fileID: 5811921193137224075}
   - component: {fileID: 5811921193137224074}
   - component: {fileID: 5811921193137224073}
-  - component: {fileID: 5811921193137224078}
   - component: {fileID: 1667829834687669964}
   - component: {fileID: 1795744082280894315}
   - component: {fileID: 1419710306}
+  - component: {fileID: 690566456846909353}
   m_Layer: 9
   m_Name: Enemy
   m_TagString: enemy
@@ -210,12 +210,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5811921193137224085}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -5.51, y: -4.537, z: 0}
   m_LocalScale: {x: 0.82061136, y: 1.5372484, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5811921192025995567}
   - {fileID: 1780041903}
+  - {fileID: 6430424488172574261}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -266,62 +267,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.42, y: 1.5291781}
   m_EdgeRadius: 0
---- !u!114 &5811921193137224078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5811921193137224085}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b57793e512845b142ac8fa3991401cf6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <MaxHealth>k__BackingField: 100
-  <CurrentHealth>k__BackingField: 0
-  GameEnemyManager: {fileID: 0}
-  facingRight: 0
-  inImpact: 0
-  maxVelocity: 60
-  collisionForceThreshold: 10
-  collisionDamageMultiplier: 0.5
-  collisionForceMultiplier: 0.5
-  baseMass: 1
-  postImpactMassScale: 0.9
-  player: {fileID: 0}
-  chaseSpeed: 2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  aiEnabled: 1
-  stoppingDistance: 1.2
-  maxJumpYForce: 100
-  isGrounded: 0
-  shouldJump: 0
-  midJump: 0
-  direction: {x: 0, y: 0}
-  isPaused: 0
-  maxYJumpForce: 15
-  maxXJumpForce: 5
-  platformDetectionMask:
-    serializedVersion: 2
-    m_Bits: 64
-  jumpDelay: 0.3
-  playerAbove: 0
-  playerBelow: 0
-  landingTarget: {x: 0, y: 0}
-  landingOffset: 1.5
-  currentOneWayPlatform: {fileID: 0}
-  fallthroughTime: 1
-  detectAttack: {fileID: 1780041902}
-  attackRadius: 1.2
-  punchDamage: 5
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  attackWait: 1.5
-  pointSpacing: 0.5
 --- !u!231 &1667829834687669964
 SpringJoint2D:
   m_ObjectHideFlags: 0
@@ -535,3 +480,117 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &690566456846909353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5811921193137224085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee95f2efde76c604dbf7186587ab9524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameEnemyManager: {fileID: 0}
+  Player: {fileID: 0}
+  InImpact: 0
+  <IsPaused>k__BackingField: 0
+  <FacingRight>k__BackingField: 0
+  <IsGrounded>k__BackingField: 0
+  <ShouldJump>k__BackingField: 0
+  <MidJump>k__BackingField: 0
+  <PlayerAbove>k__BackingField: 0
+  <PlayerBelow>k__BackingField: 0
+  <InChaseRange>k__BackingField: 0
+  <InAttackRange>k__BackingField: 0
+  enemyState: 0
+  maxVelocity: 60
+  collisionForceThreshold: 10
+  collisionDamageMultiplier: 0.5
+  collisionForceMultiplier: 0.5
+  baseMass: 1
+  postImpactMassScale: 0.9
+  <MaxHealth>k__BackingField: 100
+  <CurrentHealth>k__BackingField: 0
+  <IsDead>k__BackingField: 0
+  <ChaseSpeed>k__BackingField: 2
+  <MaxYJumpForce>k__BackingField: 15
+  <MaxXJumpForce>k__BackingField: 5
+  <PlatformDetectionMask>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 64
+  <FallthroughTime>k__BackingField: 1
+  <LandingOffset>k__BackingField: 1.5
+  <JumpDelay>k__BackingField: 0.15
+  <GroundLayer>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 64
+  IdleRange: 5
+  IdleTimeBetweenMove: 2
+  <DetectAttack>k__BackingField: {fileID: 1780041902}
+  <AttackRadius>k__BackingField: 1.2
+  <PunchDamage>k__BackingField: 5
+  <AttackWait>k__BackingField: 1
+  PointSpacing: 0.5
+--- !u!1 &6430424488172574266
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6430424488172574261}
+  - component: {fileID: 6430424488172574260}
+  - component: {fileID: 6430424488172574263}
+  m_Layer: 0
+  m_Name: DetectChase
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6430424488172574261
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6430424488172574266}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5811921193137224075}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &6430424488172574260
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6430424488172574266}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 10
+--- !u!114 &6430424488172574263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6430424488172574266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f71bc0ca07f33cf44a7fea9a3f30b34e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

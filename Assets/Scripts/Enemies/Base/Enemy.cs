@@ -116,6 +116,7 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
     // called before start when script is loaded
     private void Awake() {
         Player = GameObject.FindGameObjectWithTag("Player");
+        GameEnemyManager = GameObject.Find("GameEnemyManager").GetComponent<GameEnemyManager>();
         StateMachine = new EnemyStateMachine();
         IdleState = new EnemyIdleState(this, StateMachine);
         ChaseState = new EnemyChaseState(this, StateMachine);

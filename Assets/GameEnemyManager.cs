@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class GameEnemyManager : MonoBehaviour
 {
-    public Transform playerTransform;
+    public GameObject Player;
     public List<GameObject> spawnedEnemies = new List<GameObject>();
     public int TotalNumberOfEnemiesLeft;
 
@@ -20,6 +20,10 @@ public class GameEnemyManager : MonoBehaviour
     [Header("Wave Settings")]
     public List<int> waveConfigurations; // List of enemy count per wave
     private int currentWave = 0;         // Current wave number
+
+    void Awake() {
+        Player = GameObject.FindGameObjectWithTag("Player");
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -51,12 +55,12 @@ public class GameEnemyManager : MonoBehaviour
     {
         foreach(GameObject enemy in spawnedEnemies) {
             if (enemy != null) {
-                Enemy_Basic enemyRef = enemy.GetComponent<Enemy_Basic>();
+                Enemy enemyRef = enemy.GetComponent<Enemy>();
                 // Code to execute for each item
                 enemyRef.MaxHealth += ExtraHealth;
                 enemyRef.CurrentHealth += ExtraHealth;
-                enemyRef.chaseSpeed += ExtraSpeed;
-                enemyRef.punchDamage += ExtraDamage;
+                enemyRef.ChaseSpeed += ExtraSpeed;
+                enemyRef.PunchDamage += ExtraDamage;
             }
         }
     }
@@ -128,8 +132,8 @@ public class GameEnemyManager : MonoBehaviour
 
     private void SpawnEnemy(Transform spawnPoint) {
         GameObject newEnemy = Instantiate(enemyPrefab, spawnPoint.position, Quaternion.identity);
-        Enemy_Basic enemyRef = newEnemy.GetComponent<Enemy_Basic>();
-        enemyRef.player = playerTransform;
+        Enemy enemyRef = newEnemy.GetComponent<Enemy>();
+        enemyRef.Player = Player;
         enemyRef.GameEnemyManager = this;
         spawnedEnemies.Add(newEnemy);
     }

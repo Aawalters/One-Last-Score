@@ -85,6 +85,10 @@ public class GameManager : MonoBehaviour
         healthBar = PlayScreen.GetComponentInChildren<Slider>();
 
         iOSPanel = IBuild.transform.Find("iOS Panel").gameObject;
+
+        GameEnemyManager = GetComponentInChildren<GameEnemyManager>();
+        Player = GameObject.FindGameObjectWithTag("Player");
+        Canvas = GameObject.FindGameObjectWithTag("Canvas");
     }
 
     void Update()
