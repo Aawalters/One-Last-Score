@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         GM = p.GameManager;
+        p.playerChargeMeter = GameObject.Find("Player Charge Meter");
+        p.playerExtendedChargeMeter = GameObject.Find("Player Extended Charge Meter");
     }
 
     // Start is called before the first frame update
@@ -30,6 +33,19 @@ public class PlayerController : MonoBehaviour
         GM.healthBar.maxValue = GM.healthMax;
         GM.healthBar.value = GM.healthCurrent;
 
+        // charge kick values
+        p.playerChargeMeter.GetComponent<Slider>().value = 0;
+        // p.playerChargeMeter.SetActive(false); // hide
+        p.playerChargeMeter.GetComponent<Slider>().maxValue = 1;
+
+        p.playerExtendedChargeMeter.GetComponent<Slider>().value = 0;
+        // p.playerExtendedChargeMeter.SetActive(false); // hide
+        p.forceIncrease = p.maxKickForce - p.baseKickForce;
+        float extendedPercent = (p.extendedMaxKickForce - p.baseKickForce) / p.forceIncrease; // 1 + percent increase
+        p.playerExtendedChargeMeter.GetComponent<Slider>().maxValue = extendedPercent;
+        p.playerExtendedChargeMeter.GetComponent<RectTransform>().sizeDelta = new Vector2(
+            p.playerChargeMeter.GetComponent<RectTransform>().sizeDelta.x * extendedPercent, 
+            p.playerExtendedChargeMeter.GetComponent<RectTransform>().sizeDelta.y);
         // accessing components
         p.rb = GetComponent<Rigidbody2D>();
         p.anim = GetComponent<Animator>();
@@ -65,6 +81,8 @@ public class PlayerController : MonoBehaviour
                 directionPlayerFaces();
             }
         }
+
+        p.playerChargeMeter.GetComponent<Slider>().value = Math.Min(1, p.kickCharge); // just in case
     }
 
     private void FixedUpdate()
@@ -76,6 +94,11 @@ public class PlayerController : MonoBehaviour
         // if is Grounded and just ended midJump, then play landing animation
         p.isGrounded = Physics2D.OverlapBox(p.groundCheck.position, p.checkGroundSize, 0f, p.groundObjects) && !p.midJump;
         Move();
+
+        if (p.charging) {
+            p.kickCharge += p.kickChargeRate; // increases at fixed rate
+            // (p.rb.velocity.magnitude * p.movementChargeRateMultiplier);
+        }
     }
 
     private void Move()
@@ -166,6 +189,15 @@ public class PlayerController : MonoBehaviour
         {
             p.anim.SetBool("isKicking", true);
         }
+        // while not holding down button, set back to normal
+        if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.K) && p.charging) {
+            p.anim.speed = 0; // pause anim
+        } else {
+            p.charging = false;
+            p.anim.speed = 1; // unpause anim
+            p.kickCharge = 0; // reset charge
+        }
+
         // Grappling hook Input
         if (Input.GetKeyDown(KeyCode.Mouse1) || Input.GetKeyDown(KeyCode.J)) 
         { 
@@ -234,6 +266,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void StartCharging() {
+        p.charging = true;
+    }
+
     // kick active frames
     public IEnumerator Kick()
     {
@@ -241,27 +277,25 @@ public class PlayerController : MonoBehaviour
         Debug.Log("on ground kick? " + p.isGrounded);
 
         while (shouldBeDamaging) {
-            Collider2D[] enemyList = Physics2D.OverlapCircleAll(p.attackPoint.transform.position, p.attackRadius, p.enemyLayer);
+            Collider2D[] enemyList = Physics2D.OverlapCircleAll(p.kickPoint.transform.position, p.kickRadius, p.enemyLayer);
             Vector2 force;
 
             foreach (Collider2D enemyObject in enemyList)
             {
-                // calculate direction of force and factor in player and enemy velocity to strength
-                Vector2 dir = enemyObject.transform.position - transform.position;
-                dir.Normalize();
-                float weightedForce = p.kickForce + (p.rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * p.movementForceMultiplier;
-                float weightedUpForce = p.kickUpForce + (p.rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * p.movementUpForceMultiplier;
+                // calculate direction of force and factor in player velocity to overall power
+                // Vector2 dir = enemyObject.transform.position - transform.position;
+                // dir.Normalize();
+                // float weightedForce = p.kickForce + (p.rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * p.movementForceMultiplier;
+                // float weightedUpForce = p.kickUpForce + (p.rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * p.movementUpForceMultiplier;
 
-                // if isGrounded, add slight upward force but don't multiply upward force
-                // for both, clamp (maybe log max) force
+                int dir = p.facingRight ? 1 : -1;
+                float chargeIncrease = p.kickCharge * p.forceIncrease;
+                float weightedXForce = dir * Math.Min(p.baseKickForce + chargeIncrease, p.maxKickForce);
+                force = new Vector2(weightedXForce, 0);
+                // if isGrounded, add slight upward force
                 if (p.isGrounded) {
-                    force = new Vector2(Mathf.Sign(dir.x) * weightedForce, weightedUpForce);
-                    if (math.abs(force.x) > p.maxKickForce) { // clamp x
-                        force.x = force.x > 0 ? p.maxKickForce : p.maxKickForce * -1;
-                    }
-                } else {
-                    dir = dir * weightedForce;
-                    force = Vector2.ClampMagnitude(dir * p.kickForce, p.maxKickForce); // clamp total force
+                    float weightedYForce = p.kickUpForce + (chargeIncrease * p.chargeUpForceMultiplier);
+                    force.y = weightedYForce;
                 }
 
                 // apply damage + force to enemy 
@@ -326,7 +360,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(p.attackPoint.transform.position, p.attackRadius);
+        Gizmos.DrawWireSphere(p.kickPoint.transform.position, p.kickRadius);
         // Gizmos.DrawWireSphere(groundCheck.transform.position, checkRadius);
         // isGrounded = Physics2D.OverlapBox(groundCheck.position, new Vector2(2, 2), 0f);
         Gizmos.DrawCube(p.groundCheck.position, p.checkGroundSize);

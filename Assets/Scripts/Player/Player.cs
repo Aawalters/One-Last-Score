@@ -50,12 +50,30 @@ public class Player
     
     // attack tuning
     [Header("Attack Tuning")]
-    public GameObject attackPoint;
-    public float kickForce = 0.5f, kickUpForce, maxKickForce, attackRadius; //max is clamping kick force
+    public GameObject kickPoint;
+
+    // properties of actual kick
+    public float baseKickForce = 0.5f; // non-charged kick force
+    public float maxKickForce; // non-extended fully charged kick force
+    public float forceIncrease; // diff increase in force from base to max (private)
+    public float extendedMaxKickForce; // extended fully charged kick force (for grapple kick) (determines amount of extension relative to maxKickForce)
+    public float kickUpForce; // base up force (for grounded kick)
+    public float kickRadius; // size of kick hitbox
+
+    // kick charge
+    // base = 5 max = 6 extendedMax = 7
+    // 1 (max of bar) <= maxKickForce (kickCharge * (max - base)) => e.g. 50/100 * (6-5) = .5 * 1 = .5 => 5.5 force
+    // x (max of extended bar) <= extendedMaxKickForce 
+    // (ext-base - max-base)/(max-base) * 100 percent increase => (7-5 - 6-5)/(6-5) * 100 = (2 - 1)/(1) * 100 = 1
+    // extended bar max value = 1 (max of bar) + (extended percent)
+    // kick force = baseKickForce * (kickCharge (clamped at 1 or ext max) * forceIncrease)
+    public float kickCharge; // current charge of kick (0 if non-charged) (added force to kick is base + (kickCharge/maxKickCharge * baseKickForce) (private)
+    [Range(0, 1)] public float kickChargeRate; // rate at which charge increases per physics frame
+    [Range(0, 1)] public float movementChargeRateMultiplier; // how much charge rate is affected by player current speed
+    [Range(0, 1)] public float chargeUpForceMultiplier; // how much charge affects upforce amount (grounded attack)
     public LayerMask enemyLayer;
     public int kickDamage = 1;
-    [Range(0, 1)]
-    public float movementForceMultiplier; // determines how much player & enemy velocity should affect kick force 
-    [Range(0, 1)]
-    public float movementUpForceMultiplier; // determines how much player & enemy velocity affect grounded upward kick force
+    public GameObject playerChargeMeter;
+    public GameObject playerExtendedChargeMeter; 
+    public bool charging;
 }

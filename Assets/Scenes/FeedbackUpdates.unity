@@ -605,7 +605,7 @@ GameObject:
   - component: {fileID: 381771710}
   - component: {fileID: 381771711}
   m_Layer: 5
-  m_Name: Extended Charge Meter
+  m_Name: Player Extended Charge Meter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -630,9 +630,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 27.7, y: 0.6}
-  m_SizeDelta: {x: 175.49, y: 26.66}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -61.60004, y: -0.000004768372}
+  m_SizeDelta: {x: 180, y: 26.66}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &381771711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -678,9 +678,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 150
+  m_MaxValue: 1.5
   m_WholeNumbers: 0
-  m_Value: 100
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2093,6 +2093,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 690566456846909353, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
+      propertyPath: <MaxHealth>k__BackingField
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 690566456846909353, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
       propertyPath: <AttackRadius>k__BackingField
       value: 0.9
       objectReference: {fileID: 0}
@@ -2146,7 +2150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5811921193137224085, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
@@ -3240,7 +3244,7 @@ GameObject:
   - component: {fileID: 1578167350}
   - component: {fileID: 1578167351}
   m_Layer: 5
-  m_Name: Charge Meter
+  m_Name: Player Charge Meter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3265,9 +3269,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00000071526, y: 0.00000029802}
+  m_AnchoredPosition: {x: -61.60004, y: -0.0000047683716}
   m_SizeDelta: {x: 120, y: 26.66}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1578167351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3313,9 +3317,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 100
+  m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 100
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3755,13 +3759,57 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.canvas
+      value: 
+      objectReference: {fileID: 1867354210}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
       propertyPath: p.iFrames
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.kickPoint
+      value: 
+      objectReference: {fileID: 1710969593}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.kickRadius
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
       propertyPath: p.GameManager
       value: 
       objectReference: {fileID: 112427780}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.kickUpForce
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.maxKickForce
+      value: 13.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.baseKickForce
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.forceIncrease
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.extendedMaxKickForce
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.ButtonsAndClickScript
+      value: 
+      objectReference: {fileID: 1798159767}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.currentOneWayPlatform
+      value: 
+      objectReference: {fileID: 1843003561}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.MovementJoystickScript
+      value: 
+      objectReference: {fileID: 1798159768}
     - target: {fileID: 5516453970350294433, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
       propertyPath: m_camera
       value: 
@@ -3770,8 +3818,17 @@ PrefabInstance:
       propertyPath: cursorImage
       value: 
       objectReference: {fileID: 511009531}
+    - target: {fileID: 6114587614926986967, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: m_Name
+      value: KickPoint
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+--- !u!1 &1710969593 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6114587614926986967, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+  m_PrefabInstance: {fileID: 1710969592}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1751937654
 GameObject:
   m_ObjectHideFlags: 0
@@ -4141,6 +4198,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1798159767 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3768005602947744886, guid: 7a86c7be7ef6f5d4b91f1ffc39b4f80c, type: 3}
+  m_PrefabInstance: {fileID: 122476060}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38d016a7c72d5f74fa1d5bd099fb4c4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1798159768 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3768005602947744874, guid: 7a86c7be7ef6f5d4b91f1ffc39b4f80c, type: 3}
+  m_PrefabInstance: {fileID: 122476060}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c791f6eb5a2f92419a6a655c552078a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1842182806
 GameObject:
   m_ObjectHideFlags: 0
@@ -4397,7 +4476,7 @@ GameObject:
   - component: {fileID: 1867354213}
   - component: {fileID: 1867354212}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: PlayerCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
