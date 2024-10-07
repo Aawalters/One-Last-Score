@@ -316,7 +316,7 @@ GameObject:
   - component: {fileID: 7998308603484210774}
   m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -459,6 +459,7 @@ MonoBehaviour:
     attackCharge: 0
     healCharge: 0
     bleedValue: 0
+    iFrames: 2
     anim: {fileID: 3976756146910260309}
     grappleRope: {fileID: 5516453970350294432}
     grapplingGun: {fileID: 5516453970350294433}
@@ -490,7 +491,7 @@ MonoBehaviour:
     kickForce: 15
     kickUpForce: 10
     maxKickForce: 50
-    attackRadius: 2
+    attackRadius: 1.2
     enemyLayer:
       serializedVersion: 2
       m_Bits: 512
@@ -739,7 +740,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1050991548157220790}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: AttackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -754,7 +755,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6114587614926986967}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.97, y: 1.03, z: 0}
+  m_LocalPosition: {x: -2.97, y: 0.48, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -902,6 +903,7 @@ MonoBehaviour:
     attackCharge: 0
     healCharge: 0
     bleedValue: 0
+    iFrames: 0.5
     anim: {fileID: 0}
     grappleRope: {fileID: 0}
     grapplingGun: {fileID: 0}
@@ -942,7 +944,7 @@ MonoBehaviour:
     movementUpForceMultiplier: 0
   grappableLayerMask:
     serializedVersion: 2
-    m_Bits: 631
+    m_Bits: 630
   m_camera: {fileID: 0}
   gunHolder: {fileID: 2990557554159055597}
   gunPivot: {fileID: 7427512630093263643}
