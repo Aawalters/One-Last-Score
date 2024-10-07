@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public GameEnemyManager GameEnemyManager;
     public GameObject Player;
     public GameObject Canvas;
+    public GameObject Camera;
 
     [Header("Art/Audio")]
     public AudioSource audioSource;
@@ -62,6 +63,10 @@ public class GameManager : MonoBehaviour
 
     private bool paused = false;
 
+    [Header("FX")]
+    public bool InHitStop = false;
+    public AnimationCurve Curve;
+
     void Awake()
     {
         PlayScreen = Canvas.transform.Find("Play Screen").gameObject;
@@ -89,6 +94,7 @@ public class GameManager : MonoBehaviour
         GameEnemyManager = GetComponentInChildren<GameEnemyManager>();
         Player = GameObject.FindGameObjectWithTag("Player");
         Canvas = GameObject.FindGameObjectWithTag("Canvas");
+        Camera = GameObject.FindGameObjectWithTag("MainCamera");
     }
 
     void Update()
@@ -244,5 +250,29 @@ public class GameManager : MonoBehaviour
     public void Menu()
     {
         SceneManager.LoadScene("MainMenuScene");
+    }
+
+    // hit stop (scaling) + screen shake (if strong enough)
+    public IEnumerator HitStop(float totalTime) {
+        if (!InHitStop) {
+            Time.timeScale = 0.01f; // FREEEZE TIME!
+            InHitStop = true;
+            yield return new WaitForSecondsRealtime(totalTime);
+            Time.timeScale = 1.0f; // unfreeze time :(
+            InHitStop = false;
+        }
+    }
+
+    public IEnumerator ScreenShake(float totalTime, float shakeMultiplier) {
+        Vector3 startPos = Camera.transform.position;
+        float elapsedTime = 0f;
+        while (elapsedTime < totalTime) {
+            elapsedTime += Time.unscaledDeltaTime;
+            float strength = Curve.Evaluate(elapsedTime / totalTime);
+            Camera.transform.position = startPos + UnityEngine.Random.insideUnitSphere * strength * shakeMultiplier;
+            yield return null;
+        }
+
+        Camera.transform.position = startPos;
     }
 }

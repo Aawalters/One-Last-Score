@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     {
         GM = p.GameManager;
         p.playerChargeMeter = GameObject.Find("Player Charge Meter");
-        p.playerExtendedChargeMeter = GameObject.Find("Player Extended Charge Meter");
+        // p.playerExtendedChargeMeter = GameObject.Find("Player Extended Charge Meter");
     }
 
     // Start is called before the first frame update
@@ -35,17 +35,19 @@ public class PlayerController : MonoBehaviour
 
         // charge kick values
         p.playerChargeMeter.GetComponent<Slider>().value = 0;
-        // p.playerChargeMeter.SetActive(false); // hide
+        p.playerChargeMeter.SetActive(false); // hide
         p.playerChargeMeter.GetComponent<Slider>().maxValue = 1;
 
-        p.playerExtendedChargeMeter.GetComponent<Slider>().value = 0;
+        // p.playerExtendedChargeMeter.GetComponent<Slider>().value = 0;
         // p.playerExtendedChargeMeter.SetActive(false); // hide
         p.forceIncrease = p.maxKickForce - p.baseKickForce;
-        float extendedPercent = (p.extendedMaxKickForce - p.baseKickForce) / p.forceIncrease; // 1 + percent increase
-        p.playerExtendedChargeMeter.GetComponent<Slider>().maxValue = extendedPercent;
-        p.playerExtendedChargeMeter.GetComponent<RectTransform>().sizeDelta = new Vector2(
-            p.playerChargeMeter.GetComponent<RectTransform>().sizeDelta.x * extendedPercent, 
-            p.playerExtendedChargeMeter.GetComponent<RectTransform>().sizeDelta.y);
+        // float extendedPercent = (p.extendedMaxKickForce - p.baseKickForce) / p.forceIncrease; // 1 + percent increase
+        // p.playerExtendedChargeMeter.GetComponent<Slider>().maxValue = extendedPercent;
+        // p.playerExtendedChargeMeter.GetComponent<RectTransform>().sizeDelta = new Vector2(
+        //     p.playerChargeMeter.GetComponent<RectTransform>().sizeDelta.x * extendedPercent, 
+        //     p.playerExtendedChargeMeter.GetComponent<RectTransform>().sizeDelta.y);
+
+        p.kickChargeRate = 1f / p.maxChargeTime; // calc charge rate needed to reach desired time
         // accessing components
         p.rb = GetComponent<Rigidbody2D>();
         p.anim = GetComponent<Animator>();
@@ -96,8 +98,8 @@ public class PlayerController : MonoBehaviour
         Move();
 
         if (p.charging) {
-            p.kickCharge += p.kickChargeRate; // increases at fixed rate
-            // (p.rb.velocity.magnitude * p.movementChargeRateMultiplier);
+            p.kickCharge += (p.kickChargeRate * Time.deltaTime) + (p.rb.velocity.magnitude * p.movementChargeRateMultiplier);
+            p.kickCharge = Mathf.Clamp(p.kickCharge, 0, 1f);
         }
     }
 
@@ -185,17 +187,19 @@ public class PlayerController : MonoBehaviour
         }
 
         // attacks
-        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.K))
+        // can buffer kick
+        if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.K) && !p.anim.GetBool("isKicking"))
         {
             p.anim.SetBool("isKicking", true);
         }
         // while not holding down button, set back to normal
-        if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.K) && p.charging) {
+        if ((Input.GetMouseButton(0) || Input.GetKey(KeyCode.K)) && p.charging && !p.isHit && p.anim.GetBool("isKicking")) {
+            p.playerChargeMeter.SetActive(true);
             p.anim.speed = 0; // pause anim
         } else {
             p.charging = false;
             p.anim.speed = 1; // unpause anim
-            p.kickCharge = 0; // reset charge
+            p.playerChargeMeter.SetActive(false);
         }
 
         // Grappling hook Input
@@ -274,11 +278,17 @@ public class PlayerController : MonoBehaviour
     public IEnumerator Kick()
     {
         shouldBeDamaging = true;
-        Debug.Log("on ground kick? " + p.isGrounded);
+        // calculate kick force
+        int dir = p.facingRight ? 1 : -1;
+        float chargeIncrease = p.kickCharge * p.forceIncrease;
+        float weightedXForce = dir * (p.baseKickForce + chargeIncrease);
+        Vector2 force = new Vector2(weightedXForce, 0);
+        float weightedYForce = p.kickUpForce + (chargeIncrease * p.chargeUpForceMultiplier);
+        // if grounded or moving up, kick upward, else downward
+        force.y = ((p.isGrounded || p.rb.velocity.y > 0) ? 1 : -1) * weightedYForce;
 
         while (shouldBeDamaging) {
             Collider2D[] enemyList = Physics2D.OverlapCircleAll(p.kickPoint.transform.position, p.kickRadius, p.enemyLayer);
-            Vector2 force;
 
             foreach (Collider2D enemyObject in enemyList)
             {
@@ -288,21 +298,9 @@ public class PlayerController : MonoBehaviour
                 // float weightedForce = p.kickForce + (p.rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * p.movementForceMultiplier;
                 // float weightedUpForce = p.kickUpForce + (p.rb.velocity.magnitude + enemyObject.GetComponent<Rigidbody2D>().velocity.magnitude) * p.movementUpForceMultiplier;
 
-                int dir = p.facingRight ? 1 : -1;
-                float chargeIncrease = p.kickCharge * p.forceIncrease;
-                float weightedXForce = dir * Math.Min(p.baseKickForce + chargeIncrease, p.maxKickForce);
-                force = new Vector2(weightedXForce, 0);
-                // if isGrounded, add slight upward force
-                if (p.isGrounded) {
-                    float weightedYForce = p.kickUpForce + (chargeIncrease * p.chargeUpForceMultiplier);
-                    force.y = weightedYForce;
-                }
-
                 // apply damage + force to enemy 
                 IDamageable iDamageable = enemyObject.GetComponent<IDamageable>();
                 if (iDamageable != null && !iDamageableSet.Contains(iDamageable)) {
-                    Debug.Log("Force of player kick: " + force);
-
                     iDamageable.TakeKick(p.kickDamage, force);
                     iDamageable.StopAttack(); // cancel enemy attack
                     iDamageableSet.Add(iDamageable);
@@ -311,13 +309,18 @@ public class PlayerController : MonoBehaviour
             yield return null; // wait a frame
         }
 
-        // post active frame processing
+        // post active-frame processing
         if (iDamageableSet.Count == 0) {
             GM.audioSource.clip = GM.MissAudio;
             GM.audioSource.Play();
         } else {
             GM.audioSource.clip = GM.KickAudio;
             GM.audioSource.Play();
+
+            if (force.magnitude > p.hitStopForceThreshold) {
+                StartCoroutine(GM.HitStop(force.magnitude * p.hitStopScaling));
+                StartCoroutine(GM.ScreenShake(force.magnitude * p.hitStopScaling, force.magnitude * p.screenShakeScaling));
+            }
         }
         iDamageableSet.Clear();
     }
@@ -325,6 +328,7 @@ public class PlayerController : MonoBehaviour
     // set end of kick active frames
     public void EndShouldBeDamaging() {
         shouldBeDamaging = false;
+        p.kickCharge = 0; // reset charge
     }
 
     // set end of animation
@@ -374,8 +378,11 @@ public class PlayerController : MonoBehaviour
             GM.healthCurrent -= damage;
             GM.healthBar.value = GM.healthCurrent;
             p.anim.SetBool("isHurt", true);
-            p.anim.SetBool("isKicking", false); // if you get hurt, cancel kick (rewards precision maybe?)
-            shouldBeDamaging = false;
+
+            // if you get hurt, cancel kick
+            p.anim.SetBool("isKicking", false); 
+            EndShouldBeDamaging();
+            p.playerChargeMeter.SetActive(false);
 
             p.rb.velocity = Vector2.zero; // so previous velocity doesn't interfere (would super stop player momentum tho? maybe change in future)
             p.rb.AddForce(force, ForceMode2D.Impulse);
@@ -383,7 +390,7 @@ public class PlayerController : MonoBehaviour
             if (GM.healthCurrent <= 0) {
                 p.GameManager.Death();
             } else {
-                yield return new WaitForSeconds(p.iFrames); // hitstun (i-frames?), should make sep later
+                yield return new WaitForSeconds(p.iFrames);
                 p.isHit = false;
                 p.anim.SetBool("isHurt", false);
             }

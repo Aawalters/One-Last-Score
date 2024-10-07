@@ -193,13 +193,11 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
             CurrentOneWayPlatform = collision.gameObject;
         }
 
-        if (!collision.gameObject.CompareTag("OneWayPlatform") && (InImpact || collision.gameObject.CompareTag("enemy"))) {
+        if (InImpact || collision.gameObject.CompareTag("enemy")) {
             
             float impactForce = collision.relativeVelocity.magnitude;
-            int collisionDamage = 0;
-
             if (impactForce > collisionForceThreshold) { // if force > threshold, then deal dmg, otherwise no longer in InImpact state
-                collisionDamage = Mathf.RoundToInt(impactForce * collisionDamageMultiplier); // note: consider log max for extreme cases
+                int collisionDamage = Mathf.RoundToInt(impactForce * collisionDamageMultiplier); // note: consider log max for extreme cases
                 Damage(collisionDamage);
 
                 // if collide wtih enemy, treat as if you were InImpact
@@ -214,8 +212,6 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
                     RB.AddForce(bounceDirection * (impactForce * collisionForceMultiplier), ForceMode2D.Impulse);
                 }
             }
-
-            Debug.Log(gameObject.name + " <- " + impactForce + " impact force, " + collisionDamage + " impact damage <- " + collision.gameObject.name);
         }
     }
 
@@ -231,10 +227,12 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
 
     // Helper function to encapsulate the pause logic
     public IEnumerator PauseAction(float delay) {
-        IsPaused = true;
-        Anim.SetBool("isWalking", false);
-        yield return new WaitForSeconds(delay);
-        IsPaused = false;
+        if (!IsPaused) {
+            IsPaused = true;
+            Anim.SetBool("isWalking", false);
+            yield return new WaitForSeconds(delay);
+            IsPaused = false;
+        }
     }
 
     // walk in x direction toward target
@@ -316,6 +314,8 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
     public void Damage(int damage) {
         CurrentHealth -= damage;
         Anim.SetTrigger("ImpactTrigger");
+        ShouldBeDamaging = false;
+        Anim.SetBool("isPunching", false);
 
         if (CurrentHealth <= 0) {
             if (!gameObject.IsDestroyed())
@@ -348,6 +348,9 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
             FlipCharacter(false);
         }
 
+        if (IsGrounded) {
+            transform.position = new Vector2(transform.position.x, transform.position.y + 0.1f); // slight upward translate to enable bounce from ground
+        }
         RB.velocity = Vector2.zero; // so previous velocity doesn't interfere
         RB.AddForce(force, ForceMode2D.Impulse);
     }
@@ -417,7 +420,6 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
         while (ShouldBeDamaging) {
             Collider2D player = Physics2D.OverlapCircle(DetectAttack.transform.position, AttackRadius, 1 << Player.layer);
             if (player != null) {
-                Debug.Log(gameObject.name + " punched " + player.GetComponentInParent<Transform>().name);
                 Vector2 force = new Vector2((FacingRight ? 1 : -1) * Math.Abs(PunchForce.x), PunchForce.y);
                 StartCoroutine(player.GetComponent<PlayerController>().TakeDamage(PunchDamage, force));
             }

@@ -67,13 +67,18 @@ public class Player
     // (ext-base - max-base)/(max-base) * 100 percent increase => (7-5 - 6-5)/(6-5) * 100 = (2 - 1)/(1) * 100 = 1
     // extended bar max value = 1 (max of bar) + (extended percent)
     // kick force = baseKickForce * (kickCharge (clamped at 1 or ext max) * forceIncrease)
+    public float maxChargeTime; // time it takes to reach regular max charge
     public float kickCharge; // current charge of kick (0 if non-charged) (added force to kick is base + (kickCharge/maxKickCharge * baseKickForce) (private)
-    [Range(0, 1)] public float kickChargeRate; // rate at which charge increases per physics frame
+    public float kickChargeRate; // rate at which charge increases per physics frame
     [Range(0, 1)] public float movementChargeRateMultiplier; // how much charge rate is affected by player current speed
     [Range(0, 1)] public float chargeUpForceMultiplier; // how much charge affects upforce amount (grounded attack)
     public LayerMask enemyLayer;
     public int kickDamage = 1;
     public GameObject playerChargeMeter;
     public GameObject playerExtendedChargeMeter; 
-    public bool charging;
+    public bool charging = false;
+    // fx
+    [Range(0, 1)] public float hitStopScaling; // how much force affects level of hit stop
+    public float screenShakeScaling; // how much force affects level of screen shake
+    public float hitStopForceThreshold; // force threshold required before hit stop + screenshake is applied
 }
