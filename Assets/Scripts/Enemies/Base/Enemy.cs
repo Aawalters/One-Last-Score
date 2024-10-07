@@ -405,6 +405,7 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
         Gizmos.DrawWireCube(PlatformDetectionOrigin, new Vector2(MaxJumpDistance, MaxJumpHeight)); // jump detection box
         Gizmos.DrawLine(BottomEnemyTransform, LandingTarget); // visual for where jumping landing target is
 
+        // hitbox
         Gizmos.color = new Color(1f, 0f, 0f, 0.5f);
         Gizmos.DrawWireSphere(DetectAttack.transform.position, AttackRadius);
     }
