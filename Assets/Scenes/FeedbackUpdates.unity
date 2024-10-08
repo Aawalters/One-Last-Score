@@ -375,34 +375,6 @@ PrefabInstance:
       propertyPath: Player
       value: 
       objectReference: {fileID: 836372526}
-    - target: {fileID: 5376063832109763254, guid: a39fc854e38d49f4a88f3915e30d9739, type: 3}
-      propertyPath: firstSpawnDelay
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5376063832109763254, guid: a39fc854e38d49f4a88f3915e30d9739, type: 3}
-      propertyPath: EnemyOffScreenDeathPrefab
-      value: 
-      objectReference: {fileID: 7508921488299735724, guid: 7f84a877937bfea40ad9fdb8d477e6fd, type: 3}
-    - target: {fileID: 5376063832109763254, guid: a39fc854e38d49f4a88f3915e30d9739, type: 3}
-      propertyPath: waveConfigurations.Array.data[0]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5376063832109763254, guid: a39fc854e38d49f4a88f3915e30d9739, type: 3}
-      propertyPath: waveConfigurations.Array.data[1]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5376063832109763254, guid: a39fc854e38d49f4a88f3915e30d9739, type: 3}
-      propertyPath: waveConfigurations.Array.data[2]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5376063832437897329, guid: a39fc854e38d49f4a88f3915e30d9739, type: 3}
-      propertyPath: currentDeck.deck.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5376063832437897329, guid: a39fc854e38d49f4a88f3915e30d9739, type: 3}
-      propertyPath: currentDeck.deck.Array.data[0]
-      value: 
-      objectReference: {fileID: 11400000, guid: f20a718285d15474aaab6ed11483391b, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a39fc854e38d49f4a88f3915e30d9739, type: 3}
 --- !u!114 &112427780 stripped
@@ -1866,7 +1838,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5811921193137224085, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
@@ -3317,17 +3289,21 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.YMaxSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
       propertyPath: p.GameManager
       value: 
       objectReference: {fileID: 112427780}
     - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
+      propertyPath: p.grappleAirControl
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
       propertyPath: p.ButtonsAndClickScript
       value: 
       objectReference: {fileID: 1798159767}
-    - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
-      propertyPath: p.currentOneWayPlatform
-      value: 
-      objectReference: {fileID: 1843003561}
     - target: {fileID: 2990557554159055600, guid: cdb22645942123143ba7da51b1a71b5c, type: 3}
       propertyPath: p.MovementJoystickScript
       value: 

@@ -113,7 +113,6 @@ public class GrapplingGun : MonoBehaviour
         //m_rigidbody.gravityScale = 1;
         m_rigidbody.velocity = releaseVelocity; //momentum
         isGrappling = false;
-        Debug.Log(m_rigidbody.gameObject.name + " velocity: " + m_rigidbody.velocity);
     }
 
     public void SetSpring(bool isGrounded)
@@ -167,6 +166,7 @@ public class GrapplingGun : MonoBehaviour
         if (launchType == LaunchType.Physics_Launch)
         {
             Vector2 distanceVector = firePoint.position - gunHolder.position;
+            Debug.Log(distanceVector.magnitude);
             m_springJoint2D.distance = distanceVector.magnitude;
             m_springJoint2D.frequency = launchSpeed;
             m_springJoint2D.enabled = true;
