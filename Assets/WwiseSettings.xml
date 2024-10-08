@@ -1,0 +1,9 @@
+<?xml version='1.0'?>
+<WwiseSettings>
+    <CreateWwiseGlobal>true</CreateWwiseGlobal>
+    <CreateWwiseListener>true</CreateWwiseListener>
+    <SoundbankPath>Audio/GeneratedSoundBanks</SoundbankPath>
+    <WwiseProjectPath>../../../../Library/Application Support/Wwise2019/Bottles/Wwise2019x64/dosdevices/y:/Documents/WwiseProjects/Hit-Me/Hit-Me.wproj</WwiseProjectPath>
+    <WwiseInstallationPathWindows></WwiseInstallationPathWindows>
+    <WwiseInstallationPathMac>/Applications/Audiokinetic/Wwise2023.1.7.8574/Wwise.app</WwiseInstallationPathMac>
+</WwiseSettings>
