@@ -16,8 +16,8 @@ MonoBehaviour:
   cardDescription: Enemy Dmg +20 & Enemy Health +
   cardImage: {fileID: -220727521, guid: cdc11f2a2cc379f40b160f16ad26c643, type: 3}
   effectImage: {fileID: 21300000, guid: 3e7b1deecd2ed1848a5cf83898257d61, type: 3}
-  effectValue: 50
+  effectValue: 25
   id: 0
   cardUserAnim: 
-  ExtraDamage: 20
-  ExtraSpeed: 0.2
+  ExtraDamage: 5
+  ExtraSpeed: 0.7

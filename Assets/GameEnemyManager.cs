@@ -2,23 +2,32 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class GameEnemyManager : MonoBehaviour
 {
     public GameObject Player;
     public List<GameObject> spawnedEnemies = new List<GameObject>();
-    public int TotalNumberOfEnemiesLeft;
+    public int EnemiesLeftInWave = 0;
 
     [Header("Spawn Settings")]
     public List<Transform> spawnPoints;  // List of possible spawn points
     public GameObject enemyPrefab;
-    public float firstSpawnDelay = 7f;   // initial delay before first wave
-    public float spawnInterval = 5f;     // Time between each wave
+    public float SpawnDelay = 3f;
 
     [Header("Wave Settings")]
     public List<int> waveConfigurations; // List of enemy count per wave
-    private int currentWave = 0;         // Current wave number
+    public int currentWave = 0;         // Current wave number
+    private bool _WaveInprogress = false;
+
+    public struct EnemyStats {
+        public int MaxHealth;
+        public float ChaseSpeed;
+        public int PunchDamage;
+    }
+    [Header("Enemy Buffs")]
+    public EnemyStats enemyStats;
 
     [Header("FX")]
     // death fx
@@ -35,25 +44,47 @@ public class GameEnemyManager : MonoBehaviour
         _OffScreenDeathRend = EnemyOffScreenDeathPrefab.GetComponent<SpriteRenderer>();
     }
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         var bounds = _OffScreenDeathRend.bounds;
         _OffScreenSpriteWidth = bounds.size.x / 2f;
         _OffScreenSpriteHeight = bounds.size.y / 2f;
-        StartWaves();
+
+        var enemyScript = enemyPrefab.GetComponent<Enemy>(); 
+        enemyStats = new EnemyStats();
+        enemyStats.MaxHealth = enemyScript.MaxHealth;
+        enemyStats.ChaseSpeed = enemyScript.ChaseSpeed;
+        enemyStats.PunchDamage = enemyScript.PunchDamage;
     }
 
-    public void StartWaves() {
-        TotalNumberOfEnemiesLeft = waveConfigurations.Sum();
-        StartCoroutine(SpawnWaveRoutine());
+    void Update() {
+        // Check if there are more waves left
+        if (currentWave < waveConfigurations.Count && !_WaveInprogress) {
+            int enemiesToSpawn = waveConfigurations[currentWave];
+            
+            // If no enemies are left, spawn a new wave
+            if (EnemiesLeftInWave == 0) {
+                StartCoroutine(StartWaves(enemiesToSpawn));
+            }
+        }
+    }
+
+    public IEnumerator StartWaves(int enemiesToSpawn) {
+        _WaveInprogress = true;
+        yield return new WaitForSeconds(SpawnDelay);
+        SpawnWave(enemiesToSpawn);
     }
 
     public void Death(GameObject enemy)
     {
         if (enemy != null) {
-            TotalNumberOfEnemiesLeft -= 1;
+            EnemiesLeftInWave -= 1;
             spawnedEnemies.Remove(enemy);
             StartCoroutine(WaitForSpawn(enemy));
+
+            // Check if all enemies are dead
+            if (EnemiesLeftInWave == 0) {
+                _WaveInprogress = false; // Allow the next wave to start
+            }
         }
     }
 
@@ -70,31 +101,22 @@ public class GameEnemyManager : MonoBehaviour
                 enemyRef.PunchDamage += ExtraDamage;
             }
         }
+
+        enemyStats.MaxHealth += ExtraHealth;
+        enemyStats.ChaseSpeed += ExtraSpeed;
+        enemyStats.PunchDamage += ExtraDamage;
     }
 
-    private IEnumerator SpawnWaveRoutine()
-    {
-        while (currentWave < waveConfigurations.Count)
-        {
-            if (currentWave < 1) {
-                yield return new WaitForSeconds(firstSpawnDelay);
-            } else {
-                yield return new WaitForSeconds(spawnInterval);
-            }
+    private void SpawnWave(int enemiesToSpawn) {
+        // Choose a random number of spawn points, capped by the total spawn points available
+        int randomSpawnPoints = Mathf.Min(enemiesToSpawn, spawnPoints.Count);
+        List<Transform> selectedSpawnPoints = GetRandomSpawnPoints(randomSpawnPoints);
 
-            // Get the number of enemies to spawn for the current wave
-            int enemiesToSpawn = waveConfigurations[currentWave];
+        // Spawn enemies equally spread out among the selected spawn points
+        SpawnEnemies(enemiesToSpawn, selectedSpawnPoints);
 
-            // Choose a random number of spawn points, capped by the total spawn points available
-            int randomSpawnPoints = Mathf.Min(enemiesToSpawn, spawnPoints.Count);
-            List<Transform> selectedSpawnPoints = GetRandomSpawnPoints(randomSpawnPoints);
-
-            // Spawn enemies equally spread out among the selected spawn points
-            SpawnEnemies(enemiesToSpawn, selectedSpawnPoints);
-
-            // Move to the next wave
-            currentWave++;
-        }
+        // Move to the next wave
+        ++currentWave;
     }
 
     private List<Transform> GetRandomSpawnPoints(int count)
@@ -135,6 +157,9 @@ public class GameEnemyManager : MonoBehaviour
                 remainingEnemies--;
             }
         }
+
+         // Update total number of enemies after spawning
+        EnemiesLeftInWave += totalEnemies;
     }
 
     private void SpawnEnemy(Transform spawnPoint) {
@@ -142,6 +167,12 @@ public class GameEnemyManager : MonoBehaviour
         Enemy enemyRef = newEnemy.GetComponent<Enemy>();
         enemyRef.Player = Player;
         enemyRef.GameEnemyManager = this;
+
+        // adding current stats
+        enemyRef.MaxHealth = enemyStats.MaxHealth;
+        enemyRef.ChaseSpeed = enemyStats.ChaseSpeed;
+        enemyRef.PunchDamage = enemyStats.PunchDamage;
+
         spawnedEnemies.Add(newEnemy);
     }
 

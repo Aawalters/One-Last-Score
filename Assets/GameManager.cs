@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (GameEnemyManager.TotalNumberOfEnemiesLeft <= 0)
+        if (GameEnemyManager.currentWave == GameEnemyManager.waveConfigurations.Count)
         {
             int total_score = ((int)(wager * multiplier));
             if (total_score >= quota)
