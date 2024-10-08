@@ -206,10 +206,14 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
                     Anim.SetBool("ImpactBool", true);
                 } else { // bounce off surfaces, not enemies
                     Vector2 bounceDirection = collision.contacts[0].normal;
-                    if (Math.Abs(bounceDirection.x) > 0) {
-                        FlipCharacter(bounceDirection.x < 0);
+                    Debug.Log("bounceDirection: " + bounceDirection);   
+                    // if not one way platform or if hitting one way platform from above (the only allowed bounce, otherwise just go through it)
+                    if (!collision.gameObject.CompareTag("OneWayPlatform") || (collision.gameObject.CompareTag("OneWayPlatform") && bounceDirection == Vector2.up)) {
+                        if (Math.Abs(bounceDirection.x) > 0) {
+                            FlipCharacter(bounceDirection.x < 0);
+                        }
+                        RB.AddForce(bounceDirection * (impactForce * collisionForceMultiplier), ForceMode2D.Impulse);
                     }
-                    RB.AddForce(bounceDirection * (impactForce * collisionForceMultiplier), ForceMode2D.Impulse);
                 }
             }
         }
