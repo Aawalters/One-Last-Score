@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{607AA2FF-D830-42A0-93D2-EC99633CCA0B}" SchemaVersion="119">
+	<InteractiveMusic>
+		<WorkUnit Name="Default Work Unit" ID="{607AA2FF-D830-42A0-93D2-EC99633CCA0B}" PersistMode="Standalone">
+			<ChildrenList>
+				<MusicSegment Name="SCORE_Level1_Flop_v4" ID="{D2A64F64-3255-463B-A7C0-4C33C23F2CA2}" ShortID="739009681">
+					<PropertyList>
+						<Property Name="EndPosition" Type="Real64" Value="188333.333333333"/>
+						<Property Name="Highpass" Type="int16">
+							<ValueList>
+								<Value>15</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{5BCE8D9A-BCA0-4310-BAB6-53D22C228D15}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{74BD82B6-80FE-4B26-916A-BEFA57A7236B}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<MusicTrack Name="SCORE_Level1_Flop_v4" ID="{D9E11ADF-1A33-4313-96AD-9D9DC2EA52F2}" ShortID="93574893">
+							<ReferenceList>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{74BD82B6-80FE-4B26-916A-BEFA57A7236B}"/>
+								</Reference>
+								<Reference Name="TransitionRoot">
+									<Custom>
+										<MusicTransition Name="Root" ID="{D7395DEC-B969-47AF-8C76-3EA0AB49BE07}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</Custom>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="SCORE_Level1_Flop_v4" ID="{875D1480-CC53-4DBC-8450-54A79BDBBFBE}">
+									<Language>SFX</Language>
+									<AudioFile>SCORE_Level1_Flop_v4.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="584730722"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ObjectLists>
+								<ObjectList Name="Sequences">
+									<Reference>
+										<Local>
+											<MusicTrackSequence Name="" ID="{1CF364A5-C2B3-40A1-9E93-C53E7C51B094}">
+												<ObjectLists>
+													<ObjectList Name="Clips">
+														<Reference>
+															<Local>
+																<MusicClip Name="SCORE_Level1_Flop_v4" ID="{0DE875F0-C2E6-43C0-B19B-72BE86FCA0A6}">
+																	<PropertyList>
+																		<Property Name="EndTrimOffset" Type="Real64" Value="188333.333333333"/>
+																		<Property Name="FadeInMode" Type="int16" Value="0"/>
+																		<Property Name="FadeOutMode" Type="int16" Value="0"/>
+																	</PropertyList>
+																	<AudioSourceRef Name="SCORE_Level1_Flop_v4" ID="{875D1480-CC53-4DBC-8450-54A79BDBBFBE}"/>
+																</MusicClip>
+															</Local>
+														</Reference>
+													</ObjectList>
+												</ObjectLists>
+											</MusicTrackSequence>
+										</Local>
+									</Reference>
+								</ObjectList>
+							</ObjectLists>
+						</MusicTrack>
+					</ChildrenList>
+					<ObjectLists>
+						<ObjectList Name="Cues">
+							<Reference>
+								<Local>
+									<MusicCue Name="Entry Cue" ID="{8DA8087E-8C28-49BE-B3B3-EDA99CC22074}"/>
+								</Local>
+							</Reference>
+							<Reference>
+								<Local>
+									<MusicCue Name="Exit Cue" ID="{5A2EC35A-C568-4AB9-9615-14020E20F091}">
+										<PropertyList>
+											<Property Name="CueType" Type="int16" Value="1"/>
+											<Property Name="TimeMs" Type="Real64" Value="188333.333333333"/>
+										</PropertyList>
+									</MusicCue>
+								</Local>
+							</Reference>
+						</ObjectList>
+					</ObjectLists>
+				</MusicSegment>
+				<MusicSegment Name="SCORE_TheBoss_v1" ID="{A5641FD7-EB3B-4147-A652-59CE0EEDC2A9}" ShortID="107058308">
+					<PropertyList>
+						<Property Name="EndPosition" Type="Real64" Value="92689.6145124717"/>
+						<Property Name="Highpass" Type="int16">
+							<ValueList>
+								<Value>10</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{5BCE8D9A-BCA0-4310-BAB6-53D22C228D15}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{74BD82B6-80FE-4B26-916A-BEFA57A7236B}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<MusicTrack Name="SCORE_TheBoss_v1" ID="{C06ED065-A3B3-4149-B0FA-24DDC799FBCD}" ShortID="1003054715">
+							<ReferenceList>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{74BD82B6-80FE-4B26-916A-BEFA57A7236B}"/>
+								</Reference>
+								<Reference Name="TransitionRoot">
+									<Custom>
+										<MusicTransition Name="Root" ID="{361F6096-2E7C-4837-AA98-450DEB2DE56F}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</Custom>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="SCORE_TheBoss_v1" ID="{794A1354-B6A1-45D2-8566-4A9A8AC674E2}">
+									<Language>SFX</Language>
+									<AudioFile>SCORE_TheBoss_v1.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="533183214"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ObjectLists>
+								<ObjectList Name="Sequences">
+									<Reference>
+										<Local>
+											<MusicTrackSequence Name="" ID="{F05DF8E9-14B4-457C-A1B3-0B10A1637969}">
+												<ObjectLists>
+													<ObjectList Name="Clips">
+														<Reference>
+															<Local>
+																<MusicClip Name="SCORE_TheBoss_v1" ID="{E23792E7-B845-4257-874E-74FC8C5FD805}">
+																	<PropertyList>
+																		<Property Name="EndTrimOffset" Type="Real64" Value="92689.6145124717"/>
+																		<Property Name="FadeInMode" Type="int16" Value="0"/>
+																		<Property Name="FadeOutMode" Type="int16" Value="0"/>
+																	</PropertyList>
+																	<AudioSourceRef Name="SCORE_TheBoss_v1" ID="{794A1354-B6A1-45D2-8566-4A9A8AC674E2}"/>
+																</MusicClip>
+															</Local>
+														</Reference>
+													</ObjectList>
+												</ObjectLists>
+											</MusicTrackSequence>
+										</Local>
+									</Reference>
+								</ObjectList>
+							</ObjectLists>
+						</MusicTrack>
+					</ChildrenList>
+					<ObjectLists>
+						<ObjectList Name="Cues">
+							<Reference>
+								<Local>
+									<MusicCue Name="Entry Cue" ID="{09D6C847-0EBB-4B65-B094-E558AEE7B18E}"/>
+								</Local>
+							</Reference>
+							<Reference>
+								<Local>
+									<MusicCue Name="Exit Cue" ID="{B2D9578E-4604-4BCE-B10A-8884B5B24D06}">
+										<PropertyList>
+											<Property Name="CueType" Type="int16" Value="1"/>
+											<Property Name="TimeMs" Type="Real64" Value="92689.6145124717"/>
+										</PropertyList>
+									</MusicCue>
+								</Local>
+							</Reference>
+						</ObjectList>
+					</ObjectLists>
+				</MusicSegment>
+				<MusicSegment Name="SCORE_TUTORIAL_buyin" ID="{3F6B3FAC-A62D-4578-8AC2-138AA8F2DBC9}" ShortID="308753212">
+					<PropertyList>
+						<Property Name="EndPosition" Type="Real64" Value="196535.442176871"/>
+						<Property Name="Highpass" Type="int16">
+							<ValueList>
+								<Value>12</Value>
+							</ValueList>
+						</Property>
+						<Property Name="Volume" Type="Real64">
+							<ValueList>
+								<Value>4</Value>
+							</ValueList>
+						</Property>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{5BCE8D9A-BCA0-4310-BAB6-53D22C228D15}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{74BD82B6-80FE-4B26-916A-BEFA57A7236B}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<MusicTrack Name="SCORE_TUTORIAL_buyin" ID="{75AC7C0F-EEBC-42F5-B1C3-D98814ED1698}" ShortID="507694082">
+							<ReferenceList>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{74BD82B6-80FE-4B26-916A-BEFA57A7236B}"/>
+								</Reference>
+								<Reference Name="TransitionRoot">
+									<Custom>
+										<MusicTransition Name="Root" ID="{571F129E-39F7-4E65-BC56-51C83D6040DA}">
+											<PropertyList>
+												<Property Name="IsFolder" Type="bool" Value="True"/>
+											</PropertyList>
+											<TransitionInfo/>
+										</MusicTransition>
+									</Custom>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="SCORE_TUTORIAL_buyin" ID="{4836B1B4-1764-46DC-BC05-4160646EF4FF}">
+									<Language>SFX</Language>
+									<AudioFile>SCORE_TUTORIAL_buyin.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="946911117"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ObjectLists>
+								<ObjectList Name="Sequences">
+									<Reference>
+										<Local>
+											<MusicTrackSequence Name="" ID="{55CAA183-DE76-491F-BEEE-5B6AF5F411D4}">
+												<ObjectLists>
+													<ObjectList Name="Clips">
+														<Reference>
+															<Local>
+																<MusicClip Name="SCORE_TUTORIAL_buyin" ID="{149781C4-A87F-4CED-9BE0-BE8F3CA28F60}">
+																	<PropertyList>
+																		<Property Name="EndTrimOffset" Type="Real64" Value="196535.442176871"/>
+																		<Property Name="FadeInMode" Type="int16" Value="0"/>
+																		<Property Name="FadeOutMode" Type="int16" Value="0"/>
+																	</PropertyList>
+																	<AudioSourceRef Name="SCORE_TUTORIAL_buyin" ID="{4836B1B4-1764-46DC-BC05-4160646EF4FF}"/>
+																</MusicClip>
+															</Local>
+														</Reference>
+													</ObjectList>
+												</ObjectLists>
+											</MusicTrackSequence>
+										</Local>
+									</Reference>
+								</ObjectList>
+							</ObjectLists>
+						</MusicTrack>
+					</ChildrenList>
+					<ObjectLists>
+						<ObjectList Name="Cues">
+							<Reference>
+								<Local>
+									<MusicCue Name="Entry Cue" ID="{72C802B0-E97D-41EC-9371-63AB7AC37E1A}"/>
+								</Local>
+							</Reference>
+							<Reference>
+								<Local>
+									<MusicCue Name="Exit Cue" ID="{8B60BCFD-19D5-4090-891E-1CA5A4859DEB}">
+										<PropertyList>
+											<Property Name="CueType" Type="int16" Value="1"/>
+											<Property Name="TimeMs" Type="Real64" Value="196535.442176871"/>
+										</PropertyList>
+									</MusicCue>
+								</Local>
+							</Reference>
+						</ObjectList>
+					</ObjectLists>
+				</MusicSegment>
+			</ChildrenList>
+		</WorkUnit>
+	</InteractiveMusic>
+</WwiseDocument>

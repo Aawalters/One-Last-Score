@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProjectInfo>
+	<Project Name="Hit-Me" GUID="{69DDDF46-2739-4A78-979B-1F47345A0810}" Generator="2023.1.7.8574"/>
+	<CacheRoot>../.cache</CacheRoot>
+	<Platforms>
+		<Platform Name="Windows" GUID="{A9366181-2C22-4A45-9117-8F894DC2DCF6}" BasePlatform="Windows" BasePlatformGUID="{6E0CB257-C6C8-4C5C-8366-2740DFC441EB}" Path="Windows"/>
+	</Platforms>
+	<Languages>
+		<Language Name="English(US)" Id="684519430" GUID="{94DF0BD2-2F57-4C87-9B7D-670440575D98}" Default="true" UseAsStandIn="true"/>
+	</Languages>
+	<FileHash>{E0B2888B-2EF7-8668-E7F8-AF0B9962DD8F}</FileHash>
+</ProjectInfo>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{58A30D8C-40B4-4180-A1F5-2FBA1F2F6E50}" SchemaVersion="119">
+	<Events>
+		<WorkUnit Name="Default Work Unit" ID="{58A30D8C-40B4-4180-A1F5-2FBA1F2F6E50}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="Player_Steps_Concrete" ID="{A9A518B9-8F77-4D39-974C-D9110E0A0F10}">
+					<ChildrenList>
+						<Action Name="" ID="{7F1703BB-C42F-4C10-913E-F99DC94862FD}" ShortID="905982705">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Steps_concrete" ID="{C75A15EF-D7DF-4B94-9C3E-DBEE87BF055B}" WorkUnitID="{1D073A2E-546B-4798-AD28-A413750551CE}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Player_Jumps" ID="{03847F47-DA97-4D0C-B652-12F69868CD1D}">
+					<ChildrenList>
+						<Action Name="" ID="{D70AB86D-53DA-4F7C-AAB8-943CCEA6A375}" ShortID="828725430">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Jumps" ID="{5A689605-4E71-4F89-B68C-43E8A7DF9AB4}" WorkUnitID="{1D073A2E-546B-4798-AD28-A413750551CE}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Player_Deals_Damage" ID="{CA228E6D-41A8-4E6A-AC9C-B1E2294B14E8}">
+					<ChildrenList>
+						<Action Name="" ID="{359F3026-FEFA-4FA7-8477-22E6CDD067BD}" ShortID="304148036">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Punches" ID="{512E6946-A9CA-455C-8D69-0E2E1B1C4DAD}" WorkUnitID="{1D073A2E-546B-4798-AD28-A413750551CE}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Player_Misses" ID="{DB4F4B61-3BAF-4AEC-AECC-8F23E0BE0BF6}">
+					<ChildrenList>
+						<Action Name="" ID="{0D4E9214-1072-4339-9F3C-4C1B6F4AACCD}" ShortID="675478431">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Misses" ID="{457FD8FB-25F2-4551-ABB7-C60D67D97BD4}" WorkUnitID="{1D073A2E-546B-4798-AD28-A413750551CE}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="CardPull_Good" ID="{DDC3BA33-F93E-4B7A-9A50-1C29783C0BDD}">
+					<ChildrenList>
+						<Action Name="" ID="{1DA3CF42-657F-4695-BFBA-CC8092A9AC8F}" ShortID="149957201">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Pull_Good" ID="{31F0F409-8FB2-4CB1-9AFF-071B2D5D4747}" WorkUnitID="{1D073A2E-546B-4798-AD28-A413750551CE}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="CardPull_Bad" ID="{C6EE5466-9BDB-4A7F-8D97-8D76E3222BF8}">
+					<ChildrenList>
+						<Action Name="" ID="{5E24E8D9-BBCB-4A15-9340-6A1C5C5E3B6C}" ShortID="187231821">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Pull_Bad" ID="{61EC4BE2-DAD9-40D3-9170-D92AB97A5A64}" WorkUnitID="{1D073A2E-546B-4798-AD28-A413750551CE}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Player_Takes_Damage" ID="{68E54339-F09B-4907-9F35-BD16AC636F55}">
+					<ChildrenList>
+						<Action Name="" ID="{A30B4709-C145-409F-A178-02ED90A33086}" ShortID="1058291813">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="PlayerDamage_v1" ID="{409C4C9B-897A-47A7-A5FC-FAFDD37F07C0}" WorkUnitID="{1D073A2E-546B-4798-AD28-A413750551CE}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="UI_Click" ID="{5218B6BA-A3A3-4B77-AC4C-4A9DCCCDFC17}">
+					<ChildrenList>
+						<Action Name="" ID="{5BBB76AE-4304-4788-849E-65C78A2F61BB}" ShortID="454800375">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="UI_HoverButton" ID="{239DC405-7DF3-4424-BD94-A94F738CBCC4}" WorkUnitID="{1D073A2E-546B-4798-AD28-A413750551CE}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Ambiance" ID="{5BAEF837-C4D9-442A-A377-6C1D779229D0}">
+					<ChildrenList>
+						<Action Name="" ID="{7EB0B737-5BC4-4FA4-AA95-09DC2579A2FD}" ShortID="195143573">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Gamejam_Ambiance-v1" ID="{33D33A1F-6A0C-40A0-9797-0F3A35EBA2C3}" WorkUnitID="{1D073A2E-546B-4798-AD28-A413750551CE}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="MUSIC_Play_L1" ID="{107ED59F-2282-4D3F-B161-6B9FA4DBAC54}">
+					<ChildrenList>
+						<Action Name="" ID="{DAA79C64-2229-47E3-A40B-A01343A3528C}" ShortID="147437110">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="SCORE_Level1_Flop_v4" ID="{D2A64F64-3255-463B-A7C0-4C33C23F2CA2}" WorkUnitID="{607AA2FF-D830-42A0-93D2-EC99633CCA0B}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="MUSIC_Play_Tu" ID="{60B43607-2F37-434F-A99D-E51EDDE55F90}">
+					<ChildrenList>
+						<Action Name="" ID="{05FAB9CA-CA9D-4CEF-B997-AD776FD2CD78}" ShortID="148138484">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="SCORE_Level1_Flop_v4" ID="{D2A64F64-3255-463B-A7C0-4C33C23F2CA2}" WorkUnitID="{607AA2FF-D830-42A0-93D2-EC99633CCA0B}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>
