@@ -529,7 +529,7 @@ MonoBehaviour:
   IdleRange: 5
   IdleTimeBetweenMove: 2
   <DetectAttack>k__BackingField: {fileID: 1780041902}
-  <AttackRadius>k__BackingField: 1.2
+  <AttackRadius>k__BackingField: 0.9
   <PunchDamage>k__BackingField: 5
   <PunchForce>k__BackingField: {x: 45, y: 7}
   <AttackWait>k__BackingField: 1

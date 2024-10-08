@@ -174,6 +174,12 @@ public class GameEnemyManager : MonoBehaviour
             Vector3 direction = enemy.transform.position - indicator.transform.position;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             indicator.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
+            if (direction.x < 0) {
+                Vector3 scale = indicator.transform.localScale;
+                scale.y = scale.y * -1;
+                indicator.transform.localScale = scale;
+            }
         } else {
             Instantiate(EnemyOnScreenDeathPrefab, enemy.transform.position, Quaternion.identity);
         }
