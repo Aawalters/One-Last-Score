@@ -194,17 +194,19 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
             float impactForce = collision.relativeVelocity.magnitude;
             if (impactForce > collisionForceThreshold) { // if force > threshold, then deal dmg, otherwise no longer in InImpact state
                 int collisionDamage = Mathf.RoundToInt(impactForce * collisionDamageMultiplier); // note: consider log max for extreme cases
-                Damage(collisionDamage);
 
                 // if collide wtih enemy, treat as if you were InImpact
                 if (collision.gameObject.CompareTag("enemy")) { 
+                    Damage(collisionDamage);
+
                     InImpact = true;
                     Anim.SetBool("ImpactBool", true);
                 } else { // bounce off surfaces, not enemies
                     Vector2 bounceDirection = collision.contacts[0].normal;
-                    Debug.Log("bounceDirection: " + bounceDirection);   
                     // if not one way platform or if hitting one way platform from above (the only allowed bounce, otherwise just go through it)
                     if (!collision.gameObject.CompareTag("OneWayPlatform") || (collision.gameObject.CompareTag("OneWayPlatform") && bounceDirection == Vector2.up)) {
+                        Damage(collisionDamage);
+                        
                         if (Math.Abs(bounceDirection.x) > 0) {
                             FlipCharacter(bounceDirection.x < 0);
                         }
