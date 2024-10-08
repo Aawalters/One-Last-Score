@@ -10,7 +10,6 @@ public class GameEnemyManager : MonoBehaviour
     public List<GameObject> spawnedEnemies = new List<GameObject>();
     public int TotalNumberOfEnemiesLeft;
 
-
     [Header("Spawn Settings")]
     public List<Transform> spawnPoints;  // List of possible spawn points
     public GameObject enemyPrefab;
@@ -21,19 +20,26 @@ public class GameEnemyManager : MonoBehaviour
     public List<int> waveConfigurations; // List of enemy count per wave
     private int currentWave = 0;         // Current wave number
 
+    [Header("FX")]
+    // death fx
+    public GameObject EnemyOnScreenDeathPrefab;
+    public GameObject EnemyOffScreenDeathPrefab;
+    private SpriteRenderer _OffScreenDeathRend;
+    private float _OffScreenSpriteWidth;
+    private float _OffScreenSpriteHeight;
+    private Camera _Camera;
+
     void Awake() {
         Player = GameObject.FindGameObjectWithTag("Player");
+        _Camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        _OffScreenDeathRend = EnemyOffScreenDeathPrefab.GetComponent<SpriteRenderer>();
     }
     // Start is called before the first frame update
     void Start()
     {
-        // for (int i = 0; i < numberOfEnemies; i++)
-        // {
-        //     GameObject newEnemy = Instantiate(EnemyPrefab, spawnPoint.position, spawnPoint.rotation);
-        //     Enemy_Basic enemyRef = newEnemy.GetComponent<Enemy_Basic>();
-        //     enemyRef.player = playerTransform;
-        //     spawnedEnemies.Add(newEnemy);
-        // }
+        var bounds = _OffScreenDeathRend.bounds;
+        _OffScreenSpriteWidth = bounds.size.x / 2f;
+        _OffScreenSpriteHeight = bounds.size.y / 2f;
         StartWaves();
     }
 
@@ -42,15 +48,16 @@ public class GameEnemyManager : MonoBehaviour
         StartCoroutine(SpawnWaveRoutine());
     }
 
-    public void death(GameObject enemy)
+    public void Death(GameObject enemy)
     {
         if (enemy != null) {
             TotalNumberOfEnemiesLeft -= 1;
             spawnedEnemies.Remove(enemy);
-            Destroy(enemy);
+            StartCoroutine(WaitForSpawn(enemy));
         }
     }
 
+    // NOTE: need to redo buff enemies so it applies to current AND FUTURE enemies
     public void BuffEnemies(int ExtraHealth, int ExtraDamage, float ExtraSpeed)
     {
         foreach(GameObject enemy in spawnedEnemies) {
@@ -137,4 +144,39 @@ public class GameEnemyManager : MonoBehaviour
         enemyRef.GameEnemyManager = this;
         spawnedEnemies.Add(newEnemy);
     }
+
+    #region FX
+    IEnumerator WaitForSpawn(GameObject enemy) {
+        while (Time.timeScale != 1.0f) { // wait until after hit stop fx
+            yield return null;
+        }
+        Destroy(enemy);
+        DeathIndication(enemy);
+    }
+
+    // if enemy is offscreen, then spawn offscreen arrow pointing at them, otherwise normal death fx
+    private void DeathIndication(GameObject enemy) {
+        Vector3 screenPos = _Camera.WorldToViewportPoint(enemy.transform.position);
+        bool isOffScreen = screenPos.x <= 0 || screenPos.x >= 1 || screenPos.y <= 0 || screenPos.y >= 1;
+        
+        if (isOffScreen) {
+            GameObject indicator = Instantiate(EnemyOffScreenDeathPrefab);
+            Vector3 spriteSizeInViewPort = _Camera.WorldToViewportPoint(new Vector3(_OffScreenSpriteWidth, _OffScreenSpriteHeight, 0))
+                - _Camera.WorldToViewportPoint(Vector3.zero);
+
+            screenPos.x = Mathf.Clamp(screenPos.x, spriteSizeInViewPort.x, 1 - spriteSizeInViewPort.x);
+            screenPos.y = Mathf.Clamp(screenPos.y, spriteSizeInViewPort.y, 1 - spriteSizeInViewPort.y);
+
+            Vector3 worldPosition = _Camera.ViewportToWorldPoint(screenPos);
+            worldPosition.z = 0;
+            indicator.transform.position = worldPosition;
+
+            Vector3 direction = enemy.transform.position - indicator.transform.position;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            indicator.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        } else {
+            Instantiate(EnemyOnScreenDeathPrefab, enemy.transform.position, Quaternion.identity);
+        }
+    }
+    #endregion
 }

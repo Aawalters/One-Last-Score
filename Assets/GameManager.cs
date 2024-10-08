@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
     private bool paused = false;
 
     [Header("FX")]
+    // hit fx
     public bool InHitStop = false;
     public AnimationCurve Curve;
 
@@ -252,6 +253,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenuScene");
     }
 
+    #region FX
     // hit stop (scaling) + screen shake (if strong enough)
     public IEnumerator HitStop(float totalTime) {
         if (!InHitStop) {
@@ -275,4 +277,5 @@ public class GameManager : MonoBehaviour
 
         Camera.transform.position = startPos;
     }
+    #endregion
 }

@@ -4045,6 +4045,7 @@ MonoBehaviour:
     attackCharge: 0
     healCharge: 0
     bleedValue: 0
+    iFrames: 0.5
     anim: {fileID: 0}
     grappleRope: {fileID: 0}
     grapplingGun: {fileID: 0}
@@ -4072,17 +4073,28 @@ MonoBehaviour:
     airControl: 0
     grappleAirControl: 0
     friction: 0
-    attackPoint: {fileID: 0}
-    kickForce: 0.5
-    kickUpForce: 0
+    kickPoint: {fileID: 0}
+    baseKickForce: 0.5
     maxKickForce: 0
-    attackRadius: 0
+    forceIncrease: 0
+    extendedMaxKickForce: 0
+    kickUpForce: 0
+    kickRadius: 0
+    maxChargeTime: 0
+    kickCharge: 0
+    kickChargeRate: 0
+    movementChargeRateMultiplier: 0
+    chargeUpForceMultiplier: 0
     enemyLayer:
       serializedVersion: 2
       m_Bits: 0
     kickDamage: 1
-    movementForceMultiplier: 0
-    movementUpForceMultiplier: 0
+    playerChargeMeter: {fileID: 0}
+    playerExtendedChargeMeter: {fileID: 0}
+    charging: 0
+    hitStopScaling: 0
+    screenShakeScaling: 0
+    hitStopForceThreshold: 0
   jumpButton: {fileID: 3768005601710219963}
   kickButton: {fileID: 3768005602480187570}
   isJumping: 0

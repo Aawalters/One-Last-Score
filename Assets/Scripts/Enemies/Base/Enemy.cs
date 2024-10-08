@@ -8,6 +8,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckable, IPuncher
 {
 
+    #region Variables
     [Header("Game Object Dependencies")]
     public GameEnemyManager GameEnemyManager;
     public GameObject Player;
@@ -32,7 +33,7 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
     // State Machine Variables
     public EnemyStateMachine.EnemyStates enemyState;
 
-    #region Collision Tuning
+    // Collision Tuning
     [Header("Collision Tuning")]
     public float maxVelocity; // don't want enemies to break game speed
 
@@ -48,16 +49,14 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
     public float baseMass;
     [Tooltip("Affects enemy floatiness during Impact State (for easier juggles)"), Range(0, 1)]
     public float postImpactMassScale;
-    #endregion
     
-    #region IDamageable Variables
+    // IDamageable Variables
     [field: SerializeField, Header("Health/Death")] public int MaxHealth { get; set; }
     [field: SerializeField] public int CurrentHealth { get; set; }
     public object DeathLock { get; set; } = new object();
     [field: SerializeField] public bool IsDead { get; set; } = false;
-    #endregion
 
-    #region IMoveable Variables
+    // IMoveable Variables
     // components
     public Rigidbody2D RB { get; set; }
 
@@ -81,39 +80,36 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
     [field: SerializeField] public float LandingOffset { get; set; } = 1.5f;
     [field: SerializeField] public float JumpDelay { get; set; } = 0.3f;
     [field: SerializeField] public LayerMask GroundLayer { get; set; }
-    #endregion
 
-    #region State Machine Variables
+    // State Machine Variables
     public EnemyStateMachine StateMachine { get; set; }
     public EnemyIdleState IdleState { get; set; }
     public EnemyChaseState ChaseState { get; set; }
     public EnemyAttackState AttackState { get; set; }
-    #endregion
 
-    #region IdleState Variables
+    // IdleState Variables
     [Header("Idle Variables")]
     public float IdleRange = 5f;
     public float IdleTimeBetweenMove = 2f;
-    #endregion
 
-    #region Punching Variables
+    // Punching Variables
     [field: SerializeField, Header("Attacking")] public GameObject DetectAttack { get; set; }
     [field: SerializeField] public float AttackRadius { get; set; }
     [field: SerializeField] public int PunchDamage { get; set; }
     [field: SerializeField] public Vector2 PunchForce { get; set; }
     public bool ShouldBeDamaging { get; set; } = false;
     [field: SerializeField] public float AttackWait { get; set; } = 1f;
-    #endregion
 
     [Header("Knockback Path Tracer")]
     public float PointSpacing = 0.5f;  // Minimum distance between recorded points
     private LineRenderer _lineRenderer;
     private Vector3 _lastRecordedPosition;  // Last recorded position to avoid redundant points
-
+    #endregion
     // #region Enable Gizmos
     // public bool IdleDetection = true;
     // #endregion
 
+    #region Universal Functions
     // called before start when script is loaded
     private void Awake() {
         Player = GameObject.FindGameObjectWithTag("Player");
@@ -218,6 +214,7 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
             }
         }
     }
+    #endregion
 
     #region Movement
     public void FlipCharacter(bool right)
@@ -325,7 +322,6 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
             if (!gameObject.IsDestroyed())
             {
                 Die();
-                Debug.Log("dead as hell");
             }
         }
     }
@@ -336,7 +332,7 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
             if (!IsDead)
             {
                 IsDead = true;
-                GameEnemyManager.death(gameObject); // call this one cause list with enemies needs to be updated, this one calls Destroy too
+                GameEnemyManager.Death(gameObject); // call this one cause list with enemies needs to be updated, this one calls Destroy too
             }
         }
     }

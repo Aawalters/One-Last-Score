@@ -50,6 +50,7 @@ MonoBehaviour:
   GameEnemyManager: {fileID: 5376063832109763254}
   Player: {fileID: 0}
   Canvas: {fileID: 0}
+  Camera: {fileID: 0}
   audioSource: {fileID: 5376063830636673449}
   KickAudio: {fileID: 8300000, guid: 97f613546e209fd4888e63a86e9a39d9, type: 3}
   MissAudio: {fileID: 8300000, guid: f3368c20d3503e3439553e27cec0ec10, type: 3}
@@ -78,6 +79,7 @@ MonoBehaviour:
     attackCharge: 0
     healCharge: 0
     bleedValue: 0
+    iFrames: 0.5
     anim: {fileID: 0}
     grappleRope: {fileID: 0}
     grapplingGun: {fileID: 0}
@@ -105,18 +107,63 @@ MonoBehaviour:
     airControl: 0
     grappleAirControl: 0
     friction: 0
-    attackPoint: {fileID: 0}
-    kickForce: 0.5
-    kickUpForce: 0
+    kickPoint: {fileID: 0}
+    baseKickForce: 0.5
     maxKickForce: 0
-    attackRadius: 0
+    forceIncrease: 0
+    extendedMaxKickForce: 0
+    kickUpForce: 0
+    kickRadius: 0
+    maxChargeTime: 0
+    kickCharge: 0
+    kickChargeRate: 0
+    movementChargeRateMultiplier: 0
+    chargeUpForceMultiplier: 0
     enemyLayer:
       serializedVersion: 2
       m_Bits: 0
     kickDamage: 1
-    movementForceMultiplier: 0
-    movementUpForceMultiplier: 0
+    playerChargeMeter: {fileID: 0}
+    playerExtendedChargeMeter: {fileID: 0}
+    charging: 0
+    hitStopScaling: 0
+    screenShakeScaling: 0
+    hitStopForceThreshold: 0
   playerController: {fileID: 0}
+  InHitStop: 0
+  Curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.18812414
+      outSlope: 0.18812414
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.117834374
+      value: 0.022167489
+      inSlope: -0.05477421
+      outSlope: -0.05477421
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.05776175
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.02512849
+      outSlope: -0.02512849
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!82 &5376063830636673449
 AudioSource:
   m_ObjectHideFlags: 0
@@ -418,7 +465,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4475c1130409e284c8c2b5fdf12abfd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTransform: {fileID: 0}
+  Player: {fileID: 0}
   spawnedEnemies: []
   TotalNumberOfEnemiesLeft: 0
   spawnPoints:
@@ -428,9 +475,11 @@ MonoBehaviour:
   - {fileID: 5376063831353332324}
   - {fileID: 5376063832007169897}
   enemyPrefab: {fileID: 5811921193137224085, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
-  firstSpawnDelay: 7
+  firstSpawnDelay: 1000
   spawnInterval: 45
   waveConfigurations: 030000000400000006000000
+  EnemyOnScreenDeathPrefab: {fileID: 7508921488299735724, guid: eb53a49b64c63cc49bb88adbdcf8fde3, type: 3}
+  EnemyOffScreenDeathPrefab: {fileID: 0}
 --- !u!1 &5376063832384337724
 GameObject:
   m_ObjectHideFlags: 0
