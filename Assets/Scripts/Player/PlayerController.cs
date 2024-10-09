@@ -191,8 +191,12 @@ public class PlayerController : MonoBehaviour
         }
 
         // attacks
+        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.K)) {
+            p.anim.SetBool("isPunching", true);
+            p.anim.SetTrigger("punch");
+        }
         // can buffer kick
-        if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.K) && !p.anim.GetBool("isKicking"))
+        if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.K) && !p.anim.GetBool("isKicking") && !p.anim.GetBool("isPunching"))
         {
             p.anim.SetBool("isKicking", true);
         }
@@ -285,7 +289,8 @@ public class PlayerController : MonoBehaviour
     public IEnumerator Kick()
     {
         shouldBeDamaging = true;
-        // calculate kick force
+
+        // calculate kick force properties
         int dir = p.facingRight ? 1 : -1;
         float chargeIncrease = p.kickCharge * p.forceIncrease;
         float weightedXForce = dir * (p.baseKickForce + chargeIncrease);
@@ -351,6 +356,66 @@ public class PlayerController : MonoBehaviour
         p.anim.SetBool("isKicking", false);
     }
 
+    public IEnumerator PunchCombo(int partOfCombo) {
+        // 1-2 = first two hits
+        // 3 = uppercut
+        shouldBeDamaging = true;
+
+        // calculate kick force properties
+        int dir = p.facingRight ? 1 : -1;
+        // punches apply a little bit of force
+        // uppercut applies a lot of upward force
+        // if grappling, just do upper cut
+
+        float radius = partOfCombo == 3 ? p.uppercutRadius : p.punchRadius;
+
+        while (shouldBeDamaging) {
+            Collider2D[] enemyList = Physics2D.OverlapCircleAll(p.punchPoint.transform.position, radius, p.enemyLayer);
+
+            foreach (Collider2D enemyObject in enemyList) {
+                // apply damage + force to enemy 
+                IDamageable iDamageable = enemyObject.GetComponent<IDamageable>();
+                if (iDamageable != null && !iDamageableSet.Contains(iDamageable)) {
+                    if (partOfCombo == 3) { // knock up if uppercut
+                        Vector2 force = p.uppercutForce;
+                        force.x = Mathf.Abs(p.uppercutForce.x) * dir;
+                        iDamageable.TakeKick(p.uppercutDamage, force);
+                    } else { // regular punch otherwise (apply slow down)
+                        iDamageable.TakePunch(p.punchDamage, p.velocityMod);
+                    }
+                    iDamageable.StopAttack(); // cancel enemy attack
+                    iDamageableSet.Add(iDamageable);
+                }
+            }
+            yield return null; // wait a frame
+        }
+
+        // post active-frame processing
+        // if (iDamageableSet.Count == 0) {
+        //     GM.audioSource.clip = GM.MissAudio;
+        //     GM.audioSource.Play();
+        // } else {
+        //     GM.audioSource.clip = GM.KickAudio;
+        //     GM.audioSource.Play();
+
+            // if (force.magnitude > p.hitStopForceThreshold) {
+            //     StartCoroutine(GM.HitStop(force.magnitude * p.hitStopScaling));
+            //     StartCoroutine(GM.ScreenShake(force.magnitude * p.hitStopScaling, force.magnitude * p.screenShakeScaling));
+            // }
+        // }
+        if (partOfCombo == 3 && iDamageableSet.Count > 0) {
+            StartCoroutine(GM.HitStop(p.uppercutForce.magnitude * p.hitStopScaling));
+            StartCoroutine(GM.ScreenShake(p.uppercutForce.magnitude * p.hitStopScaling, p.uppercutForce.magnitude * p.screenShakeScaling));
+        }
+        iDamageableSet.Clear();
+    }
+
+    // set end of animation
+    public void EndPunch()
+    {
+        p.anim.SetBool("isPunching", false);
+    }
+
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("OneWayPlatform"))
@@ -378,12 +443,19 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        Gizmos.color = Color.red;
         float kickRadius = p.kickRadius;
         if (p.kickCharge > 1f) { // during grapple
             float t = Mathf.Clamp((p.kickCharge - 1f) / (p.playerExtendedChargeMeter.GetComponent<Slider>().maxValue - 1f), 0f, 1f);
             kickRadius = Mathf.Lerp(p.kickRadius, p.extendedChargeRadius, t);
         }
         Gizmos.DrawWireSphere(p.kickPoint.transform.position, kickRadius);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(p.punchPoint.transform.position, p.punchRadius);
+        Gizmos.DrawWireSphere(p.punchPoint.transform.position, p.uppercutRadius);
+
+        Gizmos.color = Color.grey;
         // Gizmos.DrawWireSphere(groundCheck.transform.position, checkRadius);
         // isGrounded = Physics2D.OverlapBox(groundCheck.position, new Vector2(2, 2), 0f);
         Gizmos.DrawCube(p.groundCheck.position, p.checkGroundSize);

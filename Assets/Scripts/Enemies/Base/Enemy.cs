@@ -357,6 +357,13 @@ public class Enemy : MonoBehaviour, IDamageable, IEnemyMoveable, ITriggerCheckab
         RB.AddForce(force, ForceMode2D.Impulse);
     }
 
+    public void TakePunch(int damage, float velocityMod) {
+        Damage(damage);
+        InImpact = true;
+        Anim.SetBool("ImpactBool", true);
+        RB.velocity = RB.velocity * velocityMod;
+    }
+
     public void StopAttack() {
         Anim.SetBool("isPunching", false);
     }

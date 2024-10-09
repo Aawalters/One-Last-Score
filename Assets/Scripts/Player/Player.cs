@@ -82,6 +82,16 @@ public class Player
     public GameObject playerExtendedChargeMeter; 
     public float extendedChargeRadius; // max radius when in grapple state
     public bool charging = false;
+
+    [Header("Punch Vars")]
+    public GameObject punchPoint;
+    public float punchRadius;
+    public float uppercutRadius;
+    public int punchDamage;
+    public int uppercutDamage;
+    public Vector2 uppercutForce;
+    [Range(0, 1)] public float velocityMod; // how much normal punches slow down enemy
+
     // fx
     [Range(0, 1)] public float hitStopScaling; // how much force affects level of hit stop
     public float screenShakeScaling; // how much force affects level of screen shake
