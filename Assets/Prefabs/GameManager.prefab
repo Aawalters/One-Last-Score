@@ -467,7 +467,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
   spawnedEnemies: []
-  TotalNumberOfEnemiesLeft: 0
+  EnemiesLeftInWave: 0
   spawnPoints:
   - {fileID: 5376063831647956080}
   - {fileID: 5376063832384337725}
@@ -475,11 +475,11 @@ MonoBehaviour:
   - {fileID: 5376063831353332324}
   - {fileID: 5376063832007169897}
   enemyPrefab: {fileID: 5811921193137224085, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
-  firstSpawnDelay: 1000
-  spawnInterval: 45
+  SpawnDelay: 1000
   waveConfigurations: 030000000400000006000000
+  currentWave: 0
   EnemyOnScreenDeathPrefab: {fileID: 7508921488299735724, guid: eb53a49b64c63cc49bb88adbdcf8fde3, type: 3}
-  EnemyOffScreenDeathPrefab: {fileID: 0}
+  EnemyOffScreenDeathPrefab: {fileID: 7508921488299735724, guid: 7f84a877937bfea40ad9fdb8d477e6fd, type: 3}
 --- !u!1 &5376063832384337724
 GameObject:
   m_ObjectHideFlags: 0
@@ -561,7 +561,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f20a718285d15474aaab6ed11483391b, type: 2}
   - {fileID: 11400000, guid: 99936fece226fde4a9cb0657c0ad1fe2, type: 2}
   currentDeck:
-    deck: []
+    deck:
+    - {fileID: 11400000, guid: f20a718285d15474aaab6ed11483391b, type: 2}
     drawPile: []
     hand: []
     discardPile: []

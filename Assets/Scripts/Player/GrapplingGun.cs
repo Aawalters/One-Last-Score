@@ -56,6 +56,9 @@ public class GrapplingGun : MonoBehaviour
     // Track the current cursor to avoid setting it unnecessarily
     private Texture2D currentCursor;
 
+    [Header("Grapple Forgiveness")]
+    public float GrappleRadius; // set 'thickness' of grapple detection for easier use
+    public LineRenderer GrappleIndicator;
 
     private void Start()
     {
@@ -65,6 +68,11 @@ public class GrapplingGun : MonoBehaviour
         //playerController = GameObject.Find("Player Controller").GetComponent<PlayerController>();
         // p = playerController.p;
         // Cursor.SetCursor(defaultCursor, cursorHotspot, CursorMode.Auto);
+
+        // configuring line renderer
+        GrappleIndicator.positionCount = 2; // Two points (start and end)
+        GrappleIndicator.startWidth = 0.1f; // Set the starting width
+        GrappleIndicator.endWidth = 0.1f; // Set the ending width
     }
 
     private void Update()
@@ -75,6 +83,7 @@ public class GrapplingGun : MonoBehaviour
         // Debug.Log(grappledObject + "1");
         if (isGrappling && grappleRope.enabled)
         {
+            GrappleIndicator.enabled = false;
             // Debug.Log(grappledObject + "2");
             if (grappledObject != null && grappledObject.layer == LayerMask.NameToLayer("Enemy")) 
             {
@@ -86,7 +95,25 @@ public class GrapplingGun : MonoBehaviour
             {
                 stopGrappling(); // if enemy dies as player is grappling it
             }
-                
+        } else {
+            GrappleIndicator.enabled = true;
+            GrappleIndication();
+        }
+    }
+
+    // shows where grapple target/latch onto (if doesn't exist on a surface, then can't be grappled)
+    public void GrappleIndication() {
+        Vector2 direction = (m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position).normalized;
+        RaycastHit2D _hit = Physics2D.CircleCast(firePoint.position, GrappleRadius, direction, maxDistance, grappableLayerMask);
+
+        // Update the LineRenderer to show the projected grapple point
+        if (_hit) {
+            Vector3 endPoint = _hit.point;
+            endPoint += Vector3.up * 0.5f;
+            GrappleIndicator.SetPosition(0, endPoint + Vector3.up * 0.7f); // setting first point to be 1 unit behind second point to cut line short
+            GrappleIndicator.SetPosition(1, endPoint); // Show the grapple target
+        } else {
+            GrappleIndicator.enabled = false;
         }
     }
 
@@ -113,7 +140,6 @@ public class GrapplingGun : MonoBehaviour
         //m_rigidbody.gravityScale = 1;
         m_rigidbody.velocity = releaseVelocity; //momentum
         isGrappling = false;
-        Debug.Log(m_rigidbody.gameObject.name + " velocity: " + m_rigidbody.velocity);
     }
 
     public void SetSpring(bool isGrounded)
@@ -139,10 +165,10 @@ public class GrapplingGun : MonoBehaviour
         gunPivot.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
-    public void SetGrapplePoint()
-    {
-        RaycastHit2D _hit = Physics2D.Raycast(firePoint.position, (m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position).normalized, maxDistance, grappableLayerMask);
-        //Debug.DrawRay(firePoint.position, ((m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position).normalized * maxDistance), Color.red, maxDistance);
+    public void SetGrapplePoint() {
+        Vector2 direction = (m_camera.ScreenToWorldPoint(Input.mousePosition) - gunPivot.position).normalized;
+        RaycastHit2D _hit = Physics2D.CircleCast(firePoint.position, GrappleRadius, direction, maxDistance, grappableLayerMask);
+
         if (_hit)
         {
             grapplePoint = _hit.point;
