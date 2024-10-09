@@ -34,4 +34,9 @@ public class MapScript : MonoBehaviour
         SceneManager.LoadScene("MapMenuScene");
 
     }
+
+    // public void Shop() 
+    // {
+    //     SceneManager.LoadScene("Shop");
+    // }
 }

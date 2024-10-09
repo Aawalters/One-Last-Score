@@ -19,5 +19,6 @@ MonoBehaviour:
   effectValue: 25
   id: 0
   cardUserAnim: 
+  price: 100
   ExtraDamage: 5
   ExtraSpeed: 0.7
