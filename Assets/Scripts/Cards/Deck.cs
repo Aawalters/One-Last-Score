@@ -12,4 +12,9 @@ public class Deck
     public List<Card> discardPile = new List<Card>();
     //public int comboIndex=0;
     
+    public IEnumerator<Card> GetEnumerator()
+    {
+        return deck.GetEnumerator();
+    }
+
 }

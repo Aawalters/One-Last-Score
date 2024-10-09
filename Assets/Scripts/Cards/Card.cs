@@ -16,6 +16,7 @@ public abstract class Card : ScriptableObject
     public int effectValue;
     public int id;
     public string cardUserAnim;
+    public float price;
 
     public abstract void use(GameManager GM);
 

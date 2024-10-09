@@ -23,6 +23,9 @@ public class Player
     public float iFrames = .5f;
 
     public Animator anim;
+
+    [Header("Bank Account")]
+    public float money = 0f;
     
     // grappling
     [Header("Grappling")]
