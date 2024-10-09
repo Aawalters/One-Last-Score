@@ -6,7 +6,7 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Enemy_Basic : MonoBehaviour
+public class Enemy_Basic : MonoBehaviour, IDamageable
 {
     [field: SerializeField] public int MaxHealth { get; set; }
     [field: SerializeField] public int CurrentHealth { get; set; }
