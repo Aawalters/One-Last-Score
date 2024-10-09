@@ -5,9 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class MapScript : MonoBehaviour
 {
+    public void PlayTutorial()
+    {
+        SceneManager.LoadScene("Tutorial");
+
+    }
+
     public void PlayLevel_1()
     {
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("Lvl1");
 
     }
 
@@ -35,8 +41,8 @@ public class MapScript : MonoBehaviour
 
     }
 
-    // public void Shop() 
-    // {
-    //     SceneManager.LoadScene("Shop");
-    // }
+    public void Shop()
+    {
+        SceneManager.LoadScene("Shop");
+    }
 }

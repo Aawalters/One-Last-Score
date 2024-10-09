@@ -3483,7 +3483,7 @@ GameObject:
   - component: {fileID: 2595410672827845559}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: Canvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4047,6 +4047,7 @@ MonoBehaviour:
     bleedValue: 0
     iFrames: 0.5
     anim: {fileID: 0}
+    money: 0
     grappleRope: {fileID: 0}
     grapplingGun: {fileID: 0}
     m_springJoint2D: {fileID: 0}

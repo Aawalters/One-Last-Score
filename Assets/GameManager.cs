@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public PlayerController playerController;
 
-    private TextMeshProUGUI wager_text;
+    public TextMeshProUGUI wager_text;
     private TextMeshProUGUI quota_text; 
 
     private GameObject PlayScreen;
@@ -68,34 +68,115 @@ public class GameManager : MonoBehaviour
     public bool InHitStop = false;
     public AnimationCurve Curve;
 
+    private static GameManager instance;
+
     void Awake()
     {
-        PlayScreen = Canvas.transform.Find("Play Screen").gameObject;
-        WagerScreen = Canvas.transform.Find("Wager Screen").gameObject;
-        PauseScreen = Canvas.transform.Find("Pause Screen").gameObject;
-        DeathScreen = Canvas.transform.Find("Death Screen").gameObject;
-        WinScreen = Canvas.transform.Find("Win Screen").gameObject;
-        IBuild = Canvas.transform.Find("InclusivityBuildPanel").gameObject;
+        //if (instance == null)
+        //{
+        //    instance = this;
+        //    DontDestroyOnLoad(gameObject);
+        //    SceneManager.sceneLoaded += OnSceneLoaded; // Add listener for scene change
+        //}
+        //else
+        //{
+        //    Destroy(gameObject); // Prevent duplicate instances
+        //}
 
-        playerController = Player.GetComponent<PlayerController>();
-        wager_text = PlayScreen.transform.Find("Wager").gameObject.GetComponent<TextMeshProUGUI>();
-        quota_text = PlayScreen.transform.Find("Quota").gameObject.GetComponent<TextMeshProUGUI>();
-        wager_text.text = "Wager:" + wager.ToString();
+        AssignReferences();
+
+    }
+
+    public static GameManager GetInstance()
+    {
+        if (instance == null)
+        {
+            Debug.LogError("GameManager instance is not assigned.");
+        }
+        return instance;
+    }
+
+    // Called when a scene is loaded
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        AssignReferences(); // Reassign UI references
+    }
+
+    void AssignReferences()
+    {
+        Canvas = GameObject.FindGameObjectWithTag("Canvas");
+        Player = GameObject.FindGameObjectWithTag("Player");
+        Camera = GameObject.FindGameObjectWithTag("MainCamera");
+
+        if (Player)
+        {
+            playerController = Player.GetComponent<PlayerController>();
+        }
+
+        if (Canvas)
+        {
+            PlayScreen = Canvas.transform.Find("Play Screen")?.gameObject;
+            WagerScreen = Canvas.transform.Find("Wager Screen")?.gameObject;
+            PauseScreen = Canvas.transform.Find("Pause Screen")?.gameObject;
+            DeathScreen = Canvas.transform.Find("Death Screen")?.gameObject;
+            WinScreen = Canvas.transform.Find("Win Screen")?.gameObject;
+            IBuild = Canvas.transform.Find("InclusivityBuildPanel")?.gameObject;
+        }
+
+        if (PlayScreen)
+        {
+            wager_text = PlayScreen.transform.Find("Wager")?.gameObject.GetComponent<TextMeshProUGUI>();
+            quota_text = PlayScreen.transform.Find("Quota")?.gameObject.GetComponent<TextMeshProUGUI>();
+            UICard = PlayScreen.transform.Find("Card")?.gameObject.GetComponent<Image>();
+            CooldownImg = PlayScreen.transform.Find("Card")?.gameObject.GetComponentInChildren<Image>();
+            StatusEffectManager = PlayScreen.transform.Find("Card")?.GetComponent<StatusEffectManager>();
+            healthBar = PlayScreen.GetComponentInChildren<Slider>();
+
+            wager_text.text = "Wager:" + wager.ToString();
+        }
+
+        if (DeathScreen || WinScreen || PauseScreen)
+        {
+            Button MenuButton = DeathScreen.transform.Find("Menu")?.gameObject.GetComponent<Button>();
+            if (MenuButton)
+            {
+                MenuButton.onClick.AddListener(Menu);
+            }
+
+            if (DeathScreen)
+            {
+                Button restartButton = DeathScreen.transform.Find("Restart")?.gameObject.GetComponent<Button>();
+                if (restartButton)
+                {
+                    restartButton.onClick.AddListener(() => Restart(SceneManager.GetActiveScene().name));
+                }
+            }
+            if (WinScreen)
+            {
+                Button MapButton = WinScreen.transform.Find("Map")?.gameObject.GetComponent<Button>();
+                if (MapButton)
+                {
+                    MapButton.onClick.AddListener(Map);
+                }
+            }
+            if (PauseScreen)
+            {
+                Button resumeButton = PauseScreen.transform.Find("Resume")?.gameObject.GetComponent<Button>();
+                if (resumeButton)
+                {
+                    resumeButton.onClick.AddListener(Pause);
+                }
+            }
+
+        }
+
+        if (IBuild)
+        {
+            iOSPanel = IBuild.transform.Find("iOS Panel")?.gameObject;
+        }
 
         audioSource = GetComponent<AudioSource>();
-        
-        UICard = PlayScreen.transform.Find("Card").gameObject.GetComponent<Image>();
-        CooldownImg = PlayScreen.transform.Find("Card").gameObject.GetComponentInChildren<Image>();
-        StatusEffectManager = PlayScreen.transform.Find("Card").GetComponent<StatusEffectManager>();
-
-        healthBar = PlayScreen.GetComponentInChildren<Slider>();
-
-        iOSPanel = IBuild.transform.Find("iOS Panel").gameObject;
-
         GameEnemyManager = GetComponentInChildren<GameEnemyManager>();
-        Player = GameObject.FindGameObjectWithTag("Player");
-        Canvas = GameObject.FindGameObjectWithTag("Canvas");
-        Camera = GameObject.FindGameObjectWithTag("MainCamera");
     }
 
     void Update()
@@ -116,6 +197,7 @@ public class GameManager : MonoBehaviour
         {
             ApplyCooldown();
         }
+        updateWager();
     }
 
     public void useCard()
@@ -187,7 +269,10 @@ public class GameManager : MonoBehaviour
     public void updateWager()
     {
         int total_score = ((int)(wager * multiplier));
-        wager_text.text = "Wager:" + total_score.ToString();
+        if (wager_text != null)
+        {
+            wager_text.text = "Wager:" + total_score.ToString();
+        }
     }
     public void Wager()
     {
@@ -201,7 +286,6 @@ public class GameManager : MonoBehaviour
         wager = value;
         PlayScreen.SetActive(true);
         WagerScreen.SetActive(false);
-        updateWager();
     }
     public void Pause()
     {
@@ -242,7 +326,7 @@ public class GameManager : MonoBehaviour
     }
     public void Restart(string scene_name)
     {
-        SceneManager.LoadScene(scene_name); // "DiegoTestingScene"
+        SceneManager.LoadScene(scene_name);
     }
     public void Map()
     {
@@ -251,6 +335,11 @@ public class GameManager : MonoBehaviour
     public void Menu()
     {
         SceneManager.LoadScene("MainMenuScene");
+    }
+
+    void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     #region FX

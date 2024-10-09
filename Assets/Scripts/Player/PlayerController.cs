@@ -12,11 +12,12 @@ public class PlayerController : MonoBehaviour
     public HashSet<IDamageable> iDamageableSet = new HashSet<IDamageable>();
     public bool shouldBeDamaging { get; private set; } = false;
 
-    private GameManager GM;
+    [HideInInspector]
+    public GameManager GM;
 
     private void Awake()
     {
-        GM = p.GameManager;
+        GM = GameObject.FindGameObjectWithTag("GameManager")?.GetComponent<GameManager>();
         p.playerChargeMeter = GameObject.Find("Player Charge Meter");
         p.playerExtendedChargeMeter = GameObject.Find("Player Extended Charge Meter");
     }
@@ -68,7 +69,7 @@ public class PlayerController : MonoBehaviour
     {
         if (p.ControlsEnabled)
         {
-            if (p.GameManager.mobile)
+            if (GM.mobile)
             {
                 ProcessInputMobile();
                 p.anim.SetBool("midJump", p.midJump);
@@ -237,7 +238,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            p.GameManager.Pause();
+            GM.Pause();
         }
     }
 
@@ -279,7 +280,7 @@ public class PlayerController : MonoBehaviour
         }
         if (p.ButtonsAndClickScript.pause)
         {
-            p.GameManager.Pause();
+            GM.Pause();
             p.ButtonsAndClickScript.pause = false;
         }
     }
@@ -482,7 +483,7 @@ public class PlayerController : MonoBehaviour
             p.rb.AddForce(force, ForceMode2D.Impulse);
 
             if (GM.healthCurrent <= 0) {
-                p.GameManager.Death();
+                GM.Death();
             } else {
                 yield return new WaitForSeconds(p.iFrames);
                 p.isHit = false;

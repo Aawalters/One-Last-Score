@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class ShopManager : MonoBehaviour
 {
-
     public List<Card> allPurchasableCards;
     public Button card0Button;
     public Button card1Button;
@@ -13,11 +12,16 @@ public class ShopManager : MonoBehaviour
     public GameManager GM;
     public Button duplicateButton;
     public Button destroyButton;
+    public GameObject Options; // Panel containing the player's current deck of cards
     public GameObject deckDisplayPanel; // Panel containing the player's current deck of cards
     public GameObject cardButtonPrefab; // Prefab to create buttons for each card in the deck
     public float dupPrice;
     public float destPrice;
 
+    private void Awake()
+    {
+        // Buttons should be assigned in the Inspector, no need to assign them here unless necessary
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -27,47 +31,43 @@ public class ShopManager : MonoBehaviour
         destroyButton.onClick.AddListener(DisplayDeckForDestruction);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     /*
-    * sets up the cards in the shop to be random & configures the button sprites & listeners
-    * to be called whenever a level is beaten 
-    */
-    void SetUpShop() 
-    { 
+     * Sets up the cards in the shop to be random & configures the button sprites & listeners
+     * to be called whenever a level is beaten.
+     */
+    public void SetUpShop()
+    {
         int[] _randCards = new int[3];
-        for (int i = 0; i < 3; i++) 
+        for (int i = 0; i < 3; i++)
         {
             _randCards[i] = Random.Range(0, allPurchasableCards.Count);
         }
-        card0Button.GetComponent<Image>().sprite = allPurchasableCards[0].cardImage;
+        // Using _randCards[i] instead of 0, 1, 2
+        card0Button.GetComponent<Image>().sprite = allPurchasableCards[_randCards[0]].cardImage;
         card0Button.onClick.AddListener(() => PurchaseCard(_randCards[0], card0Button));
-        card1Button.GetComponent<Image>().sprite = allPurchasableCards[1].cardImage;
+
+        card1Button.GetComponent<Image>().sprite = allPurchasableCards[_randCards[1]].cardImage;
         card1Button.onClick.AddListener(() => PurchaseCard(_randCards[1], card1Button));
-        card2Button.GetComponent<Image>().sprite = allPurchasableCards[2].cardImage;
+
+        card2Button.GetComponent<Image>().sprite = allPurchasableCards[_randCards[2]].cardImage;
         card2Button.onClick.AddListener(() => PurchaseCard(_randCards[2], card2Button));
     }
 
-    private void PurchaseCard(int _cardIndex, Button button) 
+    private void PurchaseCard(int _cardIndex, Button button)
     {
         Card selectedCard = allPurchasableCards[_cardIndex];
-        //TODO: change to be player money? idk tbh
-        if(GM.wager < selectedCard.price) 
+        if (GM.wager < selectedCard.price)
         {
-            //player is too broke to buy card! do nothing. maybe play a sad trumpet sound 
+            // Feedback for insufficient funds (e.g., play a sound or display a message)
+            Debug.Log("Player doesn't have enough money to buy this card!");
             return;
         }
         else
         {
-            //yippee the player has money
+            // Player buys the card
             GM.wager -= selectedCard.price;
-            //TODO: change so the player has the deck, cahnge .currentDeck to that 
             GM.deckController.DeckAdd(selectedCard, GM.deckController.currentDeck);
-            button.gameObject.SetActive(false);
+            button.gameObject.SetActive(false); // Hide the button after purchase
         }
     }
 
@@ -84,8 +84,9 @@ public class ShopManager : MonoBehaviour
     void DisplayDeck(bool duplicateCard)
     {
         deckDisplayPanel.SetActive(true);
+        Options.SetActive(false);
 
-        //clear prev. buttons
+        // Clear previous buttons
         foreach (Transform child in deckDisplayPanel.transform)
         {
             Destroy(child.gameObject);
@@ -95,7 +96,7 @@ public class ShopManager : MonoBehaviour
         {
             GameObject cardButton = Instantiate(cardButtonPrefab, deckDisplayPanel.transform);
             cardButton.GetComponent<Image>().sprite = card.cardImage;
-            cardButton.GetComponent<Button>().onClick.AddListener(() => 
+            cardButton.GetComponent<Button>().onClick.AddListener(() =>
             {
                 if (duplicateCard)
                 {
@@ -105,18 +106,17 @@ public class ShopManager : MonoBehaviour
                 {
                     DestroyCard(card);
                 }
-                deckDisplayPanel.SetActive(false); //hides after selection
+                deckDisplayPanel.SetActive(false); // Hide after selection
+                Options.SetActive(true);
             });
         }
-
-        //TODO: add a button to close the display?
     }
 
     void DuplicateCard(Card card)
     {
-        if (GM.wager < dupPrice) 
+        if (GM.wager < dupPrice)
         {
-            //BROKKKEEEEE
+            Debug.Log("Not enough money to duplicate this card!");
             return;
         }
         else
@@ -128,15 +128,15 @@ public class ShopManager : MonoBehaviour
 
     void DestroyCard(Card card)
     {
-        if (GM.wager < destPrice) 
+        if (GM.wager < destPrice)
         {
-            //BROKKKEEEEEEEEEEEEEEEEEEEEEE
+            Debug.Log("Not enough money to destroy this card!");
             return;
         }
         else
         {
             GM.wager -= destPrice;
-            GM.deckController.DeckAdd(card, GM.deckController.currentDeck);
+            GM.deckController.DeckRemove(card, GM.deckController.currentDeck); // Correcting to remove the card
         }
     }
 }

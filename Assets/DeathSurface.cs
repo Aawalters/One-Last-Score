@@ -17,12 +17,12 @@ public class DeathSurface : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             PlayerController player = other.gameObject.GetComponent<PlayerController>();
-            player.p.GameManager.Death();
+            player.GM.Death();
         }
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            Enemy_Basic enemyScript = other.gameObject.GetComponent<Enemy_Basic>();
-            enemyScript.Damage(1000);
+            //Enemy_Basic enemyScript = other.gameObject.GetComponent<Enemy_Basic>();
+            //enemyScript.Damage(1000);
         }
     }
 }

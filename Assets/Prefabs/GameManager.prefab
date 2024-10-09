@@ -81,6 +81,7 @@ MonoBehaviour:
     bleedValue: 0
     iFrames: 0.5
     anim: {fileID: 0}
+    money: 0
     grappleRope: {fileID: 0}
     grapplingGun: {fileID: 0}
     m_springJoint2D: {fileID: 0}
@@ -130,6 +131,7 @@ MonoBehaviour:
     screenShakeScaling: 0
     hitStopForceThreshold: 0
   playerController: {fileID: 0}
+  wager_text: {fileID: 0}
   InHitStop: 0
   Curve:
     serializedVersion: 2
@@ -475,7 +477,7 @@ MonoBehaviour:
   - {fileID: 5376063831353332324}
   - {fileID: 5376063832007169897}
   enemyPrefab: {fileID: 5811921193137224085, guid: 7ae274f75d9c00c4eb67223abbab35d1, type: 3}
-  SpawnDelay: 1000
+  SpawnDelay: 3
   waveConfigurations: 030000000400000006000000
   currentWave: 0
   EnemyOnScreenDeathPrefab: {fileID: 7508921488299735724, guid: eb53a49b64c63cc49bb88adbdcf8fde3, type: 3}
