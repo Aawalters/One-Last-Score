@@ -80,3 +80,4 @@ crashlytics-build.properties
 *.validationcache
 *.wsettings
 IncrementalSoundBankData.xml
+*/Assets/Wwise/Editor/ProjectData/AkWwiseProjectData.asset*
