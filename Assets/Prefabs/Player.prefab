@@ -279,6 +279,37 @@ RectTransform:
   m_AnchoredPosition: {x: 0.5, y: 0}
   m_SizeDelta: {x: -9.000004, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1402335155
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1402335156}
+  m_Layer: 3
+  m_Name: PunchPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1402335156
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402335155}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4, y: 1.1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2990557554159055597}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1450067198
 GameObject:
   m_ObjectHideFlags: 0
@@ -998,6 +1029,7 @@ Transform:
   - {fileID: 7427512630093263643}
   - {fileID: 1050991548157220790}
   - {fileID: 1867354211}
+  - {fileID: 1402335156}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1165,10 +1197,18 @@ MonoBehaviour:
     enemyLayer:
       serializedVersion: 2
       m_Bits: 512
-    kickDamage: 1
+    kickDamage: 10
     playerChargeMeter: {fileID: 0}
     playerExtendedChargeMeter: {fileID: 0}
+    extendedChargeRadius: 1.8
     charging: 0
+    punchPoint: {fileID: 1402335155}
+    punchRadius: 0.5
+    uppercutRadius: 1
+    punchDamage: 5
+    uppercutDamage: 10
+    uppercutForce: {x: 2, y: 5}
+    velocityMod: 0.5
     hitStopScaling: 0.009
     screenShakeScaling: 2.5
     hitStopForceThreshold: 16
@@ -1625,7 +1665,15 @@ MonoBehaviour:
     kickDamage: 1
     playerChargeMeter: {fileID: 0}
     playerExtendedChargeMeter: {fileID: 0}
+    extendedChargeRadius: 0
     charging: 0
+    punchPoint: {fileID: 0}
+    punchRadius: 0
+    uppercutRadius: 0
+    punchDamage: 0
+    uppercutDamage: 0
+    uppercutForce: {x: 0, y: 0}
+    velocityMod: 0
     hitStopScaling: 0
     screenShakeScaling: 0
     hitStopForceThreshold: 0
