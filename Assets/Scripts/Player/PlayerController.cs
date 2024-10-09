@@ -191,10 +191,13 @@ public class PlayerController : MonoBehaviour
         }
 
         // attacks
-        if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.K)) {
-            p.anim.SetBool("isPunching", true);
-            p.anim.SetTrigger("punch");
-        }
+        // if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.K)) {
+        //     if (p.anim.GetBool("isPunching")) {
+        //         p.anim.SetTrigger("punch");
+        //     }
+
+        //     p.anim.SetBool("isPunching", true);
+        // }
         // can buffer kick
         if (Input.GetMouseButton(0) || Input.GetKey(KeyCode.K) && !p.anim.GetBool("isKicking") && !p.anim.GetBool("isPunching"))
         {
