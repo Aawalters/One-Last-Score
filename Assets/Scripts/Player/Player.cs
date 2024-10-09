@@ -80,6 +80,7 @@ public class Player
     public int kickDamage = 1;
     public GameObject playerChargeMeter;
     public GameObject playerExtendedChargeMeter; 
+    public float extendedChargeRadius; // max radius when in grapple state
     public bool charging = false;
     // fx
     [Range(0, 1)] public float hitStopScaling; // how much force affects level of hit stop

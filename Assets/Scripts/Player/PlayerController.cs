@@ -291,14 +291,18 @@ public class PlayerController : MonoBehaviour
         float weightedXForce = dir * (p.baseKickForce + chargeIncrease);
         Vector2 force = new Vector2(weightedXForce, 0);
         float weightedYForce = p.kickUpForce + (chargeIncrease * p.chargeUpForceMultiplier);
-        Debug.Log("isGrappling: " + p.grapplingGun.isGrappling);
-        Debug.Log("force of kick: " + weightedXForce);
 
         // if grounded or moving up, kick upward, else downward
         force.y = ((p.isGrounded || p.rb.velocity.y > 0) ? 1 : -1) * weightedYForce;
 
+        float kickRadius = p.kickRadius;
+        if (p.kickCharge > 1f) { // during grapple
+            float t = Mathf.Clamp((p.kickCharge - 1f) / (p.playerExtendedChargeMeter.GetComponent<Slider>().maxValue - 1f), 0f, 1f);
+            kickRadius = Mathf.Lerp(p.kickRadius, p.extendedChargeRadius, t);
+        }
+
         while (shouldBeDamaging) {
-            Collider2D[] enemyList = Physics2D.OverlapCircleAll(p.kickPoint.transform.position, p.kickRadius, p.enemyLayer);
+            Collider2D[] enemyList = Physics2D.OverlapCircleAll(p.kickPoint.transform.position, kickRadius, p.enemyLayer);
 
             foreach (Collider2D enemyObject in enemyList)
             {
@@ -374,7 +378,12 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(p.kickPoint.transform.position, p.kickRadius);
+        float kickRadius = p.kickRadius;
+        if (p.kickCharge > 1f) { // during grapple
+            float t = Mathf.Clamp((p.kickCharge - 1f) / (p.playerExtendedChargeMeter.GetComponent<Slider>().maxValue - 1f), 0f, 1f);
+            kickRadius = Mathf.Lerp(p.kickRadius, p.extendedChargeRadius, t);
+        }
+        Gizmos.DrawWireSphere(p.kickPoint.transform.position, kickRadius);
         // Gizmos.DrawWireSphere(groundCheck.transform.position, checkRadius);
         // isGrounded = Physics2D.OverlapBox(groundCheck.position, new Vector2(2, 2), 0f);
         Gizmos.DrawCube(p.groundCheck.position, p.checkGroundSize);
