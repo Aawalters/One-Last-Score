@@ -94,8 +94,42 @@ MonoBehaviour:
     ParentPath: Events/Default Work Unit
     guid: 1eb70c761833044485ebd5e972d3a6bb
     GuidInternal: 
-    m_lastTime: -8584730807812885526
+    m_lastTime: -8584730129168369704
     List:
+    - name: CardPull_Bad
+      guid: 5283ba33efd2494295d0d31004f4820a
+      id: 3230066054
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 1eb70c761833044485ebd5e972d3a6bb
+      - ElementName: CardPull_Bad
+        ObjectType: 3
+        guid: 5283ba33efd2494295d0d31004f4820a
+      Path: Events/Default Work Unit/CardPull_Bad
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: CardPull_Good
+      guid: 7d01edfabb0ec94792006a56f34a77aa
+      id: 2688313194
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 1eb70c761833044485ebd5e972d3a6bb
+      - ElementName: CardPull_Good
+        ObjectType: 3
+        guid: 7d01edfabb0ec94792006a56f34a77aa
+      Path: Events/Default Work Unit/CardPull_Good
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
     - name: congrat
       guid: 350bf2aab6e27f4fb5f77263e79d3a7d
       id: 4072873563
@@ -110,6 +144,159 @@ MonoBehaviour:
         ObjectType: 3
         guid: 350bf2aab6e27f4fb5f77263e79d3a7d
       Path: Events/Default Work Unit/congrat
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: MUSIC_Play_L1
+      guid: 0901969e4c5da442ae7aeb95ac2cca0a
+      id: 1777709127
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 1eb70c761833044485ebd5e972d3a6bb
+      - ElementName: MUSIC_Play_L1
+        ObjectType: 3
+        guid: 0901969e4c5da442ae7aeb95ac2cca0a
+      Path: Events/Default Work Unit/MUSIC_Play_L1
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: MUSIC_Play_Tu
+      guid: 63acb3f888149947a23b3c438e5a861a
+      id: 1643488171
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 1eb70c761833044485ebd5e972d3a6bb
+      - ElementName: MUSIC_Play_Tu
+        ObjectType: 3
+        guid: 63acb3f888149947a23b3c438e5a861a
+      Path: Events/Default Work Unit/MUSIC_Play_Tu
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Play_Ambiance
+      guid: 71dde6b5db70b14a9beffaefedfbafb0
+      id: 3174479978
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 1eb70c761833044485ebd5e972d3a6bb
+      - ElementName: Play_Ambiance
+        ObjectType: 3
+        guid: 71dde6b5db70b14a9beffaefedfbafb0
+      Path: Events/Default Work Unit/Play_Ambiance
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_Deals_Damage
+      guid: 1590e9748a38cb43808cb27bc0c40f50
+      id: 1167747594
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 1eb70c761833044485ebd5e972d3a6bb
+      - ElementName: Player_Deals_Damage
+        ObjectType: 3
+        guid: 1590e9748a38cb43808cb27bc0c40f50
+      Path: Events/Default Work Unit/Player_Deals_Damage
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_Jumps
+      guid: 127552a7cbb3e74bb097bba957aa08f8
+      id: 2335147900
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 1eb70c761833044485ebd5e972d3a6bb
+      - ElementName: Player_Jumps
+        ObjectType: 3
+        guid: 127552a7cbb3e74bb097bba957aa08f8
+      Path: Events/Default Work Unit/Player_Jumps
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_Misses
+      guid: 156e473b7627394a9fb7fed9d8739eb8
+      id: 208143349
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 1eb70c761833044485ebd5e972d3a6bb
+      - ElementName: Player_Misses
+        ObjectType: 3
+        guid: 156e473b7627394a9fb7fed9d8739eb8
+      Path: Events/Default Work Unit/Player_Misses
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_Steps_Concrete
+      guid: 545d402bc2267c46ae136c0eaf255686
+      id: 2869637896
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 1eb70c761833044485ebd5e972d3a6bb
+      - ElementName: Player_Steps_Concrete
+        ObjectType: 3
+        guid: 545d402bc2267c46ae136c0eaf255686
+      Path: Events/Default Work Unit/Player_Steps_Concrete
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: Player_Takes_Damage
+      guid: c6911f859c5b4e4981f2d77443ecbbbb
+      id: 3757410549
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 1eb70c761833044485ebd5e972d3a6bb
+      - ElementName: Player_Takes_Damage
+        ObjectType: 3
+        guid: c6911f859c5b4e4981f2d77443ecbbbb
+      Path: Events/Default Work Unit/Player_Takes_Damage
+      maxAttenuation: 0
+      maxDuration: -1
+      minDuration: -1
+    - name: UI_Click
+      guid: 87948ccb59d7874d8a8bce984dd7ac29
+      id: 2249769530
+      PathAndIcons:
+      - ElementName: Events
+        ObjectType: 5
+        guid: 00000000000000000000000000000000
+      - ElementName: Default Work Unit
+        ObjectType: 12
+        guid: 1eb70c761833044485ebd5e972d3a6bb
+      - ElementName: UI_Click
+        ObjectType: 3
+        guid: 87948ccb59d7874d8a8bce984dd7ac29
+      Path: Events/Default Work Unit/UI_Click
       maxAttenuation: 0
       maxDuration: -1
       minDuration: -1
@@ -170,7 +357,7 @@ MonoBehaviour:
     m_lastTime: -8584730835423317787
     List: []
   ExpandedFileSystemItemIds: 
-  ExpandedWaapiItemIds: 0500000006000000
+  ExpandedWaapiItemIds: 050000000600000007000000
   AutoSyncSelection: 0
   autoPopulateEnabled: 1
   currentDataSource: 0
