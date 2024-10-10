@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WwiseDocument Type="WorkUnit" ID="{760CB71E-3318-4404-85EB-D5E972D3A6BB}" SchemaVersion="119">
 	<Events>
-		<WorkUnit Name="Default Work Unit" ID="{760CB71E-3318-4404-85EB-D5E972D3A6BB}" PersistMode="Standalone"/>
+		<WorkUnit Name="Default Work Unit" ID="{760CB71E-3318-4404-85EB-D5E972D3A6BB}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="congrat" ID="{AAF20B35-E2B6-4F7F-B5F7-7263E79D3A7D}">
+					<ChildrenList>
+						<Action Name="" ID="{AB084811-19AE-4E2D-B547-78CE89F268F2}" ShortID="878510665">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="GoodCardDraw" ID="{55130C0C-0A2E-43E9-A4CC-C99A8D4D0BA4}" WorkUnitID="{ABEC6A62-9F81-43F9-BEC0-27F536E990D1}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
 	</Events>
 </WwiseDocument>
